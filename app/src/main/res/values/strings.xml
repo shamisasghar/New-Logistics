@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">DailyBudget</string>
+    <string name="title_internet">Internet</string>
+    <string name="msg_internet">message Internet</string>
+    <string name="err_first_name">error first name</string>
+    <string name="err_last_name">error last name</string>
+    <string name="err_user_name">error username</string>
+    <string name="err_password">error password</string>
+    <string name="err_email">error email</string>
+</resources>
