@@ -93,7 +93,7 @@ public class ActivityUtils {
                 final Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) titleView.getLayoutParams();
                 layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
                 toolbar.requestLayout();
-                Typeface exo2 = Typeface.createFromAsset(toolbar.getContext().getAssets(), "RobotoBold.ttf");
+                Typeface exo2 = Typeface.createFromAsset(toolbar.getContext().getAssets(), "RobotoRegular.ttf");
                 titleView.setTypeface(exo2);
                 titleView.setTextColor(ContextCompat.getColor(toolbar.getContext(), R.color.colorToolBarText));
             }

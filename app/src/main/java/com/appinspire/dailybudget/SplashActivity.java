@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.appinspire.dailybudget.utils.ActivityUtils;
+
 
 /**
  * Created by Bilal Rashid on 10/8/2017.
@@ -14,7 +16,7 @@ public class SplashActivity extends AppCompatActivity {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-          //  ActivityUtils.startActivity(SplashActivity.this, HomeActivity.class, true);
+            ActivityUtils.startActivity(SplashActivity.this, HomeActivity.class, true);
         }
     };
 
