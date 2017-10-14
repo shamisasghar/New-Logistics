@@ -81,14 +81,16 @@ public class ActivityUtils {
         intent.putExtra(Constants.DATA, bundle);
         context.startActivity(intent);
     }
-
-    public static void centerToolbarTitle(@NonNull final Toolbar toolbar) {
+    public static void centerToolbarTitle(@NonNull final Toolbar toolbar,Boolean padding) {
         final CharSequence title = toolbar.getTitle();
         final ArrayList<View> outViews = new ArrayList<>(1);
         toolbar.findViewsWithText(outViews, title, View.FIND_VIEWS_WITH_TEXT);
         if (!outViews.isEmpty()) {
             final TextView titleView = (TextView) outViews.get(0);
             titleView.setGravity(Gravity.CENTER);
+            if(padding) {
+                titleView.setPadding(0, 0, AppUtils.dpToPx(65), 0);
+            }
             if (titleView.getLayoutParams() instanceof Toolbar.LayoutParams) {
                 final Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) titleView.getLayoutParams();
                 layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -100,6 +102,7 @@ public class ActivityUtils {
             //also you can use titleView for changing font: titleView.setTypeface(Typeface);
         }
     }
+
 
     public static void startHomeActivity(Context context, Class<?> class_, String fragmentName) {
         Intent intent = new Intent(context, class_);

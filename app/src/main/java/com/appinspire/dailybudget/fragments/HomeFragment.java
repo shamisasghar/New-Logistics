@@ -4,15 +4,15 @@ package com.appinspire.dailybudget.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.appinspire.dailybudget.FrameActivity;
 import com.appinspire.dailybudget.R;
 import com.appinspire.dailybudget.toolbox.ToolbarListener;
+import com.appinspire.dailybudget.utils.ActivityUtils;
 
 /**
  * Created by Bilal Rashid on 10/10/2017.
@@ -41,19 +41,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
+        mHolder.button.setOnClickListener(this);
 //        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
 //        toolbar.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
+        ActivityUtils.startActivity(getActivity(), FrameActivity.class,HomeFragment.class.getName(),null);
 
     }
 
     public static class ViewHolder {
 
 
+        Button button;
         public ViewHolder(View view) {
+            button = (Button) view.findViewById(R.id.button);
+
         }
 
     }
