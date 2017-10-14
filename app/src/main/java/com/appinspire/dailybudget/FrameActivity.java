@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.appinspire.dailybudget.dialog.SimpleDialog;
+import com.appinspire.dailybudget.enumerations.AnimationEnum;
 import com.appinspire.dailybudget.fragments.HomeFragment;
 import com.appinspire.dailybudget.toolbox.ToolbarListener;
 import com.appinspire.dailybudget.utils.ActivityUtils;
@@ -95,6 +96,9 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 // app icon in action bar clicked; goto parent activity.
                 onBackPressed();
                 return true;
+            case R.id.action_dummy:
+                ActivityUtils.startActivity(this,SimpleFrameActivity.class,HomeFragment.class.getName(),null, AnimationEnum.VERTICAL);
+                break;
             default:
                 // ...
         }
