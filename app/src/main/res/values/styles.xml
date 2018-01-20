@@ -14,7 +14,16 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="TextInputLayout" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorwhite</item>
+        <item name="android:textSize">@dimen/textinput</item>
 
+
+    </style>
+
+    <style name="ErrorLayout" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorwhite</item>
+    </style>
 
     <!-- Paytabs theme. -->
     <style name="PaytabsTheme" parent="Theme.AppCompat.Light">

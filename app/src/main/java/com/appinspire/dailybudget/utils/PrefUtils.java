@@ -6,6 +6,11 @@ import android.preference.PreferenceManager;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Created by Metis on 29-Dec-17.
+ */
+
+
 public class PrefUtils {
     public static boolean persistString(Context context, String key, String toPersist) {
         return PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key, toPersist).commit();

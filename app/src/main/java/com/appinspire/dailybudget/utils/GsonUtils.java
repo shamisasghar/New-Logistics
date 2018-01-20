@@ -6,6 +6,11 @@ import com.google.gson.JsonObject;
 
 import java.lang.reflect.Type;
 
+/**
+ * Created by Metis on 29-Dec-17.
+ */
+
+
 public class GsonUtils {
     // register a type adapter on Gson
     private static Gson gson = new GsonBuilder().create();

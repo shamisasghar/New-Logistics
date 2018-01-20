@@ -54,7 +54,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     public static class ViewHolder {
 
-
         Button button;
         public ViewHolder(View view) {
             button = (Button) view.findViewById(R.id.button);

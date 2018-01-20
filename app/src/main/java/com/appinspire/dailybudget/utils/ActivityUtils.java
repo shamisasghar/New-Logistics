@@ -1,6 +1,5 @@
 package com.appinspire.dailybudget.utils;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +18,10 @@ import com.appinspire.dailybudget.R;
 import com.appinspire.dailybudget.enumerations.AnimationEnum;
 
 import java.util.ArrayList;
+
+/**
+ * Created by Metis on 08-Dec-17.
+ */
 
 public class ActivityUtils {
 
@@ -81,7 +84,26 @@ public class ActivityUtils {
         intent.putExtra(Constants.DATA, bundle);
         context.startActivity(intent);
     }
-    public static void centerToolbarTitle(@NonNull final Toolbar toolbar,Boolean padding) {
+
+    public static void centerToolbarTitle(@NonNull final Toolbar toolbar) {
+        final CharSequence title = toolbar.getTitle();
+        final ArrayList<View> outViews = new ArrayList<>(1);
+        toolbar.findViewsWithText(outViews, title, View.FIND_VIEWS_WITH_TEXT);
+        if (!outViews.isEmpty()){
+            final TextView titleView = (TextView) outViews.get(0);
+            titleView.setGravity(Gravity.CENTER);
+            if (titleView.getLayoutParams() instanceof Toolbar.LayoutParams) {
+                final Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) titleView.getLayoutParams();
+                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                toolbar.requestLayout();
+                Typeface exo2 = Typeface.createFromAsset(toolbar.getContext().getAssets(), "RobotoBold.ttf");
+                titleView.setTypeface(exo2);
+                titleView.setTextColor(ContextCompat.getColor(toolbar.getContext(), R.color.colorDialogToolbarText));
+            }
+            //also you can use titleView for changing font: titleView.setTypeface(Typeface);
+        }
+    }
+    public static void centerToolbarTitle(@NonNull final Toolbar toolbar, Boolean padding) {
         final CharSequence title = toolbar.getTitle();
         final ArrayList<View> outViews = new ArrayList<>(1);
         toolbar.findViewsWithText(outViews, title, View.FIND_VIEWS_WITH_TEXT);
@@ -102,7 +124,6 @@ public class ActivityUtils {
             //also you can use titleView for changing font: titleView.setTypeface(Typeface);
         }
     }
-
 
     public static void startHomeActivity(Context context, Class<?> class_, String fragmentName) {
         Intent intent = new Intent(context, class_);

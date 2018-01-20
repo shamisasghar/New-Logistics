@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Basic-->
-    <color name="colorPrimary">#ffffff</color><!-- ok Only used in styles.xml -->
-    <color name="colorPrimaryDark">#002256</color> <!-- Toolbar Color -->
-    <color name="colorAccent">#000000</color> <!-- ok Only used in styles.xml -->
+    <color name="colorPrimary">#3096D2</color><!-- ok Only used in styles.xml -->
+    <color name="colorPrimaryDark">#979899</color> <!-- Toolbar Color -->
+    <color name="colorAccent">#ffffff</color> <!-- ok Only used in styles.xml -->
     <color name="colorMain">#c82209</color>
+    <color name="colorwhite">#ffffff</color>
     <!--App Background-->
     <color name="colorAppBG">#e6e6e6</color>
     <color name="colorDividerLine">@color/colorMain</color>

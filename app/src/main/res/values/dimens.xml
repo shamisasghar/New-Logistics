@@ -17,6 +17,7 @@
     <dimen name="app_display_1">34sp</dimen>
     <dimen name="app_headline">24sp</dimen>
     <dimen name="app_title">21sp</dimen>
+    <dimen name="textinput">13sp</dimen>
     <dimen name="app_title_small">19sp</dimen>
     <dimen name="app_subheading">17sp</dimen>
     <dimen name="app_body_2">15sp</dimen>

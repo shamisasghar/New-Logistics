@@ -4,12 +4,15 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.appinspire.dailybudget"
+        applicationId "com.hypernymbiz.logistic"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        renderscriptTargetApi 25
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
@@ -33,4 +36,8 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "com.android.support:support-v4:$supportLib"
     compile "com.android.support:design:$supportLib"
+    compile 'com.eightbitlab:blurview:1.2.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+
+
 }

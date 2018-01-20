@@ -10,6 +10,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,7 +30,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.appinspire.dailybudget.R;
 
@@ -255,7 +257,7 @@ public class AppUtils {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
-    public static void makeNotification(Context context, Class<?> class_, String fragmentName, Bundle bundle, String message, boolean isUpdateCurrent, int requestCode) {
+    public static void makeNotification(Context context, Class<?> class_, String fragmentName, Bundle bundle, String title, boolean isUpdateCurrent, int requestCode) {
         Intent intent = new Intent(context, class_);
         if (isUpdateCurrent) {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -263,21 +265,19 @@ public class AppUtils {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         intent.putExtra(Constants.FRAGMENT_NAME, fragmentName);
+
         intent.putExtra(Constants.DATA, bundle);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
-        );
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(context)
-//                .setSmallIcon(getNotificationIcon())
-                .setTicker(message)
-               // .setColor(ContextCompat.getColor(context, R.color.colorNotificationIcon))
+                .setSmallIcon(getNotificationIcon())
+                .setTicker(title)
+                .setColor(ContextCompat.getColor(context, R.color.colorNotificationIcon))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentTitle(context.getString(R.string.app_name))
-                .setContentText(message)
+                .setContentText(title)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(message))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(title))
                 .build();
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(requestCode, notification);
@@ -316,23 +316,23 @@ public class AppUtils {
     public static void showSnackBar(View v, String message) {
         if (v != null && !TextUtils.isEmpty(message)) {
             Snackbar snackbar = Snackbar.make(v, message, Snackbar.LENGTH_SHORT);
-            snackbar.getView().setBackgroundResource(R.color.colorSnackBar);
+            snackbar.getView().setBackgroundResource(R.color.colorPrimary);
             View view = snackbar.getView();
             TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
                 tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             else
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            tv.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorSnackBarText));
+            tv.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
             snackbar.show();
         }
     }
 
-//    private static int getNotificationIcon() {
-//        boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
-//        return useWhiteIcon ? R.drawable.ic_stat_onesignal_default : R.mipmap.ic_launcher;
-//    }
-
+    private static int getNotificationIcon() {
+        boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.drawable.ic_launcher_background : R.mipmap.ic_launcher;
+    }
+////
 //    public static String getErrorMessage(Context context, int statusCode) {
 //        String message = null;
 //        if (context != null) {
@@ -407,14 +407,13 @@ public class AppUtils {
             return false;
         }
     }
-//    public static Drawable getColorDrawable(int image,Context context) {
-//
-//        Drawable mDrawable = ContextCompat.getDrawable(context, image);
-//        mDrawable.setColorFilter(new
-//                PorterDuffColorFilter(ContextCompat.getColor(context,R.color.tracking_stpi_indicatorColor),
-//                PorterDuff.Mode.MULTIPLY));
-//        return mDrawable;
-//    }
+    public static Drawable getColorDrawable(int image, Context context) {
 
+        Drawable mDrawable = ContextCompat.getDrawable(context, image);
+        mDrawable.setColorFilter(new
+                PorterDuffColorFilter(ContextCompat.getColor(context,R.color.tracking_stpi_indicatorColor),
+                PorterDuff.Mode.MULTIPLY));
+        return mDrawable;
+    }
 
 }
