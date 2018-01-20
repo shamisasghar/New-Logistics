@@ -37,7 +37,6 @@ dependencies {
     compile "com.android.support:support-v4:$supportLib"
     compile "com.android.support:design:$supportLib"
     compile 'com.eightbitlab:blurview:1.2.0'
+    compile 'com.github.iammert:ExpandableLayout:1.4.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-
-
 }
