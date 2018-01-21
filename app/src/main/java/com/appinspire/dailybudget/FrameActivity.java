@@ -106,35 +106,35 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        View view = menu.findItem(R.id.notification_bell).getActionView();
-        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
-
-        if ( infoList== null) {
-            mNumberOfCartItemsText.setText("0");
-        } else {
-            mNumberOfCartItemsText.setText(String.valueOf(infoList.size()));
-        }
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent=new Intent(getApplicationContext(),JobNotifyActivity.class);
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
-//                finish();
-//                Toast.makeText(HomeActivity.this, "bell", Toast.LENGTH_SHORT).show();
-                ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class,JobNotificationFragment.class.getName(),null);
-
-            }
-        });
-//        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
-//        cartImage.setCol
-
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        View view = menu.findItem(R.id.notification_bell).getActionView();
+//        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
+//
+//        if ( infoList== null) {
+//            mNumberOfCartItemsText.setText("0");
+//        } else {
+//            mNumberOfCartItemsText.setText(String.valueOf(infoList.size()));
+//        }
+//
+////        view.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+//////                Intent intent=new Intent(getApplicationContext(),JobNotifyActivity.class);
+//////                startActivity(intent);
+//////                overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+//////                finish();
+//////                Toast.makeText(HomeActivity.this, "bell", Toast.LENGTH_SHORT).show();
+////                ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class,JobNotificationFragment.class.getName(),null);
+////
+////            }
+////        });
+////        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
+////        cartImage.setCol
+//
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -143,10 +143,10 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 // app icon in action bar clicked; goto parent activity.
                 onBackPressed();
                 return true;
-            case R.id.notification_bell:
-                ActivityUtils.startActivity(this,SimpleFrameActivity.class,HomeFragment.class.getName(),null, AnimationEnum.VERTICAL);
-                break;
-            default:
+//            case R.id.notification_bell:
+//                ActivityUtils.startActivity(this,SimpleFrameActivity.class,HomeFragment.class.getName(),null, AnimationEnum.VERTICAL);
+//                break;
+//            default:
                 // ...
         }
         return super.onOptionsItemSelected(item);

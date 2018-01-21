@@ -48,15 +48,15 @@ public interface ApiInterface {
 
     @GET("iof/get_driver_info/")
     Call<WebAPIResponse<Profile>> getprofile(@Query("driver_id") int driver_id);
-//
-//    @GET("iof/get_app_jobs/")
-//    Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);
-//
-//    @PUT("iof/driver_job_update")
-//    Call<WebAPIResponse<StartJob>> startjob(@Body HashMap<String, Object> body);
-//
-//    @PUT("iof/driver_job_update")
-//    Call<WebAPIResponse<JobEnd>> endjob(@Body HashMap<String, Object> body);
+
+    @GET("iof/get_app_jobs/")
+    Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);
+
+    @PUT("iof/driver_job_update")
+    Call<WebAPIResponse<StartJob>> startjob(@Body HashMap<String, Object> body);
+
+    @PUT("iof/driver_job_update")
+    Call<WebAPIResponse<JobEnd>> endjob(@Body HashMap<String, Object> body);
     class MyOkHttpClient {
 
 

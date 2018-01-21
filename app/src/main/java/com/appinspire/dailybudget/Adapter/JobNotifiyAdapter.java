@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.appinspire.dailybudget.FrameActivity;
 import com.appinspire.dailybudget.R;
+import com.appinspire.dailybudget.fragments.JobDetailsFragment;
 import com.appinspire.dailybudget.models.JobInfo_;
 import com.appinspire.dailybudget.utils.Constants;
 
@@ -83,10 +84,10 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
 //                        context.startActivity(intent);
 //                    ActivityUtils.startActivity(context, FrameActivity.class,JobDetailFragment.class.getName(),null);
                     // ((Activity)context).finish();
-//                    Intent intent = new Intent(context, FrameActivity.class);
-//                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailFragment.class.getName());
-////                    intent.putExtra(Constants.DATA, bundle);
-//                    context.startActivity(intent);
+                    Intent intent = new Intent(context, FrameActivity.class);
+                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
+//                    intent.putExtra(Constants.DATA, bundle);
+                    context.startActivity(intent);
 
 //                    }
 //
