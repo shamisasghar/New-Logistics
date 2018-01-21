@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/text_number_of_cart_items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:text="0"
+        android:textColor="@color/colorToolbarIcon"
+        android:textSize="@dimen/app_caption" />
+
+    <ImageView
+        android:id="@+id/image_cart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="4dp"
+        android:gravity="center"
+        android:paddingLeft="2dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/notification" />
+</LinearLayout>

@@ -96,7 +96,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 // app icon in action bar clicked; goto parent activity.
                 onBackPressed();
                 return true;
-            case R.id.action_dummy:
+            case R.id.notification_bell:
                 ActivityUtils.startActivity(this,SimpleFrameActivity.class,HomeFragment.class.getName(),null, AnimationEnum.VERTICAL);
                 break;
             default:

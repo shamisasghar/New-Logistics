@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof ToolbarListener) {
-            ((ToolbarListener) context).setTitle("Fragment");
+            ((ToolbarListener) context).setTitle("Home");
         }
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,7 +48,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
-        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<AssignedTime,Time>() {
+        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<AssignedTime,Time>()
+        {
             @Override
             public void renderParent(View view, AssignedTime model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
@@ -94,14 +95,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public Section<AssignedTime,Time> getsection() {
         Section<AssignedTime, Time> section = new Section<>();
         AssignedTime phoneCategory=new AssignedTime("Phone");
-        // PhoneCategory phoneCategory1=new PhoneCategory("sssss");
         List<Time> list=new ArrayList<Time>();
         {
             for (int i=0;i<=5;i++)
 
                 list.add(new Time("21313"+i));
             section.parent=phoneCategory;
-            //  section.parent=phoneCategory1;
             section.children.addAll(list);
 
         }

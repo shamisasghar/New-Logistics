@@ -2,11 +2,9 @@
 <menu  xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_dummy"
-        android:name="Settings"
-        android:enabled="true"
-        android:title="Settings"
-        android:visible="false"
-        app:showAsAction="never" />
-
+        android:id="@+id/notification_bell"
+        android:orderInCategory="100"
+        app:actionLayout="@layout/notification_custom_layout"
+        app:showAsAction="always"
+        android:title="Notification"/>
 </menu>

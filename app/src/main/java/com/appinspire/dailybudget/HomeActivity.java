@@ -6,7 +6,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appinspire.dailybudget.dialog.SimpleDialog;
 import com.appinspire.dailybudget.fragments.HomeFragment;
@@ -96,4 +100,57 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener {
     protected void onDestroy() {
         super.onDestroy();
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+
+        View view = menu.findItem(R.id.notification_bell).getActionView();
+//        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
+//
+//        if ( infoList== null) {
+//            mNumberOfCartItemsText.setText("0");
+//        } else {
+//            mNumberOfCartItemsText.setText(String.valueOf(infoList.size()));
+//        }
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent=new Intent(getApplicationContext(),JobNotifyActivity.class);
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+//                finish();
+                Toast.makeText(HomeActivity.this, "bell", Toast.LENGTH_SHORT).show();
+              //  ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class,JobNoticationFragment.class.getName(),null);
+
+            }
+        });
+//        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
+//        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+//            case R.id.image_cart:
+//                break;
+//                // app icon in action bar clicked; goto parent activity.
+//                this.finish();
+//                return true;
+//            case R.id.action_cart:
+//                break;
+//            case R.id.action_settings:
+//                AppUtils.makeToast(this, getString(R.string.msg_settings_not_available));
+//                break;
+//            default:
+            // ...
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }
