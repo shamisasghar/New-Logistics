@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.appinspire.dailybudget.dialog.SimpleDialog;
 import com.appinspire.dailybudget.fragments.HomeFragment;
+import com.appinspire.dailybudget.fragments.JobNotificationFragment;
 import com.appinspire.dailybudget.toolbox.ToolbarListener;
 import com.appinspire.dailybudget.utils.ActivityUtils;
 import com.appinspire.dailybudget.utils.Constants;
@@ -122,8 +123,8 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener {
 //                startActivity(intent);
 //                overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
 //                finish();
-                Toast.makeText(HomeActivity.this, "bell", Toast.LENGTH_SHORT).show();
-              //  ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class,JobNoticationFragment.class.getName(),null);
+//                Toast.makeText(HomeActivity.this, "bell", Toast.LENGTH_SHORT).show();
+               ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class,JobNotificationFragment.class.getName(),null);
 
             }
         });
