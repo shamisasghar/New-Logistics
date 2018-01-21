@@ -65,16 +65,16 @@ public class LoginActivity extends AppCompatActivity {
         edit_password.addTextChangedListener(new MyTextWatcher(edit_password));
 
 
-        mBlurView = (BlurView) findViewById(R.id.blurView);
-        final View decorView = getWindow().getDecorView();
-
-        final View rootView = decorView.findViewById(android.R.id.content);
-        //set background, if your root layout doesn't have one
-        final Drawable windowBackground = decorView.getBackground();
-        mBlurView.setupWith(rootView)
-                .windowBackground(windowBackground)
-                .blurAlgorithm(new RenderScriptBlur(this, true)) //Preferable algorithm, needs RenderScript support mode enabled
-                .blurRadius(mRadius);
+//        mBlurView = (BlurView) findViewById(R.id.blurView);
+//        final View decorView = getWindow().getDecorView();
+//
+//        final View rootView = decorView.findViewById(android.R.id.content);
+//        //set background, if your root layout doesn't have one
+//        final Drawable windowBackground = decorView.getBackground();
+//        mBlurView.setupWith(rootView)
+//                .windowBackground(windowBackground)
+//                .blurAlgorithm(new RenderScriptBlur(this, true)) //Preferable algorithm, needs RenderScript support mode enabled
+//                .blurRadius(mRadius);
         pref = getApplicationContext().getSharedPreferences("TAG", MODE_PRIVATE);
 
         if (LoginUtils.isUserLogin(getApplicationContext())) {

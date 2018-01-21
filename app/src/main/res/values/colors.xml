@@ -7,6 +7,7 @@
     <color name="colorAccent2">#F39025</color>
     <color name="colorMain">#c82209</color>
     <color name="colorwhite">#ffffff</color>
+    <color name="colorblack">#85000000</color>
     <!--App Background-->
     <color name="colorAppBG">#e6e6e6</color>
     <color name="colorDividerLine">@color/colorMain</color>
