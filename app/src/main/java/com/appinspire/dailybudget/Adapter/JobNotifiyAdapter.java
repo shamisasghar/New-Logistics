@@ -45,7 +45,7 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
 
         holder.job.setText(jobInfo_s.get(position).getJob_name());
         if(holder.job.getText().toString().equals("job1")) {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#63a4ff"));
+           // holder.cardView.setCardBackgroundColor(Color.parseColor("#63a4ff"));
         }
 
     }

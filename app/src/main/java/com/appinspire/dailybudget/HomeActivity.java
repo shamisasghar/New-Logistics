@@ -1,5 +1,7 @@
 package com.appinspire.dailybudget;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -15,9 +17,15 @@ import android.widget.Toast;
 import com.appinspire.dailybudget.dialog.SimpleDialog;
 import com.appinspire.dailybudget.fragments.HomeFragment;
 import com.appinspire.dailybudget.fragments.JobNotificationFragment;
+import com.appinspire.dailybudget.models.JobInfo_;
 import com.appinspire.dailybudget.toolbox.ToolbarListener;
 import com.appinspire.dailybudget.utils.ActivityUtils;
 import com.appinspire.dailybudget.utils.Constants;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by Bilal Rashid on 10/10/2017.
@@ -26,6 +34,9 @@ import com.appinspire.dailybudget.utils.Constants;
 public class HomeActivity extends AppCompatActivity implements ToolbarListener {
     private Toolbar mToolbar;
     private SimpleDialog mSimpleDialog;
+    SharedPreferences sharedPreferences;
+    ArrayList<JobInfo_> infoList;
+    private TextView mNumberOfCartItemsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +53,12 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener {
         } else {
             addFragment(new HomeFragment());
         }
+        sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("list", null);
+        Type type = new TypeToken<ArrayList<JobInfo_>>() {}.getType();
+        infoList = gson.fromJson(json, type);
+
 //        if (!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
     }
@@ -108,13 +125,13 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener {
 
 
         View view = menu.findItem(R.id.notification_bell).getActionView();
-//        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
-//
-//        if ( infoList== null) {
-//            mNumberOfCartItemsText.setText("0");
-//        } else {
-//            mNumberOfCartItemsText.setText(String.valueOf(infoList.size()));
-//        }
+        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
+
+        if ( infoList== null) {
+            mNumberOfCartItemsText.setText("0");
+        } else {
+            mNumberOfCartItemsText.setText(String.valueOf(infoList.size()));
+        }
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

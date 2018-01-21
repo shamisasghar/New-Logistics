@@ -39,7 +39,7 @@ public class JobNotificationFragment extends Fragment {
 
     private JobNotifiyAdapter adapter;
     private List<JobInfo_> jobInfo_s;
-   // SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferences;
     String getUserAssociatedEntity;
     RecyclerView recyclerView;
     private SwipeRefreshLayout swipelayout;
@@ -58,7 +58,7 @@ public class JobNotificationFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_job_notification, container, false);
 
 
-      //  sharedPreferences = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+       sharedPreferences = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
         recyclerView= (RecyclerView) view.findViewById(R.id.notification_recycler);
         recyclerView.setHasFixedSize(true);
@@ -74,11 +74,11 @@ public class JobNotificationFragment extends Fragment {
                     jobInfo_s = response.body().response.job_info;
                     adapter=new JobNotifiyAdapter(jobInfo_s,getActivity());
                     recyclerView.setAdapter(adapter);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    Gson gson = new Gson();
-//                    String json = gson.toJson(jobInfo_s);
-//                    editor.putString("list", json);
-//                    editor.commit();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(jobInfo_s);
+                    editor.putString("list", json);
+                    editor.commit();
                 }
             }
 
@@ -95,11 +95,7 @@ public class JobNotificationFragment extends Fragment {
                 snackbar.show();
             }
         });
-
-
         return view;
-
-
     }
 
 
