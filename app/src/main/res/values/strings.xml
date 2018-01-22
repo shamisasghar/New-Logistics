@@ -21,6 +21,8 @@
     <string name="title_sign_up">Sign Up</string>
     <string name="title_internet">Internet Not Available</string>
     <string name="title_order_tracking">Order Tracking</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <!-- Messages -->
     <string name="msg_internet">Please enable your wifi or mobile data from settings</string>
     <string name="msg_user_not_log_in">Please Login</string>

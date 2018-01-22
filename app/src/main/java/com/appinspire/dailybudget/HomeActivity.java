@@ -3,8 +3,12 @@ package com.appinspire.dailybudget;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -31,7 +35,7 @@ import java.util.ArrayList;
  * Created by Bilal Rashid on 10/10/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements ToolbarListener {
+public class HomeActivity extends AppCompatActivity implements ToolbarListener, NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
     private SimpleDialog mSimpleDialog;
     SharedPreferences sharedPreferences;
@@ -58,6 +62,14 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener {
         String json = sharedPreferences.getString("list", null);
         Type type = new TypeToken<ArrayList<JobInfo_>>() {}.getType();
         infoList = gson.fromJson(json, type);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
 //        if (!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
@@ -171,4 +183,8 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
 }
