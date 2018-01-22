@@ -24,7 +24,6 @@ import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import java.util.HashMap;
 
-import eightbitlab.com.blurview.BlurView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +34,6 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    BlurView mBlurView;
     private final float mRadius = 4;
     Button btn_sign;
     private EditText edit_username, edit_password;
@@ -56,18 +54,6 @@ public class LoginActivity extends AppCompatActivity {
         inputLayout_password = (TextInputLayout) findViewById(R.id.input_layout_password);
         edit_username.addTextChangedListener(new MyTextWatcher(edit_username));
         edit_password.addTextChangedListener(new MyTextWatcher(edit_password));
-
-
-//        mBlurView = (BlurView) findViewById(R.id.blurView);
-//        final View decorView = getWindow().getDecorView();
-//
-//        final View rootView = decorView.findViewById(android.R.id.content);
-//        //set background, if your root layout doesn't have one
-//        final Drawable windowBackground = decorView.getBackground();
-//        mBlurView.setupWith(rootView)
-//                .windowBackground(windowBackground)
-//                .blurAlgorithm(new RenderScriptBlur(this, true)) //Preferable algorithm, needs RenderScript support mode enabled
-//                .blurRadius(mRadius);
         pref = getApplicationContext().getSharedPreferences("TAG", MODE_PRIVATE);
 
         if (LoginUtils.isUserLogin(getApplicationContext())) {

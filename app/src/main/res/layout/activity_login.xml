@@ -16,12 +16,6 @@
     android:background="@color/colorblack">
 
 </RelativeLayout>
-    <!--<eightbitlab.com.blurview.BlurView-->
-        <!--android:id="@+id/blurView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:blurOverlayColor="@color/colorDrawerBG">-->
-    <!--</eightbitlab.com.blurview.BlurView>-->
 
     <RelativeLayout
         android:layout_width="100dp"
@@ -130,16 +124,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
 
 </android.support.constraint.ConstraintLayout>
