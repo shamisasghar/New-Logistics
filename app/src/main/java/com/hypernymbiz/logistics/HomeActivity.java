@@ -22,6 +22,7 @@ import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.fragments.HomeFragment;
 import com.hypernymbiz.logistics.fragments.JobFragment;
 import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
+import com.hypernymbiz.logistics.fragments.Profile_Fragment;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
@@ -214,6 +215,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         } else if (id == R.id.distance) {
 
         } else if (id == R.id.profile) {
+            addFragment(new Profile_Fragment());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -176,7 +176,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/btn_canceljob"
-            android:background="@color/colorAccent2"
+            android:background="@drawable/border_orange"
             android:text="Start Job"
             android:textColor="@color/colorAccent"/>
         <Button
@@ -188,7 +188,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/btn_startjob"
-            android:background="@color/colorAccent2"
+            android:background="@drawable/border_orange"
             android:text="Cancel Job"
             android:textColor="@color/colorAccent"/>
         </android.support.constraint.ConstraintLayout>

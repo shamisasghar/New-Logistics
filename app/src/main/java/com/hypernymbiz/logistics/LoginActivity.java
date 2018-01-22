@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.User;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.utils.LoginUtils;
@@ -98,31 +99,31 @@ public class LoginActivity extends AppCompatActivity {
                     LoginUtils.userLoggedIn(LoginActivity.this);
 
 
-//                    ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
-//                        @Override
-//                        public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-//                            if (response.body().status) {
-//
-//
-//                                url = response.body().response.getPhoto();
-//                                driver_name = response.body().response.getName();
-//                                driver_id = Integer.toString(response.body().response.getId());
-//
-//                                editor = pref.edit();
-//                                editor.putString("Email", email);
-//                                editor.putString("Url", url);
-//                                editor.putString("Name", driver_name);
-//                                editor.putString("Id", driver_id);
-//                                editor.commit();
-//
-////                                Glide.with(getApplicationContext()).load(url).into(img_profile);
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
-//                        }
-//                    });
+                    ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
+                        @Override
+                        public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
+                            if (response.body().status) {
+
+
+                                url = response.body().response.getPhoto();
+                                driver_name = response.body().response.getName();
+                                driver_id = Integer.toString(response.body().response.getId());
+
+                                editor = pref.edit();
+                                editor.putString("Email", email);
+                                editor.putString("Url", url);
+                                editor.putString("Name", driver_name);
+                                editor.putString("Id", driver_id);
+                                editor.commit();
+
+                          //      Glide.with(getApplicationContext()).load(url).into(img_profile);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
+                        }
+                    });
 
                     email = response.body().response.getEmail();
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
