@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.fragments.HomeFragment;
+import com.hypernymbiz.logistics.fragments.JobFragment;
 import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -209,7 +210,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
             // Handle the camera action
         } else if (id == R.id.jobs) {
 
-            addFragment(new HomeFragment());
+            addFragment(new JobFragment());
         } else if (id == R.id.distance) {
 
         } else if (id == R.id.profile) {
