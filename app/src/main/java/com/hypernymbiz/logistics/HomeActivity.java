@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -61,6 +62,10 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         String json = sharedPreferences.getString("list", null);
         Type type = new TypeToken<ArrayList<JobInfo_>>() {}.getType();
         infoList = gson.fromJson(json, type);
+
+
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -73,6 +78,8 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
 //        if (!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
     }
+
+
 
     public void addFragment(final Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
@@ -100,23 +107,32 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
 
     @Override
     public void onBackPressed() {
-
-        mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
-                getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.button_positive:
-                        mSimpleDialog.dismiss();
-                        HomeActivity.this.finish();
-                        break;
-                    case R.id.button_negative:
-                        mSimpleDialog.dismiss();
-                        break;
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else
+            {
+            mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
+                    getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    switch (view.getId()) {
+                        case R.id.button_positive:
+                            mSimpleDialog.dismiss();
+                            HomeActivity.this.finish();
+                            break;
+                        case R.id.button_negative:
+                            mSimpleDialog.dismiss();
+                            break;
+                    }
                 }
-            }
-        });
-        mSimpleDialog.show();
+            });
+            mSimpleDialog.show();
+        }
+
+
+
 
     }
 
@@ -183,7 +199,25 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
 
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+    public boolean onNavigationItemSelected(@NonNull MenuItem item)
+
+    {
+        int id = item.getItemId();
+
+        if (id == R.id.home) {
+            addFragment(new HomeFragment());
+            // Handle the camera action
+        } else if (id == R.id.jobs) {
+
+            addFragment(new HomeFragment());
+        } else if (id == R.id.distance) {
+
+        } else if (id == R.id.profile) {
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
+
 }
