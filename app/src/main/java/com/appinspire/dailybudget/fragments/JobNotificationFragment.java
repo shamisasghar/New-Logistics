@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.appinspire.dailybudget.Adapter.JobNotifiyAdapter;
+import com.appinspire.dailybudget.adapter.JobNotifiyAdapter;
 import com.appinspire.dailybudget.R;
 import com.appinspire.dailybudget.api.ApiInterface;
 import com.appinspire.dailybudget.models.JobInfo_;
