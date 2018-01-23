@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,OnMap
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+       if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
                 @Override

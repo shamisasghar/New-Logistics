@@ -77,7 +77,7 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(context, "notify", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "notify", Toast.LENGTH_SHORT).show();
 //                        Toast.makeText(context, job.getText(),Toast.LENGTH_SHORT).show();
 //                        Intent intent = new Intent(context, JobDetailFragment.class);
 //                        context.startActivity(intent);

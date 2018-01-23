@@ -1,6 +1,7 @@
 package com.hypernymbiz.logistics.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hypernymbiz.logistics.ActiveJobActivity;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
@@ -111,9 +113,9 @@ public class JobDetailsFragment extends Fragment {
                         editor.putString("Actualstart", actual_start_time);
                         editor.commit();
                         Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(getContext(), ActiveJobActivity.class);
-//                        startActivity(intent);
-//                        getActivity().finish();
+                        Intent intent = new Intent(getContext(), ActiveJobActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
 
                     }
 

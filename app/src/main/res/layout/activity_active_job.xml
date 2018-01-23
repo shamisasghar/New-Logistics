@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_contraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hypernymbiz.logistics.HomeActivity">
+
+    <include
+        android:id="@+id/layout"
+        layout="@layout/app_bar_activejob"
+        app:layout_constraintBottom_toTopOf="@+id/cardview_map"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></include>
+
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/layout_swipe">-->
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview_map"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout">
+
+        <com.google.android.gms.maps.MapView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.google.android.gms.maps.MapView>
+
+    </android.support.v7.widget.CardView>
+
+    <RelativeLayout
+        android:id="@+id/relativelayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardview_map">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardview_speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:text="Speed"
+                    android:textColor="@color/color1"
+                    android:textSize="25sp" />
+
+                <com.github.capur16.digitspeedviewlib.DigitSpeedView
+                    android:id="@+id/digit_speed_view1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:backgroundColor="@color/colorAccent"
+                    app:disableBackgroundImage="true"
+                    app:speedTextColor="@color/colorPrimaryDark"
+                    app:speedTextSize="25dp"
+                    app:unit="Km/h"
+                    app:unitTextColor="@color/colorPrimaryDark"
+                    app:unitTextSize="4dp" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/layout_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cardview_speed"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:padding="10dp"
+                android:text="Job Details"
+                android:textSize="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryDark"></View>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <iammert.com.expandablelib.ExpandableLayout
+                    android:id="@+id/layout_expandable"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:childLayout="@layout/layout_child"
+                    app:parentLayout="@layout/layout_parent" />
+            </android.support.v4.widget.NestedScrollView>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <com.shitij.goyal.slidebutton.SwipeButton
+        android:id="@+id/btn_slide"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/colorAccent2"
+        android:gravity="center"
+        android:text="Swipe To Complete"
+        android:textColor="#FFFFFF"
+        app:after_confirmation_background="#000"
+        app:button_confirm_text="Confirmed!!"
+        app:button_post_confirm_text="Completed"
+        app:button_swipe_text="Swipe!!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>
