@@ -20,7 +20,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.models.AssignedTime;
@@ -79,17 +81,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener,OnMap
                 @Override
                 public void onLocationChanged(Location location) {
 
-
                     Location l = (Location) location;
                     pos = new LatLng(l.getLatitude(), l.getLongitude());
-                    if (l!=null){
+
                         googleMap.setMyLocationEnabled(true);
+                       // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos,18.4f));
                         googleMap.setTrafficEnabled(true);
-                    }
 
-
-//                 googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.maptruck)));
 
                 }
 

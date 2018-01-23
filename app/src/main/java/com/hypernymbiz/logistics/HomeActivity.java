@@ -26,6 +26,7 @@ import com.hypernymbiz.logistics.fragments.Profile_Fragment;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -207,14 +208,72 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         int id = item.getItemId();
 
         if (id == R.id.home) {
+
+            if (!AppUtils.isInternetAvailable(this)) {
+                mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mSimpleDialog.dismiss();
+                                ActivityUtils.startWifiSettings(HomeActivity.this);
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
+                return true;
+            }
             addFragment(new HomeFragment());
             // Handle the camera action
         } else if (id == R.id.jobs) {
 
+            if (!AppUtils.isInternetAvailable(this)) {
+                mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mSimpleDialog.dismiss();
+                                ActivityUtils.startWifiSettings(HomeActivity.this);
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
+                return true;
+            }
             addFragment(new JobFragment());
         } else if (id == R.id.distance) {
 
         } else if (id == R.id.profile) {
+            if (!AppUtils.isInternetAvailable(this)) {
+                mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mSimpleDialog.dismiss();
+                                ActivityUtils.startWifiSettings(HomeActivity.this);
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
+                return true;
+            }
             addFragment(new Profile_Fragment());
         }
 
