@@ -167,10 +167,6 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
             public void onSwipeConfirm() {
 
 
-
-
-
-
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("job_id",13);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));

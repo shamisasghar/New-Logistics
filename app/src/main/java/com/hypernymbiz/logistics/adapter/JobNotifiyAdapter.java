@@ -64,6 +64,7 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
         TextView job;
         ImageView imageView;
         CardView cardView;
+        int pos=getAdapterPosition();
 
         private ViewHolder(final View itemView) {
             super(itemView);
@@ -83,10 +84,12 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
 //                        context.startActivity(intent);
 //                    ActivityUtils.startActivity(context, FrameActivity.class,JobDetailFragment.class.getName(),null);
                     // ((Activity)context).finish();
-                    Intent intent = new Intent(context, FrameActivity.class);
-                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
-//                    intent.putExtra(Constants.DATA, bundle);
-                    context.startActivity(intent);
+                    Toast.makeText(context,String.valueOf(pos), Toast.LENGTH_SHORT).show();
+
+//                    Intent intent = new Intent(context, FrameActivity.class);
+//                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
+////                    intent.putExtra(Constants.DATA, bundle);
+//                    context.startActivity(intent);
 
 //                    }
 //
