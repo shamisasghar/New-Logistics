@@ -134,9 +134,6 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
             mSimpleDialog.show();
         }
 
-
-
-
     }
 
     @Override

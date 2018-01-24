@@ -1,6 +1,7 @@
 package com.hypernymbiz.logistics.fragments;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -40,13 +41,14 @@ import iammert.com.expandablelib.Section;
  * Created by Bilal Rashid on 10/10/2017.
  */
 
-public class HomeFragment extends Fragment implements View.OnClickListener,OnMapReadyCallback {
+public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
     private ViewHolder mHolder;
     private GoogleMap googleMap;
     Context fContext;
     LocationManager locationManager;
     MapView mMapView;
     LatLng pos;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,OnMap
 //        if (!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -61,8 +64,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener,OnMap
             ((ToolbarListener) context).setTitle("Home");
         }
     }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
 
@@ -75,16 +79,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener,OnMap
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-       if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
 
                     Location l = (Location) location;
                     pos = new LatLng(l.getLatitude(), l.getLongitude());
-
-                        googleMap.setMyLocationEnabled(true);
+                    googleMap.setMyLocationEnabled(true);
                        // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos,18.4f));
                         googleMap.setTrafficEnabled(true);

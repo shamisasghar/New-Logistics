@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.capur16.digitspeedviewlib.DigitSpeedView;
 import com.google.android.gms.maps.GoogleMap;
@@ -64,7 +65,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
     ImageView info_img;
     Dialog summary,info;
     SwipeButton swipeButton;
-    Button btn_okk;
+    Button btn_okk,btn_cls;
     MapView mMapView;
     SharedPreferences pref;
     private GoogleMap googleMap;
@@ -135,6 +136,20 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                 info.setContentView(R.layout.dialog_truck_info);
                 info.show();
                 info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//                btn_cls.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(ActiveJobActivity.this, "hllo", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+                btn_cls = (Button) info.findViewById(R.id.btn_close);
+                btn_cls.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        info.hide();
+                    }
+                });
             }
         });
 
