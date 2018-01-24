@@ -86,10 +86,10 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
                     // ((Activity)context).finish();
                     Toast.makeText(context,String.valueOf(pos), Toast.LENGTH_SHORT).show();
 
-//                    Intent intent = new Intent(context, FrameActivity.class);
-//                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
-////                    intent.putExtra(Constants.DATA, bundle);
-//                    context.startActivity(intent);
+                    Intent intent = new Intent(context, FrameActivity.class);
+                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
+//                    intent.putExtra(Constants.DATA, bundle);
+                    context.startActivity(intent);
 
 //                    }
 //

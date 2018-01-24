@@ -277,17 +277,12 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
 
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getApplicationContext().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            return;
         }
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     LatLng pos;
@@ -307,9 +302,13 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
                     Location l = (Location) location;
                     pos = new LatLng(l.getLatitude(), l.getLongitude());
-
-                   // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                   locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
                     if (googleMap != null) {
                         googleMap.setMyLocationEnabled(true);
                         //  googleMap.setTrafficEnabled(true);
@@ -370,7 +369,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
         }
 
-    }
+
 
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";

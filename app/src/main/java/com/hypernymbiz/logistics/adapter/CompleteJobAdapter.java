@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.models.JobInfo_;
+import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.utils.AppUtils;
 
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 public class CompleteJobAdapter extends RecyclerView.Adapter<CompleteJobAdapter.MyViewHolder> {
     private List<JobInfo_> jobInfo_s;
+    Respone_Completed_job respone_completed_job;
+
     Context context;
 
 
@@ -38,12 +41,8 @@ public class CompleteJobAdapter extends RecyclerView.Adapter<CompleteJobAdapter.
 
         holder.jobname.setText(jobInfo_s.get(position).getJob_name());
         holder.jobstatus.setText(jobInfo_s.get(position).getJob_status());
-        holder.starttime.setText(AppUtils.getFormattedDate(jobInfo_s.get(position).getJob_start_time())+" "+AppUtils.getTime(jobInfo_s.get(position).getJob_start_time()));
+        holder.starttime.setText(AppUtils.getFormattedDate(jobInfo_s.get(position).getJob_start_time()) + " " + AppUtils.getTime(jobInfo_s.get(position).getJob_start_time()));
         holder.endtime.setText(AppUtils.getTime(jobInfo_s.get(position).getJob_end_time()));
-        //  holder.compled_job.setText(jobInfo_s.size());
-
-
-
     }
 
     @Override

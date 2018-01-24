@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
         OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
             @Override
             public void idsAvailable(String userId, String registrationId) {
-                Toast.makeText(SplashActivity.this, userId, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SplashActivity.this, userId, Toast.LENGTH_SHORT).show();
                 ScheduleUtils.saveUserOneSignalId(getApplicationContext(), userId);
                 Log.e("debug", "User:" + userId);
                 if (registrationId != null)
