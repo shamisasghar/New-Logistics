@@ -1,5 +1,6 @@
 package com.hypernymbiz.logistics.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -247,6 +248,7 @@ public class AppUtils {
         return false;
     }
 
+
     public static void requestFocus(Activity activity, View view) {
         if (view.requestFocus()) {
             activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -330,7 +332,7 @@ public class AppUtils {
 
     private static int getNotificationIcon() {
         boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.ic_launcher_background : R.mipmap.ic_launcher;
+        return useWhiteIcon ? R.drawable.hypernet : R.mipmap.ic_launcher;
     }
 ////
 //    public static String getErrorMessage(Context context, int statusCode) {

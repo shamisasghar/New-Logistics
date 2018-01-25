@@ -2,7 +2,9 @@ package com.hypernymbiz.logistics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -44,6 +46,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
     SharedPreferences sharedPreferences;
     ArrayList<JobInfo_> infoList;
     private TextView mNumberOfCartItemsText;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,9 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         } else {
             addFragment(new HomeFragment());
         }
+
+        Locationcheck();
+
         sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("list", null);
@@ -278,5 +284,27 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+public void Locationcheck() {
+    final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+
+        mSimpleDialog = new SimpleDialog(this, getString(R.string.title_location), getString(R.string.msg_location),
+                getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.button_positive:
+                        mSimpleDialog.dismiss();
+                        ActivityUtils.startWifiSettings(HomeActivity.this);
+                        break;
+                    case R.id.button_negative:
+                        mSimpleDialog.dismiss();
+                        break;
+                }
+            }
+        });
+    mSimpleDialog.show();
+}
 
 }
