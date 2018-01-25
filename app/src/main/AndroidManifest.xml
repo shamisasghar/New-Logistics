@@ -18,14 +18,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/driver"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/driver"
         android:supportsRtl="true"
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme" >
-
-
 
 
         <activity
@@ -45,6 +43,20 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDc7u3RNdiwxZqxCWLrd9cDkbNgt5ee9-I" />
+
+        <meta-data
+            android:name="com.onesignal.NotificationOpened.DEFAULT"
+            android:value="DISABLE" />
+
+        <service
+            android:name="com.hypernymbiz.logistics.service.OneSignalReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.onesignal.NotificationExtender" />
+            </intent-filter>
+        </service>
+
+
 
         <activity
             android:name="com.hypernymbiz.logistics.LoginActivity"

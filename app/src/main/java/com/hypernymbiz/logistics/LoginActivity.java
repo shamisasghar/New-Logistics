@@ -22,6 +22,7 @@ import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.User;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.utils.LoginUtils;
+import com.onesignal.OneSignal;
 
 import java.util.HashMap;
 
@@ -93,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
   //              progressBar.setVisibility(View.GONE);
                 if (response.body().status) {
 
-
+                    OneSignal.sendTag("email",response.body().response.getEmail());
                    // Toast.makeText(LoginActivity.this, response.body().response.getToken(), Toast.LENGTH_SHORT).show();
                     LoginUtils.saveUserToken(LoginActivity.this, response.body().response.getToken(), Integer.toString(response.body().response.getAssociatedEntity()));
                     LoginUtils.userLoggedIn(LoginActivity.this);

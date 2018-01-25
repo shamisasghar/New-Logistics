@@ -47,6 +47,7 @@ public class SplashActivity extends AppCompatActivity {
 //
         OneSignal.startInit(this)
                 .init();
+       // OneSignal.sendTag("email","driver1@kotal.com");
 
         OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
             @Override

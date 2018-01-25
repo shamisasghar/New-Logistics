@@ -112,7 +112,7 @@ public class JobDetailsFragment extends Fragment {
                         editor.putString("Endlng", endlng);
                         editor.putString("Actualstart", actual_start_time);
                         editor.commit();
-                        Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getContext(), ActiveJobActivity.class);
                         startActivity(intent);
                         getActivity().finish();

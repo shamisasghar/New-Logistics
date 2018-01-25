@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -332,7 +333,7 @@ public class AppUtils {
 
     private static int getNotificationIcon() {
         boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.hypernet : R.mipmap.ic_launcher;
+        return useWhiteIcon ? R.drawable.ic_check_circle_36dp : R.mipmap.ic_launcher;
     }
 ////
 //    public static String getErrorMessage(Context context, int statusCode) {

@@ -69,10 +69,9 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("list", null);
-        Type type = new TypeToken<ArrayList<JobInfo_>>() {}.getType();
+        Type type = new TypeToken<ArrayList<JobInfo_>>() {
+        }.getType();
         infoList = gson.fromJson(json, type);
-
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -89,7 +88,6 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
     }
 
 
-
     public void addFragment(final Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
@@ -98,7 +96,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(" ");
-        ActivityUtils.centerToolbarTitle(mToolbar,false);
+        ActivityUtils.centerToolbarTitle(mToolbar, false);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -119,9 +117,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else
-            {
+        } else {
             mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
                     getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                 @Override
@@ -151,6 +147,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
     protected void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -160,7 +157,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         View view = menu.findItem(R.id.notification_bell).getActionView();
         mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
 
-        if ( infoList== null) {
+        if (infoList == null) {
             mNumberOfCartItemsText.setText("0");
         } else {
             mNumberOfCartItemsText.setText(String.valueOf(infoList.size()));
@@ -174,7 +171,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
 //                overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
 //                finish();
 //                Toast.makeText(HomeActivity.this, "bell", Toast.LENGTH_SHORT).show();
-               ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class,JobNotificationFragment.class.getName(),null);
+                ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
 
             }
         });
@@ -285,26 +282,27 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         return true;
     }
 
-public void Locationcheck() {
-    final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+    public void Locationcheck() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        mSimpleDialog = new SimpleDialog(this, getString(R.string.title_location), getString(R.string.msg_location),
-                getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.button_positive:
-                        mSimpleDialog.dismiss();
-                        ActivityUtils.startWifiSettings(HomeActivity.this);
-                        break;
-                    case R.id.button_negative:
-                        mSimpleDialog.dismiss();
-                        break;
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            mSimpleDialog = new SimpleDialog(this, getString(R.string.title_location), getString(R.string.msg_location),
+                    getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.button_positive:
+                            mSimpleDialog.dismiss();
+                            ActivityUtils.startWifiSettings(HomeActivity.this);
+                            break;
+                        case R.id.button_negative:
+                            mSimpleDialog.dismiss();
+                            break;
+                    }
                 }
-            }
-        });
-    mSimpleDialog.show();
-}
-
+            });
+            mSimpleDialog.show();
+            return;
+        }
+    }
 }

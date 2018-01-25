@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
+import com.hypernymbiz.logistics.enumerations.AnimationEnum;
 import com.hypernymbiz.logistics.fragments.HomeFragment;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -139,7 +140,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 onBackPressed();
                 return true;
 //            case R.id.notification_bell:
-//                ActivityUtils.startActivity(this,SimpleFrameActivity.class,HomeFragment.class.getName(),null, AnimationEnum.VERTICAL);
+//                ActivityUtils.startActivity(this,FrameActivity.class,HomeFragment.class.getName(),null, AnimationEnum.VERTICAL);
 //                break;
 //            default:
                 // ...

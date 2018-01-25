@@ -41,14 +41,26 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(JobNotifiyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final JobNotifiyAdapter.ViewHolder holder, final int position) {
 
         holder.job.setText(jobInfo_s.get(position).getJob_name());
         if(holder.job.getText().toString().equals("job1")) {
            // holder.cardView.setCardBackgroundColor(Color.parseColor("#63a4ff"));
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            int pos=holder.getAdapterPosition();
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, String.valueOf(pos), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, FrameActivity.class);
+                intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
+//                    intent.putExtra(Constants.DATA, bundle);
+                context.startActivity(intent);
+            }
+        });
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -84,12 +96,12 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
 //                        context.startActivity(intent);
 //                    ActivityUtils.startActivity(context, FrameActivity.class,JobDetailFragment.class.getName(),null);
                     // ((Activity)context).finish();
-                    Toast.makeText(context,String.valueOf(pos), Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(context, FrameActivity.class);
-                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
-//                    intent.putExtra(Constants.DATA, bundle);
-                    context.startActivity(intent);
+//                    Toast.makeText(context,String.valueOf(pos), Toast.LENGTH_SHORT).show();
+//
+//                    Intent intent = new Intent(context, FrameActivity.class);
+//                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
+////                    intent.putExtra(Constants.DATA, bundle);
+//                    context.startActivity(intent);
 
 //                    }
 //
