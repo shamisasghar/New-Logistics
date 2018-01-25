@@ -11,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -30,8 +31,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
+import com.hypernymbiz.logistics.models.AssignedTime;
 import com.hypernymbiz.logistics.models.DirectionsJSONParser;
 import com.hypernymbiz.logistics.models.JobEnd;
+import com.hypernymbiz.logistics.models.Time;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 import com.shitij.goyal.slidebutton.SwipeButton;
@@ -50,6 +53,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import iammert.com.expandablelib.ExpandableLayout;
+import iammert.com.expandablelib.Section;
+import in.shadowfax.proswipebutton.ProSwipeButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +70,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 //    RecyclerView recyclerView;
     ImageView info_img;
     Dialog summary,info;
-    SwipeButton swipeButton;
+    ProSwipeButton swipeButton;
     Button btn_okk,btn_cls;
     MapView mMapView;
     SharedPreferences pref;
@@ -99,7 +105,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
         dig_vol=(TextView)findViewById(R.id.txt_dialog_actualend);
 
         swipelayout = (SwipeRefreshLayout)findViewById(R.id.layout_swipe);
-        swipeButton = (SwipeButton) findViewById(R.id.btn_slide);
+        swipeButton = (ProSwipeButton) findViewById(R.id.btn_slide);
         info_img = (ImageView) findViewById(R.id.info);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getApplicationContext());
         Calendar c = Calendar.getInstance();
@@ -115,6 +121,8 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
             e.printStackTrace();
         }
         mMapView.getMapAsync(this);
+
+        Expandable();
 
         map();
 
@@ -153,19 +161,15 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        swipeButton.addOnSwipeCallback(new SwipeButton.Swipe() {
-            @Override
-            public void onButtonPress() {
-
-            }
-
-            @Override
-            public void onSwipeCancel() {
-            }
-
+        swipeButton.setOnSwipeListener(new ProSwipeButton.OnSwipeListener() {
             @Override
             public void onSwipeConfirm() {
-
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeButton.showResultIcon(true);
+                    }
+                }, 2000);
 
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("job_id",13);
@@ -196,7 +200,6 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
 
-
                 summary = new Dialog(ActiveJobActivity.this);
                 summary.setContentView(R.layout.dialog_summary_detail);
 
@@ -222,8 +225,81 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
 
+
             }
         });
+
+//        swipeButton.addOnSwipeCallback(new SwipeButton.Swipe() {
+//            @Override
+//            public void onButtonPress() {
+//
+//            }
+//
+//            @Override
+//            public void onSwipeCancel() {
+//            }
+//
+//            @Override
+//            public void onSwipeConfirm() {
+//
+//
+//                HashMap<String, Object> body = new HashMap<>();
+//                body.put("job_id",13);
+//                body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+//                body.put("actual_end_time", actual_end_time);
+//
+//
+//
+//
+//                ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
+//                    @Override
+//                    public void onResponse(Call<WebAPIResponse<JobEnd>> call, Response<WebAPIResponse<JobEnd>> response) {
+////                        if (response.body().status) {
+//
+//
+////                    }
+//                    }
+//                    @Override
+//                    public void onFailure(Call<WebAPIResponse<JobEnd>> call, Throwable t) {
+//
+////                        Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+////                        View sbView = snackbar.getView();
+////                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+////                        sbView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+////                        textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorDialogToolbarText));
+////                        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+////                        snackbar.show();
+//                    }
+//                });
+//
+//
+//                summary = new Dialog(ActiveJobActivity.this);
+//                summary.setContentView(R.layout.dialog_summary_detail);
+//
+//                dig_actend=(TextView)summary.findViewById(R.id.txt_dialog_actualend);
+//                btn_okk = (Button) summary.findViewById(R.id.btn_ok);
+//                dig_actstrt=(TextView)summary.findViewById(R.id.txt_dialog_actualstart);
+//                dig_strt=(TextView)summary.findViewById(R.id.txt_dialog_starttime);
+//                dig_end=(TextView)summary.findViewById(R.id.txt_dialog_endtime);
+//
+//                summary.show();
+//                summary.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//                dig_actend.setText(actual_end_time);
+//                dig_actstrt.setText(pref.getString("Actualstart", ""));
+//                dig_strt.setText(pref.getString("Startjob", ""));
+//                dig_end.setText(pref.getString("Startend", ""));
+//
+//                btn_okk.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        summary.hide();
+//                        finish();
+//                    }
+//                });
+//
+//            }
+//        });
         //    add();
 
     }
@@ -494,6 +570,45 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
             } else {
             }
         }
+    }
+
+    public void Expandable()
+    {
+        ExpandableLayout sectionLinearLayout = (ExpandableLayout) findViewById(R.id.layout_expandable);
+
+        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<AssignedTime,Time>()
+        {
+            @Override
+            public void renderParent(View view, AssignedTime model, boolean isExpanded, int parentPosition) {
+                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
+                view.findViewById(R.id.arrow).setBackgroundResource(isExpanded ? R.drawable.up_arrow : R.drawable.up_arrow);
+            }
+
+            @Override
+            public void renderChild(View view, Time model, int parentPosition, int childPosition) {
+                ((TextView) view.findViewById(R.id.tvChild)).setText(model.name);
+
+            }
+        });
+
+        sectionLinearLayout.addSection(getsection());
+        sectionLinearLayout.addSection(getsection());
+
+    }
+
+    public Section<AssignedTime,Time> getsection() {
+        Section<AssignedTime, Time> section = new Section<>();
+        AssignedTime phoneCategory=new AssignedTime("Assigned Time");
+        List<Time> list=new ArrayList<Time>();
+        {
+            for (int i=0;i<=5;i++)
+
+                list.add(new Time("21313"+i));
+            section.parent=phoneCategory;
+            section.children.addAll(list);
+
+        }
+        return section;
     }
 
 }

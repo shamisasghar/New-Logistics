@@ -58,8 +58,6 @@
                         app:childLayout="@layout/layout_child"
                         app:parentLayout="@layout/layout_parent" />
                 </android.support.v4.widget.NestedScrollView>
-
-
             </LinearLayout>
 
     </RelativeLayout>

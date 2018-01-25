@@ -92,7 +92,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos,18.4f));
                         googleMap.setTrafficEnabled(true);
 
-
                 }
 
                 @Override
