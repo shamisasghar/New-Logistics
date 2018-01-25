@@ -108,10 +108,8 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
         swipeButton = (ProSwipeButton) findViewById(R.id.btn_slide);
         info_img = (ImageView) findViewById(R.id.info);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getApplicationContext());
-        Calendar c = Calendar.getInstance();
-        System.out.println("Current time =&gt; " + c.getTime());
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        actual_end_time = df.format(c.getTime());
+
+
 
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
@@ -171,13 +169,14 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                     }
                 }, 2000);
 
+                Calendar c = Calendar.getInstance();
+                System.out.println("Current time =&gt; " + c.getTime());
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                actual_end_time = df.format(c.getTime());
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("job_id",13);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
-
-
-
 
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
                     @Override

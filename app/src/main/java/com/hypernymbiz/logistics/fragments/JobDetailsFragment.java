@@ -83,8 +83,9 @@ public class JobDetailsFragment extends Fragment {
         System.out.println("Current time =&gt; " + c.getTime());
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         actual_start_time = df.format(c.getTime());
+      //  actual_start_time=AppUtils.getDateAndTime(df.toString());
 //         Now formattedDate have current date/time
-        // Toast.makeText(getActivity(), actual_start_time, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), actual_start_time, Toast.LENGTH_SHORT).show();
 
 
         btn_start.setOnClickListener(new View.OnClickListener() {
