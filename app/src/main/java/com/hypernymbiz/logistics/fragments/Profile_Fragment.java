@@ -38,7 +38,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Profile_Fragment extends Fragment implements View.OnClickListener, ToolbarListener {
     private ViewHolder mHolder;
-    TextView email, drivername, driverid;
+    TextView email, drivername, driverid,martialstatus,dof;
     private Toolbar mToolbar;
     private TextView mToolbarTitle;
     private SwipeRefreshLayout swipelayout;
@@ -65,6 +65,8 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
         email = (TextView) view.findViewById(R.id.txt_Email);
         drivername = (TextView) view.findViewById(R.id.txt_drivername);
         driverid = (TextView) view.findViewById(R.id.txt_driverid);
+        martialstatus = (TextView) view.findViewById(R.id.txt_gender);
+        dof = (TextView) view.findViewById(R.id.txt_dateofjoin);
         img_profile=(CircleImageView) view.findViewById(R.id.img_driver_profile);
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
@@ -79,33 +81,39 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
         driverid.setText(Driver_id);
         swipelayout();
 
-//        ApiInterface.retrofit.getprofile(12).enqueue(new Callback<WebAPIResponse<Profile>>() {
-//            @Override
-//            public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-//                if (response.body().status) {
-//
-//                    String driverName, driverId;
-//                    String url=response.body().response.getPhoto();
-//                    driverName = response.body().response.getName();
-//                    driverId = Integer.toString(response.body().response.getId());
-//                    drivername.setText(driverName);
-//                    driverid.setText(driverId);
-//                    Glide.with(getContext()).load(url).into(img_profile);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
-//
-//                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-//                View sbView = snackbar.getView();
-//                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-//                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-//                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-//                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//                snackbar.show();
-//            }
-//        });
+
+
+        ApiInterface.retrofit.getprofile(12).enqueue(new Callback<WebAPIResponse<Profile>>() {
+            @Override
+            public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
+                if (response.body().status) {
+
+                    String driverName, driverId,drivergender,driverdof;
+                    String url=response.body().response.getPhoto();
+                    driverName = response.body().response.getName();
+                    driverId = Integer.toString(response.body().response.getId());
+                    drivergender=response.body().response.getMaritalStatus();
+                    driverdof=response.body().response.getDateOfJoining();
+                    drivername.setText(driverName);
+                    driverid.setText(driverId);
+                    martialstatus.setText(drivergender);
+                    dof.setText(driverdof);
+                    Glide.with(getContext()).load(url).into(img_profile);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
+
+                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                snackbar.show();
+            }
+        });
 
         return view;
     }

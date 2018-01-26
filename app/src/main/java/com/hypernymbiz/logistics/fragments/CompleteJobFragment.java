@@ -1,7 +1,9 @@
 package com.hypernymbiz.logistics.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +36,8 @@ public class CompleteJobFragment extends Fragment {
     private CompleteJobAdapter completeJobAdapter;
     private List<JobInfo_> jobInfo_s;
     String getUserAssociatedEntity;
+    ConstraintLayout asd;
+
 
 
     @Override
@@ -41,14 +45,23 @@ public class CompleteJobFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_view_pager_compltd, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_complete);
-        layoutManager = new LinearLayoutManager(getContext());
+        asd=(ConstraintLayout)view.findViewById(R.id.layout_contraint);
+                layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
+
         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-                if (response.body().status) {
+            if(response.body().response.job_count==0)
+            {
+                asd.setBackgroundColor(Color.parseColor("#63a4ff"));
+
+
+            }
+
+              else if (response.body().status) {
 
                     // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
                     jobInfo_s = response.body().response.job_info;

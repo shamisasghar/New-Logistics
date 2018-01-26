@@ -1,7 +1,9 @@
 package com.hypernymbiz.logistics.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +37,7 @@ public class FailedJobFragment extends Fragment {
     private FailedJobAdapter failedJobAdapter;
     private List<JobInfo_> jobInfo_s;
     String getUserAssociatedEntity;
+    ConstraintLayout asd;
     View view;
 
     @Override
@@ -42,6 +45,7 @@ public class FailedJobFragment extends Fragment {
 
         view= inflater.inflate(R.layout.fragment_view_pager_failed,container,false);
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view_complete);
+        asd=(ConstraintLayout)view.findViewById(R.id.layout_contraint_failed);
         layoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -50,7 +54,13 @@ public class FailedJobFragment extends Fragment {
         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity),54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-                if (response.body().status){
+
+                if(response.body().response.job_count==0)
+                {
+                    asd.setBackgroundColor(Color.parseColor("#63a4ff"));
+
+                }
+                else if (response.body().status){
 
                     Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
                     jobInfo_s=response.body().response.job_info;

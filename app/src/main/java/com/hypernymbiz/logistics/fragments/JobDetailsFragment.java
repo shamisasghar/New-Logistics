@@ -155,12 +155,12 @@ public class JobDetailsFragment extends Fragment {
             if (value != null) {
                 payloadNotification = GsonUtils.fromJson(value.getString(Constants.PAYLOAD), PayloadNotification.class);
             }
-            else {
+            else
+                {
                 ApiInterface.retrofit.getalldata(13).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
                         if (response.body().status) {
-
                             jbname.setText(response.body().response.getName());
                             jbstatus.setText(response.body().response.getStatus());
                             jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
@@ -192,7 +192,6 @@ public class JobDetailsFragment extends Fragment {
                 });
             }
         }
-
 
         return view;
 

@@ -38,13 +38,14 @@ import retrofit2.Response;
 public class JobNotificationFragment extends Fragment {
 
     private JobNotifiyAdapter adapter;
-    private List<JobInfo_> jobInfo_s;
+    List<JobInfo_> jobInfo_s;
     SharedPreferences sharedPreferences;
     String getUserAssociatedEntity;
     RecyclerView recyclerView;
     private SwipeRefreshLayout swipelayout;
     Context fContext;
     View view;
+    TextView size;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -56,7 +57,6 @@ public class JobNotificationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_job_notification, container, false);
-
 
        sharedPreferences = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());

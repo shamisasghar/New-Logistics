@@ -57,7 +57,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="43dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
                         android:layout_below="@+id/img_driver_profile"
@@ -98,7 +98,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="45dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
                         android:layout_below="@+id/img_driver_profile"
@@ -139,7 +139,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="46dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
                         android:layout_below="@+id/img_driver_profile"
@@ -147,7 +147,88 @@
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/view4"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_below="@+id/layout_linear4"
+                    android:background="@color/colorPrimaryDark">
+                </View>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view4"
+                    android:id="@+id/layout_linear5"
+                    android:layout_marginTop="0dp">
+                    <TextView
+                        android:id="@+id/label_date_of_join"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:text="Date Of Join"
+                        android:layout_marginLeft="25dp"
+                        android:textColor="#000"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txt_dateofjoin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="20dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@+id/img_driver_profile"
+                        android:text="Driver Dof"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:id="@+id/view3"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_below="@+id/layout_linear3"
+                    android:background="@color/colorPrimaryDark">
+                </View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view3"
+                    android:id="@+id/layout_linear4"
+                    android:layout_marginTop="0dp">
+                    <TextView
+                        android:id="@+id/label_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:text="Gender"
+                        android:layout_marginLeft="50dp"
+                        android:textColor="#000"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txt_gender"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="31dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:layout_below="@+id/img_driver_profile"
+                        android:text="Driver Gender"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+                </LinearLayout>
 
 
             </RelativeLayout>

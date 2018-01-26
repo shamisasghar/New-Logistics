@@ -53,6 +53,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         toolbarSetup();
+
         String fragmentName = getIntent().getStringExtra(Constants.FRAGMENT_NAME);
         Bundle bundle = getIntent().getBundleExtra(Constants.DATA);
         if (!TextUtils.isEmpty(fragmentName)) {
@@ -69,8 +70,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("list", null);
-        Type type = new TypeToken<ArrayList<JobInfo_>>() {
-        }.getType();
+        Type type = new TypeToken<ArrayList<JobInfo_>>() {}.getType();
         infoList = gson.fromJson(json, type);
 
 
@@ -103,6 +103,8 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
     }
+
+
 
     @Override
     public void setTitle(String title) {

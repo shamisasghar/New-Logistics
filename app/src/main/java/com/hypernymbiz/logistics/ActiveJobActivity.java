@@ -37,8 +37,6 @@ import com.hypernymbiz.logistics.models.JobEnd;
 import com.hypernymbiz.logistics.models.Time;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.utils.LoginUtils;
-import com.shitij.goyal.slidebutton.SwipeButton;
-
 import org.json.JSONObject;
 
 import java.io.BufferedReader;

@@ -2,20 +2,24 @@ package com.hypernymbiz.logistics.fragments;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -27,9 +31,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.models.AssignedTime;
+import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.Time;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +49,16 @@ import iammert.com.expandablelib.Section;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
     private ViewHolder mHolder;
+    private Context mContext;
+    public static final int MY_LOCATION_PERMISSION_REQUEST_CODE = 1;
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 2;
     private GoogleMap googleMap;
     Context fContext;
     LocationManager locationManager;
     MapView mMapView;
     LatLng pos;
+    TextView size;
+    ArrayList<JobInfo_> jobInfos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,52 +76,59 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         }
     }
 
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+
         mMapView = (MapView) view.findViewById(R.id.mapView);
-
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-
-        } else {
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
         }
-        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        else
+            {
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
 
-                    Location l = (Location) location;
-                    pos = new LatLng(l.getLatitude(), l.getLongitude());
-                    googleMap.setMyLocationEnabled(true);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+
+                        Log.d("TAAAG","on location change");
+                        Location l = (Location) location;
+                        pos = new LatLng(l.getLatitude(), l.getLongitude());
                        // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos,18.4f));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
                         googleMap.setTrafficEnabled(true);
 
-                }
+                    }
 
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
+                    @Override
+                    public void onStatusChanged(String s, int i, Bundle bundle) {
 
-                }
+                    }
 
-                @Override
-                public void onProviderEnabled(String s) {
+                    @Override
+                    public void onProviderEnabled(String s) {
 
-                }
+                    }
 
-                @Override
-                public void onProviderDisabled(String s) {
+                    @Override
+                    public void onProviderDisabled(String s) {
 
-                }
-            });
+                    }
+                });
 
+            }
         }
+
+
+
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         try {
@@ -123,8 +141,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
         ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
-        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<AssignedTime,Time>()
-        {
+        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<AssignedTime, Time>() {
             @Override
             public void renderParent(View view, AssignedTime model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
@@ -143,49 +160,80 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         return view;
 
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-    //    mHolder.button.setOnClickListener(this);
+        //    mHolder.button.setOnClickListener(this);
 //        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
 //        toolbar.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        ActivityUtils.startActivity(getActivity(), FrameActivity.class,HomeFragment.class.getName(),null);
+        ActivityUtils.startActivity(getActivity(), FrameActivity.class, HomeFragment.class.getName(), null);
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap=googleMap;
+        this.googleMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+      this.googleMap.setMyLocationEnabled(true);
+
 
     }
 
     public static class ViewHolder {
 
         Button button;
+
         public ViewHolder(View view) {
-         //   button = (Button) view.findViewById(R.id.button);
+            //   button = (Button) view.findViewById(R.id.button);
 
         }
 
     }
-    public Section<AssignedTime,Time> getsection() {
-        Section<AssignedTime, Time> section = new Section<>();
-        AssignedTime phoneCategory=new AssignedTime("Assigned Time");
-        List<Time> list=new ArrayList<Time>();
-        {
-            for (int i=0;i<=5;i++)
 
-                list.add(new Time("21313"+i));
-            section.parent=phoneCategory;
+    public Section<AssignedTime, Time> getsection() {
+        Section<AssignedTime, Time> section = new Section<>();
+        AssignedTime phoneCategory = new AssignedTime("Assigned Time");
+        List<Time> list = new ArrayList<Time>();
+        {
+            for (int i = 0; i <= 5; i++)
+
+                list.add(new Time("21313" + i));
+            section.parent = phoneCategory;
             section.children.addAll(list);
 
         }
         return section;
     }
+        @Override
+    public void onResume() {
+        mMapView.onResume();
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && googleMap != null) {
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        }
+        super.onResume();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        mMapView.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+
 
 }
