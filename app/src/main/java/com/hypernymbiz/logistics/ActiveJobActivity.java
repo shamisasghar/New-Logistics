@@ -1,5 +1,6 @@
 package com.hypernymbiz.logistics;
 
+import android.*;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -607,5 +608,25 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
         }
         return section;
     }
+    @Override
+    public void onResume() {
+        mMapView.onResume();
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && googleMap != null) {
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        }
+        super.onResume();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        mMapView.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
 
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
 }

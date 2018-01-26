@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                     LoginUtils.saveUserToken(LoginActivity.this, response.body().response.getToken(), Integer.toString(response.body().response.getAssociatedEntity()));
                     LoginUtils.userLoggedIn(LoginActivity.this);
 
-
+                        getUserAssociatedEntity=response.body().response.getAssociatedEntity().toString();
                     ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
                         @Override
                         public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
