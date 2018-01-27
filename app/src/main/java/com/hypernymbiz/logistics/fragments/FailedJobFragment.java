@@ -55,14 +55,9 @@ public class FailedJobFragment extends Fragment {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if(response.body().response.job_count==0)
-                {
-                    asd.setBackgroundColor(Color.parseColor("#63a4ff"));
+                if (response.body().status){
 
-                }
-                else if (response.body().status){
-
-                    Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
                     jobInfo_s=response.body().response.job_info;
                     failedJobAdapter=new FailedJobAdapter(jobInfo_s);
                     recyclerView.setAdapter(failedJobAdapter);

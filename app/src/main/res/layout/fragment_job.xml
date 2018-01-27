@@ -26,7 +26,6 @@
                 android:layout_height="150dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-
                 app:cardBackgroundColor="#fff">
 
                 <TextView
@@ -34,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="Completed"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="20dp"/>
 
                 <View
@@ -43,16 +42,35 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="30dp"
-                    android:background="@color/colorPrimaryDark"></View>
-
-                <TextView
-                    android:id="@+id/txt_no_completed_job"
-                    android:layout_width="wrap_content"
+                    android:background="@color/colorPrimaryDark">
+                </View>
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text=""
-                    android:textColor="#329932"
-                    android:textSize="40dp"/>
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/img_comptd"
+                        android:background="@drawable/ic_completed"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/txt_no_completed_job"/>
+                    <TextView
+                        android:id="@+id/txt_no_completed_job"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/img_comptd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/colorAccent2"
+                        android:textSize="30sp"/>
+                </android.support.constraint.ConstraintLayout>
+
 
             </android.support.v7.widget.CardView>
 
@@ -68,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="Failed"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="20dp"/>
 
                 <View
@@ -79,15 +97,34 @@
                     android:layout_marginTop="30dp"
                     android:background="@color/colorPrimaryDark"></View>
 
-
-                <TextView
-                    android:id="@+id/txt_no_failed_job"
-                    android:layout_width="wrap_content"
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text=""
-                    android:textColor="#e11414"
-                    android:textSize="40dp"/>
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/img_failed"
+                        android:background="@drawable/ic_failed"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/txt_no_failed_job"/>
+                    <TextView
+                        android:id="@+id/txt_no_failed_job"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/img_failed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/colorAccent2"
+                        android:textSize="30sp"/>
+
+
+                </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
 
@@ -108,16 +145,16 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
                 app:tabIndicatorColor="@color/colorAccent2"
-                app:tabSelectedTextColor="#000000"
-                app:tabTextColor="#000000" />
+                app:tabSelectedTextColor="#ffffff"
+                app:tabTextColor="#ffffff"/>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="48dp" />
+                android:layout_marginTop="48dp"/>
 
         </android.support.v7.widget.CardView>
     </RelativeLayout>

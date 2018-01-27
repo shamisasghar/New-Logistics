@@ -27,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -387,10 +388,10 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                         googleMap.setMyLocationEnabled(true);
                         //  googleMap.setTrafficEnabled(true);
                         LatLng start = new LatLng(slat, slng);
-                        googleMap.addMarker(new MarkerOptions().position(start).title("Start Location")).showInfoWindow();
+                        googleMap.addMarker(new MarkerOptions().position(start).title("Start Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
                         //googleMap.animateCamera(CameraUpdateFactory.newLatLng(start));
                         LatLng dest = new LatLng(elat, elng);
-                        googleMap.addMarker(new MarkerOptions().position(dest).title("Destination Location")).showInfoWindow();
+                        googleMap.addMarker(new MarkerOptions().position(dest).title("Destination Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
                         String url = getDirectionsUrl(start, dest);
                         FetchUrl FetchUrl = new FetchUrl();
                         FetchUrl.execute(url);
@@ -559,7 +560,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
                 lineOptions.width(10);
-                lineOptions.color(Color.RED);
+                lineOptions.color(R.color.colorPrimary);
             }
 
             // Drawing polyline in the Google Map for the i-th route
