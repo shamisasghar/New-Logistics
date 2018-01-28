@@ -10,4 +10,5 @@ public class AssignedTime {
     public AssignedTime(String name) {
         this.name = name;
     }
+
 }

@@ -110,7 +110,6 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getApplicationContext());
 
 
-
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         try {
@@ -227,7 +226,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
             }
         });
-
+//swipe work
 //        swipeButton.addOnSwipeCallback(new SwipeButton.Swipe() {
 //            @Override
 //            public void onButtonPress() {
@@ -590,6 +589,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+
         sectionLinearLayout.addSection(getsection());
         sectionLinearLayout.addSection(getsection());
 
@@ -597,13 +597,14 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
     public Section<AssignedTime,Time> getsection() {
         Section<AssignedTime, Time> section = new Section<>();
-        AssignedTime phoneCategory=new AssignedTime("Assigned Time");
+
+        AssignedTime assignedTime=new AssignedTime("Assigned Time");
         List<Time> list=new ArrayList<Time>();
         {
-            for (int i=0;i<=5;i++)
 
-                list.add(new Time("21313"+i));
-            section.parent=phoneCategory;
+            list.add(new Time("21313"));
+            list.add(new Time("12345"));
+            section.parent=assignedTime;
             section.children.addAll(list);
 
         }

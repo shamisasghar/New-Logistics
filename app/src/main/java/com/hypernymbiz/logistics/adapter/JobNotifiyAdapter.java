@@ -44,9 +44,6 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
     public void onBindViewHolder(final JobNotifiyAdapter.ViewHolder holder, final int position) {
 
         holder.job.setText(jobInfo_s.get(position).getJob_name());
-        if(holder.job.getText().toString().equals("job1")) {
-           // holder.cardView.setCardBackgroundColor(Color.parseColor("#63a4ff"));
-        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             int pos=holder.getAdapterPosition();
             @Override

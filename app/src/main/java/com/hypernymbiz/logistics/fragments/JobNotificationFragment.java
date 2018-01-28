@@ -42,10 +42,11 @@ public class JobNotificationFragment extends Fragment {
     SharedPreferences sharedPreferences;
     String getUserAssociatedEntity;
     RecyclerView recyclerView;
-    private SwipeRefreshLayout swipelayout;
+    SwipeRefreshLayout swipelayout;
     Context fContext;
     View view;
     TextView size;
+    String job_id;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -74,6 +75,7 @@ public class JobNotificationFragment extends Fragment {
                     jobInfo_s = response.body().response.job_info;
                     adapter=new JobNotifiyAdapter(jobInfo_s,getActivity());
                     recyclerView.setAdapter(adapter);
+
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     Gson gson = new Gson();
                     String json = gson.toJson(jobInfo_s);

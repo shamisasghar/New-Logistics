@@ -4,12 +4,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.adapter.CompleteJobAdapter;
@@ -37,7 +40,7 @@ public class CompleteJobFragment extends Fragment {
     private List<JobInfo_> jobInfo_s;
     String getUserAssociatedEntity;
     ConstraintLayout asd;
-
+    ConstraintLayout rootlayout;
 
 
     @Override
@@ -45,7 +48,8 @@ public class CompleteJobFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_view_pager_compltd, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_complete);
-        asd=(ConstraintLayout)view.findViewById(R.id.layout_contraint);
+
+        rootlayout = (ConstraintLayout) view.findViewById(R.id.layout_contraint);
                 layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -54,20 +58,26 @@ public class CompleteJobFragment extends Fragment {
         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-            if(response.body().response.job_count==0)
-            {
-                asd.setBackgroundColor(Color.parseColor("#63a4ff"));
-
-
-            }
-
-              else if (response.body().status) {
+         if (response.body().status!=null) {
 
                     // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
                     jobInfo_s = response.body().response.job_info;
                     completeJobAdapter = new CompleteJobAdapter(jobInfo_s);
                     recyclerView.setAdapter(completeJobAdapter);
                 }
+
+                else
+         {
+
+
+             Snackbar snackbar = Snackbar.make(rootlayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+             View sbView = snackbar.getView();
+             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+             sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+             snackbar.show();
+         }
             }
 
             @Override

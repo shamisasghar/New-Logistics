@@ -17,6 +17,7 @@
             android:layout_marginLeft="40dp"
             android:padding="16dp"
             android:layout_centerVertical="true"/>
+
         <ImageView
             android:id="@+id/arrow"
             android:layout_width="24dp"

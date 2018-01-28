@@ -4,12 +4,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hypernymbiz.logistics.R;
@@ -37,7 +41,7 @@ public class FailedJobFragment extends Fragment {
     private FailedJobAdapter failedJobAdapter;
     private List<JobInfo_> jobInfo_s;
     String getUserAssociatedEntity;
-    ConstraintLayout asd;
+    ConstraintLayout rootlayout;
     View view;
 
     @Override
@@ -45,7 +49,7 @@ public class FailedJobFragment extends Fragment {
 
         view= inflater.inflate(R.layout.fragment_view_pager_failed,container,false);
         recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view_complete);
-        asd=(ConstraintLayout)view.findViewById(R.id.layout_contraint_failed);
+        rootlayout = (ConstraintLayout) view.findViewById(R.id.layout_contraint);
         layoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -55,17 +59,28 @@ public class FailedJobFragment extends Fragment {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.body().status){
+                if (response.body().status!=null){
 
                    // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
                     jobInfo_s=response.body().response.job_info;
                     failedJobAdapter=new FailedJobAdapter(jobInfo_s);
                     recyclerView.setAdapter(failedJobAdapter);
                 }
+                else {
+
+                    Snackbar snackbar = Snackbar.make(rootlayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    snackbar.show();
+                }
             }
 
             @Override
             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+
             }
         });
 

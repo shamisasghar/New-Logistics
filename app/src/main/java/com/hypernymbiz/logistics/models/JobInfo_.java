@@ -6,10 +6,20 @@ package com.hypernymbiz.logistics.models;
 
 public class JobInfo_ {
 
+    private Integer jobId;
     public String job_name;
     public String job_status;
     public String job_start_time;
     public String job_end_time;
+
+    public Integer getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Integer jobId) {
+        this.jobId = jobId;
+    }
+
 
     public String getJob_name() {
         return job_name;

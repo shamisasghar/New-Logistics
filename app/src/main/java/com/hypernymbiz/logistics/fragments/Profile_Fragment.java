@@ -38,7 +38,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Profile_Fragment extends Fragment implements View.OnClickListener, ToolbarListener {
     private ViewHolder mHolder;
-    TextView email, drivername, driverid,martialstatus,dof;
+    TextView email, drivername, drivercnic,martialstatus,dof;
     private Toolbar mToolbar;
     private TextView mToolbarTitle;
     private SwipeRefreshLayout swipelayout;
@@ -64,7 +64,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         email = (TextView) view.findViewById(R.id.txt_Email);
         drivername = (TextView) view.findViewById(R.id.txt_drivername);
-        driverid = (TextView) view.findViewById(R.id.txt_driverid);
+        drivercnic = (TextView) view.findViewById(R.id.txt_driverid);
         martialstatus = (TextView) view.findViewById(R.id.txt_gender);
         dof = (TextView) view.findViewById(R.id.txt_dateofjoin);
         img_profile=(CircleImageView) view.findViewById(R.id.img_driver_profile);
@@ -72,33 +72,42 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
 
         Email = pref.getString("Email", "");
-        Driver_photo = pref.getString("Url", "");
-        Driver_name = pref.getString("Name", "");
-        Driver_id = pref.getString("Id", "");
+//        Driver_photo = pref.getString("Url", "");
+//        Driver_name = pref.getString("Name", "");
+//        Driver_id = pref.getString("Id", "");
         email.setText(Email);
-        Glide.with(getContext()).load(Driver_photo).into(img_profile);
-        drivername.setText(Driver_name);
-        driverid.setText(Driver_id);
+//        Glide.with(getContext()).load(Driver_photo).into(img_profile);
+//        drivername.setText(Driver_name);
+//        drivercnic.setText(Driver_id);
         swipelayout();
-
-
-
-        ApiInterface.retrofit.getprofile(12).enqueue(new Callback<WebAPIResponse<Profile>>() {
+        getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
+        ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-                if (response.body().status) {
+                if (response.body().status!=null) {
 
-                    String driverName, driverId,drivergender,driverdof;
+                    String driverName, driverCnic,drivergender,driverdof;
                     String url=response.body().response.getPhoto();
                     driverName = response.body().response.getName();
-                    driverId = Integer.toString(response.body().response.getId());
+                    driverCnic = String.valueOf(response.body().response.getCnic());
                     drivergender=response.body().response.getMaritalStatus();
                     driverdof=response.body().response.getDateOfJoining();
                     drivername.setText(driverName);
-                    driverid.setText(driverId);
+                    drivercnic.setText(driverCnic);
                     martialstatus.setText(drivergender);
                     dof.setText(driverdof);
                     Glide.with(getContext()).load(url).into(img_profile);
+                }
+                else
+                {
+                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    snackbar.show();
+
                 }
             }
 
@@ -188,7 +197,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                                     driverId = Integer.toString(response.body().response.getId());
                                     String url=response.body().response.getPhoto();
                                     drivername.setText(driverName);
-                                    driverid.setText(driverId);
+//                                    driverid.setText(driverId);
 //                                    Glide.with(getContext()).load(url).into(img_profile);
 
                                 }

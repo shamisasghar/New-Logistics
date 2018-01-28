@@ -54,6 +54,7 @@ public class JobDetailsFragment extends Fragment {
     PayloadNotification payloadNotification;
     SharedPreferences.Editor editor;
     SharedPreferences pref;
+    String job_id;
 
     @Override
     public void onAttach(Context context) {
@@ -85,7 +86,6 @@ public class JobDetailsFragment extends Fragment {
         actual_start_time = df.format(c.getTime());
       //  actual_start_time=AppUtils.getDateAndTime(df.toString());
 //         Now formattedDate have current date/time
-        Toast.makeText(getActivity(), actual_start_time, Toast.LENGTH_SHORT).show();
 
 
         btn_start.setOnClickListener(new View.OnClickListener() {
@@ -152,15 +152,18 @@ public class JobDetailsFragment extends Fragment {
         Bundle value = null;
         if (extras != null) {
             value = extras.getBundle(Constants.DATA);
-            if (value != null) {
+            if (value != null)
+            {
+
                 payloadNotification = GsonUtils.fromJson(value.getString(Constants.PAYLOAD), PayloadNotification.class);
             }
             else
                 {
+
                 ApiInterface.retrofit.getalldata(13).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
-                        if (response.body().status) {
+                        if (response.body().status != null) {
                             jbname.setText(response.body().response.getName());
                             jbstatus.setText(response.body().response.getStatus());
                             jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
@@ -174,7 +177,16 @@ public class JobDetailsFragment extends Fragment {
                             editor.putString("Startjob",strttime);
                             editor.putString("Startend",endtime);
                             editor.commit();
-
+                        }
+                        else
+                        {
+                            Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                            View sbView = snackbar.getView();
+                            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+                            textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
+                            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            snackbar.show();
                         }
                     }
 

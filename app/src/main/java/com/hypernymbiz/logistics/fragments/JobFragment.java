@@ -90,11 +90,23 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.body().status) {
+                if (response.body().status!=null)
+                {
                     jobInfo_s = response.body().response.job_info;
                     compltd_job.setText(Integer.toString(jobInfo_s.size()));
                   //  faild_job.setText(Integer.toString(jobInfo_s.size()));
 
+                }
+
+                else
+                    {
+                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    snackbar.show();
                 }
             }
 
@@ -114,9 +126,21 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.body().status) {
+                if (response.body().status!=null) {
                     jobInfo_s = response.body().response.job_info;
                       faild_job.setText(Integer.toString(jobInfo_s.size()));
+
+                }
+                else{
+
+                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    snackbar.show();
+
 
                 }
             }
