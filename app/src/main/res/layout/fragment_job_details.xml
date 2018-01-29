@@ -46,8 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:hint="Job Name"
-                android:textColorHint="#000000"
-                android:textStyle="bold" />
+                android:textColorHint="#000000"/>
         </LinearLayout>
 
         <LinearLayout
@@ -75,7 +74,7 @@
                 android:layout_weight="2"
                 android:hint="Job Status"
                 android:textColorHint="#000000"
-                android:textStyle="bold" />
+                />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/linear_starttime"
@@ -101,8 +100,7 @@
                 android:layout_weight="2"
                 android:gravity="center"
                 android:hint="Job start Time"
-                android:textColorHint="#000000"
-                android:textStyle="bold" />
+                android:textColorHint="#000000" />
         </LinearLayout>
 
         <LinearLayout
@@ -129,8 +127,7 @@
                 android:layout_weight="2"
                 android:hint="Job End Time"
                 android:gravity="center"
-                android:textColorHint="#000000"
-                android:textStyle="bold" />
+                android:textColorHint="#000000"/>
         </LinearLayout>
 
         <LinearLayout
@@ -157,8 +154,7 @@
                 android:layout_weight="2"
                 android:hint="Job Description"
                 android:gravity="center_horizontal"
-                android:textColorHint="#000000"
-                android:textStyle="bold" />
+                android:textColorHint="#000000"/>
         </LinearLayout>
 
         <android.support.constraint.ConstraintLayout

@@ -70,10 +70,6 @@
             android:name="com.hypernymbiz.logistics.FrameActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name="com.hypernymbiz.logistics.SimpleFrameActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="com.hypernymbiz.logistics.ActiveJobActivity"

@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
@@ -222,13 +223,13 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
         }
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-
-        MenuItem itemCart = (MenuItem) menu.findItem(R.id.notification_bell);
-        itemCart.setVisible(true);
-        super.onPrepareOptionsMenu(menu);
-    }
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//
+//        MenuItem itemCart = (MenuItem) menu.findItem(R.id.notification_bell);
+//        itemCart.setVisible(true);
+//        super.onPrepareOptionsMenu(menu);
+//    }
 
 
     @Override

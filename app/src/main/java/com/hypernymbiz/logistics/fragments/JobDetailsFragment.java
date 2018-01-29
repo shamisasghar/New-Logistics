@@ -54,7 +54,7 @@ public class JobDetailsFragment extends Fragment {
     PayloadNotification payloadNotification;
     SharedPreferences.Editor editor;
     SharedPreferences pref;
-    String job_id;
+
 
     @Override
     public void onAttach(Context context) {
@@ -87,36 +87,48 @@ public class JobDetailsFragment extends Fragment {
       //  actual_start_time=AppUtils.getDateAndTime(df.toString());
 //         Now formattedDate have current date/time
 
-
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HashMap<String, Object> body = new HashMap<>();
-                body.put("job_id",13);
+                body.put("job_id",22);
                 body.put("actual_start_time", actual_start_time);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
 
                 ApiInterface.retrofit.startjob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
-//                        if (response.body().status) {
-                        String strlat,strlng,endlat,endlng;
-                        strlat= String.valueOf(response.body().response.getJobStartLat());
-                        strlng= String.valueOf(response.body().response.getJobStartLng());
-                        endlat= String.valueOf(response.body().response.getJobEndLat());
-                        endlng= String.valueOf(response.body().response.getJobEndLng());
+                        if (response.body().status!=null) {
 
-                        editor = pref.edit();
-                        editor.putString("Startlat", strlat);
-                        editor.putString("Startlng", strlng);
-                        editor.putString("Endlat", endlat);
-                        editor.putString("Endlng", endlng);
-                        editor.putString("Actualstart", actual_start_time);
-                        editor.commit();
-                       // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getContext(), ActiveJobActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
+                            String strlat, strlng, endlat, endlng;
+                            strlat = String.valueOf(response.body().response.getJobStartLat());
+                            strlng = String.valueOf(response.body().response.getJobStartLng());
+                            endlat = String.valueOf(response.body().response.getJobEndLat());
+                            endlng = String.valueOf(response.body().response.getJobEndLng());
+
+                            editor = pref.edit();
+                            editor.putString("Startlat", strlat);
+                            editor.putString("Startlng", strlng);
+                            editor.putString("Endlat", endlat);
+                            editor.putString("Endlng", endlng);
+                            editor.putString("Actualstart", actual_start_time);
+                            editor.commit();
+                            // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getContext(), ActiveJobActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                        }
+                        else
+                        {
+                            Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                            View sbView = snackbar.getView();
+                            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+                            textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
+                            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            snackbar.show();
+
+                        }
 
                     }
 
@@ -160,10 +172,11 @@ public class JobDetailsFragment extends Fragment {
             else
                 {
 
-                ApiInterface.retrofit.getalldata(13).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
+                ApiInterface.retrofit.getalldata(22).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
                         if (response.body().status != null) {
+                           // Toast.makeText(fContext, String.valueOf(job_id), Toast.LENGTH_SHORT).show();
                             jbname.setText(response.body().response.getName());
                             jbstatus.setText(response.body().response.getStatus());
                             jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));

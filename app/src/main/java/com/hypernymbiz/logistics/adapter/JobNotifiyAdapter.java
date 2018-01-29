@@ -44,11 +44,14 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
     public void onBindViewHolder(final JobNotifiyAdapter.ViewHolder holder, final int position) {
 
         holder.job.setText(jobInfo_s.get(position).getJob_name());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             int pos=holder.getAdapterPosition();
+            String id= String.valueOf(jobInfo_s.get(position).getJobId());
+
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, String.valueOf(pos), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, String.valueOf(pos)+id, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, FrameActivity.class);
                 intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
 //                    intent.putExtra(Constants.DATA, bundle);

@@ -51,7 +51,7 @@
 
                     <ImageView
                         android:layout_width="35dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="33dp"
                         android:id="@+id/img_comptd"
                         android:background="@drawable/ic_completed"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -104,7 +104,7 @@
 
                     <ImageView
                         android:layout_width="35dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="33dp"
                         android:id="@+id/img_failed"
                         android:background="@drawable/ic_failed"
                         app:layout_constraintLeft_toLeftOf="parent"

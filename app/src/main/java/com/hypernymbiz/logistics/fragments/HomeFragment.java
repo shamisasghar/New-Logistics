@@ -12,8 +12,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -49,6 +53,7 @@ import iammert.com.expandablelib.Section;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
     private ViewHolder mHolder;
+    private Toolbar mToolbar;
     private Context mContext;
     public static final int MY_LOCATION_PERMISSION_REQUEST_CODE = 1;
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 2;
@@ -63,6 +68,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
 //        if (!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
@@ -71,16 +77,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof ToolbarListener) {
             ((ToolbarListener) context).setTitle("Home");
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+
+        inflater.inflate(R.menu.menu_main, menu);
+        View view = menu.findItem(R.id.notification_bell).getActionView();
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
+
+            }
+        });
+//        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
+//        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
+
     }
 
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);

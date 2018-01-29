@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(" ");
-        ActivityUtils.centerToolbarTitle(mToolbar, false);
+        ActivityUtils.centerToolbarTitle(mToolbar, true);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -150,37 +150,38 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
         super.onDestroy();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-
-        View view = menu.findItem(R.id.notification_bell).getActionView();
-        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
-
-        if (infoList == null) {
-            mNumberOfCartItemsText.setText("0");
-        } else {
-            mNumberOfCartItemsText.setText(String.valueOf(infoList.size()));
-        }
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent=new Intent(getApplicationContext(),JobNotifyActivity.class);
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
-//                finish();
-//                Toast.makeText(HomeActivity.this, "bell", Toast.LENGTH_SHORT).show();
-                ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
-
-            }
-        });
-//        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
-//        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
-        return true;
-    }
+//menu
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//
+//
+//        View view = menu.findItem(R.id.notification_bell).getActionView();
+//        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
+//
+//        if (infoList == null) {
+//            mNumberOfCartItemsText.setText("0");
+//        } else {
+//            mNumberOfCartItemsText.setText(String.valueOf(infoList.size()));
+//        }
+//
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent intent=new Intent(getApplicationContext(),JobNotifyActivity.class);
+////                startActivity(intent);
+////                overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+////                finish();
+////                Toast.makeText(HomeActivity.this, "bell", Toast.LENGTH_SHORT).show();
+//                ActivityUtils.startActivity(getApplicationContext(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
+//
+//            }
+//        });
+////        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
+////        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

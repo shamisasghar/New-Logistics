@@ -32,37 +32,51 @@
         </com.google.android.gms.maps.MapView>
 
     </android.support.v7.widget.CardView>
+
     <android.support.v7.widget.CardView
+        android:id="@+id/cardview_speed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cardview_speed"
-        app:layout_constraintTop_toBottomOf="@+id/cardview_map"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardview_map">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
-
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Speed"
-                android:textSize="25sp"
-                android:textColor="@color/color1"
-                android:layout_marginLeft="40dp"
-                android:layout_gravity="center"/>
+                android:orientation="vertical"
+                android:layout_marginLeft="70dp">
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_speed"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Speed"
+                    android:textColor="@color/color1"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
             <com.github.capur16.digitspeedviewlib.DigitSpeedView
-                android:layout_width="wrap_content"
                 android:id="@+id/digit_speed_view1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:backgroundColor="@color/colorAccent"
+                app:disableBackgroundImage="true"
                 app:speedTextColor="@color/colorPrimaryDark"
-                app:unitTextColor="@color/colorPrimaryDark"
-                app:unitTextSize="7sp"
                 app:speedTextSize="25sp"
-                app:disableBackgroundImage="true">
+                app:unitTextColor="@color/colorPrimaryDark"
+                app:unitTextSize="3sp">
 
             </com.github.capur16.digitspeedviewlib.DigitSpeedView>
         </LinearLayout>

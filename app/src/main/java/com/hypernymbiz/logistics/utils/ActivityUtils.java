@@ -110,8 +110,12 @@ public class ActivityUtils {
         if (!outViews.isEmpty()) {
             final TextView titleView = (TextView) outViews.get(0);
             titleView.setGravity(Gravity.CENTER);
-            if(padding) {
+            if(padding==false) {
                 titleView.setPadding(0, 0, AppUtils.dpToPx(65), 0);
+            }
+            else {
+                titleView.setPadding(0, 0, AppUtils.dpToPx(60), 0);
+
             }
             if (titleView.getLayoutParams() instanceof Toolbar.LayoutParams) {
                 final Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) titleView.getLayoutParams();

@@ -133,10 +133,10 @@
                     android:layout_below="@+id/view2"
                     android:id="@+id/layout_linear3"
                     android:gravity="center"
-                    android:layout_marginTop="0dp">
+                    android:layout_marginTop="5dp">
                     <ImageView
                         android:layout_width="20dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="25dp"
                         android:src="@drawable/ic_profile_cnic"
                         android:layout_marginLeft="15dp"/>
                     <TextView
@@ -176,12 +176,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/view4"
                     android:id="@+id/layout_linear5"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="5dp"
                     android:gravity="center">
                     <ImageView
                         android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_profile_name"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_profile_join_date"
                         android:layout_marginLeft="15dp"/>
                     <TextView
                         android:id="@+id/label_date_of_join"
@@ -220,11 +220,12 @@
                     android:layout_below="@+id/view3"
                     android:id="@+id/layout_linear4"
                     android:gravity="center"
-                    android:layout_marginTop="0dp">
+                    android:layout_marginTop="5dp">
                     <ImageView
                         android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_profile_name"
+                        android:layout_height="match_parent"
+                        android:tint="@color/colorAccent2"
+                        android:src="@drawable/ic_profile_marital_status"
                         android:layout_marginLeft="15dp"/>
                     <TextView
                         android:id="@+id/label_gender"
@@ -240,14 +241,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:layout_marginLeft="31dp"
+                        android:layout_marginLeft="30dp"
                         android:text="Single"
                         android:layout_below="@+id/img_driver_profile"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>
-
-
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
 
