@@ -10,8 +10,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,9 +37,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
+import com.hypernymbiz.logistics.adapter.FailedJobAdapter;
+import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.models.AssignedTime;
+import com.hypernymbiz.logistics.models.JobCount;
 import com.hypernymbiz.logistics.models.JobInfo_;
+import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.Time;
+import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.PrefUtils;
@@ -46,6 +54,9 @@ import java.util.List;
 
 import iammert.com.expandablelib.ExpandableLayout;
 import iammert.com.expandablelib.Section;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Bilal Rashid on 10/10/2017.
@@ -63,6 +74,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     MapView mMapView;
     LatLng pos;
     TextView size;
+    private TextView mNumberOfCartItemsText;
+
     ArrayList<JobInfo_> jobInfos;
 
     @Override
@@ -89,6 +102,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
         inflater.inflate(R.menu.menu_main, menu);
         View view = menu.findItem(R.id.notification_bell).getActionView();
+
+
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +123,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
+        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
+
+        ApiInterface.retrofitt.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
+            @Override
+            public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
+
+//                  mNumberOfCartItemsText.setText(response.body().response.getCount());
+                Toast.makeText(getActivity(),response+"", Toast.LENGTH_SHORT).show();
+                Log.d("TAAAG",""+response);
+//                   mNumberOfCartItemsText.setText(String.valueOf(response.body().response.getCount()));
+//                mNumberOfCartItemsText.setText("000");
+
+            }
+
+            @Override
+            public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
+
+            }
+        });
+
+
+
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{

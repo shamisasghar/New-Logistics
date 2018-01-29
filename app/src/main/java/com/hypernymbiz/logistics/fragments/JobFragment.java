@@ -99,16 +99,6 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 
                 }
 
-                else
-                    {
-                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                    View sbView = snackbar.getView();
-                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    snackbar.show();
-                }
             }
 
             @Override

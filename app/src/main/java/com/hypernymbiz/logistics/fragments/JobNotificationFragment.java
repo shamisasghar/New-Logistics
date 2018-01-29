@@ -69,7 +69,7 @@ public class JobNotificationFragment extends Fragment {
         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity),53).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-                if (response.body().status) {
+                if (response.body().status!=null) {
 
                     // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
                     jobInfo_s = response.body().response.job_info;

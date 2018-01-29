@@ -1,5 +1,6 @@
 package com.hypernymbiz.logistics.api;
 
+import com.hypernymbiz.logistics.models.JobCount;
 import com.hypernymbiz.logistics.models.JobDetail;
 import com.hypernymbiz.logistics.models.JobEnd;
 import com.hypernymbiz.logistics.models.Profile;
@@ -10,6 +11,7 @@ import com.hypernymbiz.logistics.models.WebAPIResponse;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -22,6 +24,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -34,11 +37,19 @@ public interface ApiInterface {
 
     String HTTP = "http://188.166.226.185/";
 
+    String HTTPP = "http://192.168.2.185:8000/";
+
     Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(ApiInterface.HTTP)
             .addConverterFactory(GsonConverterFactory.create())
             .client(MyOkHttpClient.getHttpClient());
     ApiInterface retrofit = builder.build().create(ApiInterface.class);
+
+    Retrofit.Builder builderr = new Retrofit.Builder()
+            .baseUrl(ApiInterface.HTTPP)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(MyOkHttpClient.getHttpClient());
+    ApiInterface retrofitt = builderr.build().create(ApiInterface.class);
 
     @POST("api/users/login/")
     Call<WebAPIResponse<User>> loginUser(@Body HashMap<String, Object> body);
@@ -48,6 +59,9 @@ public interface ApiInterface {
 
     @GET("iof/get_driver_info/")
     Call<WebAPIResponse<Profile>> getprofile(@Query("driver_id") int driver_id);
+
+    @GET("hypernet/user_alerts_count")
+    Call<WebAPIResponse<List<JobCount>>> getcount();
 
     @GET("iof/get_app_jobs/")
     Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);
