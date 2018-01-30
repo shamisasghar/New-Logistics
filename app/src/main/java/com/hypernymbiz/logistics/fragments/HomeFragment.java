@@ -266,7 +266,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                     Log.d("TAAAG",""+response);
 
                     size=String.valueOf(response.body().response.get(0).getCount());
-                    Toast.makeText(getActivity(), size, Toast.LENGTH_SHORT).show();
                     mNumberOfCartItemsText.setText(size);
 
 //                mNumberOfCartItemsText.setText("000");

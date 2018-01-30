@@ -188,6 +188,12 @@ public class JobDetailsFragment extends Fragment {
                             jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
                             jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
                             decrptin.setText(response.body().response.getDescription());
+                            String status=response.body().response.getJobStatus();
+                            if(status.equals("Accomplished")) {
+                                btn_start.setVisibility(View.GONE);
+                                btn_cancel.setVisibility(View.GONE);
+
+                            }
                             String strttime,endtime;
 
                             strttime=AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());

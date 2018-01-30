@@ -142,13 +142,6 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                 info.setContentView(R.layout.dialog_truck_info);
                 info.show();
                 info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-//                btn_cls.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(ActiveJobActivity.this, "hllo", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
                 btn_cls = (Button) info.findViewById(R.id.btn_close);
                 btn_cls.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -183,11 +176,11 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
 
+
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobEnd>> call, Response<WebAPIResponse<JobEnd>> response) {
 //                        if (response.body().status) {
-
 
 //                    }
                     }
