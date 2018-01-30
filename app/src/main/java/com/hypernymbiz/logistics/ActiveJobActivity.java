@@ -3,6 +3,7 @@ package com.hypernymbiz.logistics;
 import android.*;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -175,8 +176,10 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                 System.out.println("Current time =&gt; " + c.getTime());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 actual_end_time = df.format(c.getTime());
+                Intent getintent=getIntent();
+                String  id = getintent.getStringExtra("jobid");
                 HashMap<String, Object> body = new HashMap<>();
-                body.put("job_id",22);
+                body.put("job_id",id);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
 

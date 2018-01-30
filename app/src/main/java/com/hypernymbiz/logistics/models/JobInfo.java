@@ -1,28 +1,47 @@
 package com.hypernymbiz.logistics.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class JobInfo {
 
+    @SerializedName("assigned_device")
+    @Expose
     private String assignedDevice;
-
+    @SerializedName("assigned_device_id")
+    @Expose
     private Integer assignedDeviceId;
-
+    @SerializedName("notification_id")
+    @Expose
     private Integer notificationId;
-
+    @SerializedName("job_id")
+    @Expose
     private Integer jobId;
-
+    @SerializedName("job_name")
+    @Expose
     private String jobName;
-
+    @SerializedName("job_status")
+    @Expose
     private String jobStatus;
-
+    @SerializedName("status")
+    @Expose
     private String status;
-
+    @SerializedName("customer_name")
+    @Expose
     private String customerName;
-
+    @SerializedName("customer_id")
+    @Expose
     private Integer customerId;
+    @SerializedName("created_datetime")
+    @Expose
     private String createdDatetime;
+    @SerializedName("created_time")
+    @Expose
     private String createdTime;
+    @SerializedName("is_viewed")
+    @Expose
     private List<IsViewed> isViewed = null;
 
     public String getAssignedDevice() {

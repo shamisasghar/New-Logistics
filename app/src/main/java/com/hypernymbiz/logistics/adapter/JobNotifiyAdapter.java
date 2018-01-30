@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
+import com.hypernymbiz.logistics.models.JobInfo;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.utils.Constants;
 
@@ -25,10 +26,10 @@ import java.util.List;
 
 public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.ViewHolder> {
 
-    private List<JobInfo_> jobInfo_s;
+    private List<JobInfo> jobInfo_s;
     public Context context;
 
-    public JobNotifiyAdapter(List<JobInfo_> data, Context context) {
+    public JobNotifiyAdapter(List<JobInfo> data, Context context) {
         this.jobInfo_s = data;
         this.context = context;
     }
@@ -43,16 +44,18 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
     @Override
     public void onBindViewHolder(final JobNotifiyAdapter.ViewHolder holder, final int position) {
 
-        holder.job.setText(jobInfo_s.get(position).getJob_name());
+        holder.job.setText(jobInfo_s.get(position).getJobName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             int pos=holder.getAdapterPosition();
-            String id= jobInfo_s.get(position).getJobId().toString();
+            Integer id= jobInfo_s.get(position).getJobId();
 
             @Override
             public void onClick(View v) {
+
                 Toast.makeText(context, String.valueOf(pos)+id, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, FrameActivity.class);
+                intent.putExtra("jobid",Integer.toString(id));
                 intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
 //                    intent.putExtra(Constants.DATA, bundle);
                 context.startActivity(intent);

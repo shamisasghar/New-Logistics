@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.hypernymbiz.logistics.adapter.JobNotifiyAdapter;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.models.JobInfo;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
@@ -71,46 +72,68 @@ public class JobNotificationFragment extends Fragment {
         swipelayout = (SwipeRefreshLayout)view.findViewById(R.id.layout_swipe);
 
 
-        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity),53).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
+//        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity),53).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
+//            @Override
+//            public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
+//                if (response.body().status!=null) {
+//
+//
+//
+//                    // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
+//                    jobInfo_s = response.body().response.job_info;
+//                    adapter=new JobNotifiyAdapter(jobInfo_s,getActivity());
+//                    recyclerView.setAdapter(adapter);
+//                    size=String.valueOf(jobInfo_s.size());
+//                    if (size==null) {
+//                        imageView.setVisibility(View.VISIBLE);
+//                    }
+//                    else
+//                        imageView.setVisibility(View.GONE);
+//
+////                        Toast.makeText(getActivity(), size, Toast.LENGTH_SHORT).show();
+//
+//
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    Gson gson = new Gson();
+//                    String json = gson.toJson(jobInfo_s);
+//                    editor.putString("list", json);
+//                    editor.commit();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t)
+//            {
+//
+//                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+//                View sbView = snackbar.getView();
+//                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+//                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+//                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+//                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                snackbar.show();
+//            }
+//        });
+        ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
             @Override
-            public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
+            public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
                 if (response.body().status!=null) {
-
-
-
-                    // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
-                    jobInfo_s = response.body().response.job_info;
-                    adapter=new JobNotifiyAdapter(jobInfo_s,getActivity());
+                    List <JobInfo> jobInfo = response.body().response;
+                    adapter=new JobNotifiyAdapter(jobInfo,getActivity());
                     recyclerView.setAdapter(adapter);
-                    size=String.valueOf(jobInfo_s.size());
+                    size=String.valueOf(jobInfo.size());
                     if (size==null) {
                         imageView.setVisibility(View.VISIBLE);
                     }
                     else
                         imageView.setVisibility(View.GONE);
 
-//                        Toast.makeText(getActivity(), size, Toast.LENGTH_SHORT).show();
-
-
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    Gson gson = new Gson();
-                    String json = gson.toJson(jobInfo_s);
-                    editor.putString("list", json);
-                    editor.commit();
                 }
             }
 
             @Override
-            public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t)
-            {
+            public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
 
-                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                View sbView = snackbar.getView();
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                snackbar.show();
             }
         });
         return view;

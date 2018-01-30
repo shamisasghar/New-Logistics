@@ -3,6 +3,7 @@ package com.hypernymbiz.logistics.api;
 import com.hypernymbiz.logistics.models.JobCount;
 import com.hypernymbiz.logistics.models.JobDetail;
 import com.hypernymbiz.logistics.models.JobEnd;
+import com.hypernymbiz.logistics.models.JobInfo;
 import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.StartJob;
@@ -56,6 +57,8 @@ public interface ApiInterface {
 
     @GET("iof/get_app_jobs/")
     Call<WebAPIResponse<Respone_Completed_job>> getalldata(@Query("driver_id") int driver_id, @Query("status_id") int status_id);
+ @GET("iof/get_notifications")
+    Call<WebAPIResponse<List<JobInfo>>> getallpendingdata(@Query("driver_id") int driver_id);
 
     @GET("iof/get_driver_info/")
     Call<WebAPIResponse<Profile>> getprofile(@Query("driver_id") int driver_id);

@@ -90,8 +90,10 @@ public class JobDetailsFragment extends Fragment {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent getintent=getActivity().getIntent();
+                String  id = getintent.getStringExtra("jobid");
                 HashMap<String, Object> body = new HashMap<>();
-                body.put("job_id",22);
+                body.put("job_id",Integer.parseInt(id));
                 body.put("actual_start_time", actual_start_time);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
 
@@ -115,6 +117,9 @@ public class JobDetailsFragment extends Fragment {
                             editor.commit();
                             // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getContext(), ActiveJobActivity.class);
+                            Intent getintent=getActivity().getIntent();
+                            String  id = getintent.getStringExtra("jobid");
+                            intent.putExtra("jobid",id);
                             startActivity(intent);
                             getActivity().finish();
                         }
@@ -171,8 +176,9 @@ public class JobDetailsFragment extends Fragment {
             }
             else
                 {
-
-                ApiInterface.retrofit.getalldata(22).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
+                    Intent getintent=getActivity().getIntent();
+                    String  id = getintent.getStringExtra("jobid");
+                ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
                         if (response.body().status != null) {
