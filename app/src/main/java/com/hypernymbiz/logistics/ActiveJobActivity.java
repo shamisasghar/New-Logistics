@@ -164,7 +164,10 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        swipeButton.showResultIcon(true);
+                        try
+                        {
+                        swipeButton.showResultIcon(true);}
+                        catch (Exception ex){}
                     }
                 }, 2000);
 

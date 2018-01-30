@@ -65,7 +65,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:layout_marginLeft="90dp"
+                        android:layout_marginLeft="50dp"
                         android:layout_below="@+id/img_driver_profile"
                         android:text="Driver Name"
                         android:textColor="@color/colorPrimaryDark"
@@ -109,10 +109,10 @@
                         android:id="@+id/txt_Email"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:layout_marginLeft="90dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="50dp"
                         android:layout_below="@+id/img_driver_profile"
-                        android:text="Driver Email"
+                        android:text="Driver1@kotal.com"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -154,9 +154,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:layout_marginLeft="90dp"
+                        android:layout_marginLeft="50dp"
                         android:layout_below="@+id/img_driver_profile"
-                        android:text="Driver Cnic"
+                        android:text="61101-64564888-9"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>

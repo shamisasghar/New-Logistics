@@ -60,7 +60,7 @@ public interface ApiInterface {
     @GET("iof/get_driver_info/")
     Call<WebAPIResponse<Profile>> getprofile(@Query("driver_id") int driver_id);
 
-    @GET("hypernet/user_alerts_count")
+    @GET("hypernet/get_user_alerts_count")
     Call<WebAPIResponse<List<JobCount>>> getcount();
 
     @GET("iof/get_app_jobs/")
