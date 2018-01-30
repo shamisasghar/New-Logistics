@@ -12,6 +12,7 @@
     <!--App Background-->
     <color name="colorAppBG">#e6e6e6</color>
     <color name="colorDividerLine">@color/colorMain</color>
+    <color name="imgcolor">#23979899</color> <!-- Toolbar Color -->
     <!--Tabs-->
     <color name="colorTabs">#bababa</color>
     <color name="colorTabsText">#000000</color>

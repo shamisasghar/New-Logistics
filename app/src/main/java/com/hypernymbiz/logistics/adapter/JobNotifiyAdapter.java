@@ -47,7 +47,7 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             int pos=holder.getAdapterPosition();
-            String id= String.valueOf(jobInfo_s.get(position).getJobId());
+            String id= jobInfo_s.get(position).getJobId().toString();
 
             @Override
             public void onClick(View v) {

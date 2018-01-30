@@ -10,7 +10,7 @@ public class Constants {
     public static final String DATA = "data";
     public static final String USER = "user";
     public static final String USER_TOKEN = "user token";
-    public static final String USER_ASSOSIATED_ENTITY = "user assosiated entity";
+    public static final String USER_ASSOSIATED_ENTITY = "user_assosiated_entity";
     public static final String USER_AVAILABLE = "user available";
     public static final String BRANCHES = "branches";
     public static final String BRANCH = "branch";

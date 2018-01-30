@@ -7,26 +7,20 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/home"
-            android:icon="@drawable/home"
+            android:icon="@drawable/drawer_home"
             android:title="Home"
             />
     </group>
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/jobs"
-            android:icon="@drawable/ic_job"
+            android:icon="@drawable/drawer_job"
             android:title="Jobs" />
     </group>
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/distance"
-            android:icon="@drawable/marker"
-            android:title="Distance" />
-    </group>
-    <group android:checkableBehavior="single">
-        <item
             android:id="@+id/profile"
-            android:icon="@drawable/profile"
+            android:icon="@drawable/drawer_profile"
             android:title="Profile" />
     </group>
 

@@ -255,9 +255,8 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
                 return true;
             }
             addFragment(new JobFragment());
-        } else if (id == R.id.distance) {
-
-        } else if (id == R.id.profile) {
+        }
+        else if (id == R.id.profile) {
             if (!AppUtils.isInternetAvailable(this)) {
                 mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
                         getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {

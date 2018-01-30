@@ -203,7 +203,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
                 summary = new Dialog(ActiveJobActivity.this);
                 summary.setContentView(R.layout.dialog_summary_detail);
-
+                summary.setCanceledOnTouchOutside(false);
                 dig_actend=(TextView)summary.findViewById(R.id.txt_dialog_actualend);
                 btn_okk = (Button) summary.findViewById(R.id.btn_ok);
                 dig_actstrt=(TextView)summary.findViewById(R.id.txt_dialog_actualstart);

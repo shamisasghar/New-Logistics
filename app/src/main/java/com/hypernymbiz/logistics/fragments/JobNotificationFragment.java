@@ -13,7 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hypernymbiz.logistics.adapter.JobNotifiyAdapter;
 import com.hypernymbiz.logistics.R;
@@ -44,9 +46,10 @@ public class JobNotificationFragment extends Fragment {
     RecyclerView recyclerView;
     SwipeRefreshLayout swipelayout;
     Context fContext;
+    ImageView imageView;
     View view;
-    TextView size;
     String job_id;
+    String size;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -62,19 +65,32 @@ public class JobNotificationFragment extends Fragment {
        sharedPreferences = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
         recyclerView= (RecyclerView) view.findViewById(R.id.notification_recycler);
+        imageView=(ImageView)view.findViewById(R.id.img_job_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipelayout = (SwipeRefreshLayout)view.findViewById(R.id.layout_swipe);
+
 
         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity),53).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
                 if (response.body().status!=null) {
 
+
+
                     // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
                     jobInfo_s = response.body().response.job_info;
                     adapter=new JobNotifiyAdapter(jobInfo_s,getActivity());
                     recyclerView.setAdapter(adapter);
+                    size=String.valueOf(jobInfo_s.size());
+                    if (size==null) {
+                        imageView.setVisibility(View.VISIBLE);
+                    }
+                    else
+                        imageView.setVisibility(View.GONE);
+
+//                        Toast.makeText(getActivity(), size, Toast.LENGTH_SHORT).show();
+
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     Gson gson = new Gson();

@@ -69,14 +69,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public static final int MY_LOCATION_PERMISSION_REQUEST_CODE = 1;
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 2;
     private GoogleMap googleMap;
-    Context fContext;
     LocationManager locationManager;
     MapView mMapView;
     LatLng pos;
-    TextView size;
+    String size;
     private TextView mNumberOfCartItemsText;
-
-    ArrayList<JobInfo_> jobInfos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,9 +96,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-
         inflater.inflate(R.menu.menu_main, menu);
         View view = menu.findItem(R.id.notification_bell).getActionView();
+        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
 
 
 
@@ -123,27 +120,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
-        mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
-
-        ApiInterface.retrofitt.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
-            @Override
-            public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
-
-//                  mNumberOfCartItemsText.setText(response.body().response.getCount());
-                Toast.makeText(getActivity(),response+"", Toast.LENGTH_SHORT).show();
-                Log.d("TAAAG",""+response);
-//                   mNumberOfCartItemsText.setText(String.valueOf(response.body().response.getCount()));
-//                mNumberOfCartItemsText.setText("000");
-
-            }
-
-            @Override
-            public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
-
-            }
-        });
-
-
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -282,7 +258,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         }
-        super.onResume();
+            ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
+                @Override
+                public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
+
+                    //   Toast.makeText(getActivity(),response.body().response.get(0).getCount(), Toast.LENGTH_SHORT).show();
+                    Log.d("TAAAG",""+response);
+
+                    size=String.valueOf(response.body().response.get(0).getCount());
+                    Toast.makeText(getActivity(), size, Toast.LENGTH_SHORT).show();
+                    mNumberOfCartItemsText.setText(size);
+
+//                mNumberOfCartItemsText.setText("000");
+                }
+
+                @Override
+                public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
+
+                }
+            });
+
+
+
+            super.onResume();
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
