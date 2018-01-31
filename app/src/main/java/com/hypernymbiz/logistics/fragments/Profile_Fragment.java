@@ -84,7 +84,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
         ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-                if (response.body().status!=null) {
+                    if (response.body().status==true) {
 
                     String driverName, driverCnic,drivergender,driverdof;
                     String url=response.body().response.getPhoto();
@@ -97,6 +97,17 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                     martialstatus.setText(drivergender);
                     dof.setText(driverdof);
                     Glide.with(getContext()).load(url).into(img_profile);
+                }
+                else
+                {
+                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    snackbar.show();
+
                 }
 
             }

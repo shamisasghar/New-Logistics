@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     private ViewHolder mHolder;
     private Toolbar mToolbar;
     private Context mContext;
+    Location l;
     public static final int MY_LOCATION_PERMISSION_REQUEST_CODE = 1;
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 2;
     private GoogleMap googleMap;
@@ -138,7 +139,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                     public void onLocationChanged(Location location) {
 
                         Log.d("TAAAG","on location change");
-                        Location l = (Location) location;
+                         l = (Location) location;
                         pos = new LatLng(l.getLatitude(), l.getLongitude());
                        // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
@@ -254,8 +255,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public void onResume() {
         mMapView.onResume();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && googleMap != null) {
+                && googleMap != null)
+        {
+
             googleMap.setMyLocationEnabled(true);
+            googleMap.setTrafficEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         }
             ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
@@ -276,8 +280,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
                 }
             });
-
-
 
             super.onResume();
     }

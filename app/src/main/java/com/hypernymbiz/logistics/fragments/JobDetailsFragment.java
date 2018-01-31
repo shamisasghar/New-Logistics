@@ -84,8 +84,6 @@ public class JobDetailsFragment extends Fragment {
         System.out.println("Current time =&gt; " + c.getTime());
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         actual_start_time = df.format(c.getTime());
-      //  actual_start_time=AppUtils.getDateAndTime(df.toString());
-//         Now formattedDate have current date/time
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,10 +157,6 @@ public class JobDetailsFragment extends Fragment {
                 FrameActivity frameActivity=(FrameActivity)getActivity();
                 frameActivity.onBackPressed();
 
-                //   ActivityUtils.startActivityForResult(getActivity(), FrameActivity.class, JobNoticationFragment.class.getName(), null, 1);
-//                Intent intent = new Intent(getActivity(), HomeActivity.class);
-//                startActivity(intent);
-//                finish();
             }
         });
         Bundle extras = getActivity().getIntent().getExtras();
@@ -173,16 +167,11 @@ public class JobDetailsFragment extends Fragment {
             {
 
                 payloadNotification = GsonUtils.fromJson(value.getString(Constants.PAYLOAD), PayloadNotification.class);
-            }
-            else
-                {
-                    Intent getintent=getActivity().getIntent();
-                    String  id = getintent.getStringExtra("jobid");
-                ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
+
+                ApiInterface.retrofit.getalldata(payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
                         if (response.body().status != null) {
-                           // Toast.makeText(fContext, String.valueOf(job_id), Toast.LENGTH_SHORT).show();
                             jbname.setText(response.body().response.getName());
                             jbstatus.setText(response.body().response.getStatus());
                             jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
@@ -193,6 +182,50 @@ public class JobDetailsFragment extends Fragment {
                                 btn_start.setVisibility(View.GONE);
                                 btn_cancel.setVisibility(View.GONE);
 
+                            }
+                            String strttime,endtime;
+
+                            strttime=AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
+                            endtime=AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
+                            editor = pref.edit();
+                            editor.putString("Startjob",strttime);
+                            editor.putString("Startend",endtime);
+                            editor.commit();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
+
+                        Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                        View sbView = snackbar.getView();
+                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+                        textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
+                        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        snackbar.show();
+                    }
+                });
+
+            }
+            else
+                {
+                    Intent getintent=getActivity().getIntent();
+                    String  id = getintent.getStringExtra("jobid");
+                ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
+                    @Override
+                    public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
+                        if (response.body().status != null) {
+                            jbname.setText(response.body().response.getName());
+                            jbstatus.setText(response.body().response.getStatus());
+                            jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
+                            jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
+                            decrptin.setText(response.body().response.getDescription());
+                            String status=response.body().response.getJobStatus();
+                            if(status.equals("Accomplished")) {
+                                btn_start.setVisibility(View.GONE);
+                                btn_cancel.setVisibility(View.GONE);
                             }
                             String strttime,endtime;
 
@@ -229,10 +262,6 @@ public class JobDetailsFragment extends Fragment {
                 });
             }
         }
-
         return view;
-
     }
-
-
 }

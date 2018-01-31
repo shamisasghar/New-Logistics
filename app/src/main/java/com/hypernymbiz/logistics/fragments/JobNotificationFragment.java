@@ -3,7 +3,9 @@ package com.hypernymbiz.logistics.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +24,7 @@ import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.models.JobInfo;
 import com.hypernymbiz.logistics.models.JobInfo_;
+import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -46,11 +49,12 @@ public class JobNotificationFragment extends Fragment {
     String getUserAssociatedEntity;
     RecyclerView recyclerView;
     SwipeRefreshLayout swipelayout;
+    ConstraintLayout constraintLayout;
     Context fContext;
     ImageView imageView;
     View view;
     String job_id;
-    String size;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -70,6 +74,8 @@ public class JobNotificationFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipelayout = (SwipeRefreshLayout)view.findViewById(R.id.layout_swipe);
+        constraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_constraint1);
+        swipe();
 
 
 //        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity),53).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
@@ -117,26 +123,113 @@ public class JobNotificationFragment extends Fragment {
         ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
-                if (response.body().status!=null) {
+                if (response.body().status==true) {
                     List <JobInfo> jobInfo = response.body().response;
                     adapter=new JobNotifiyAdapter(jobInfo,getActivity());
                     recyclerView.setAdapter(adapter);
+                    String size;
                     size=String.valueOf(jobInfo.size());
-                    if (size==null) {
+                    if (size.equals("0")) {
                         imageView.setVisibility(View.VISIBLE);
                     }
                     else
                         imageView.setVisibility(View.GONE);
 
                 }
+                else
+                {
+                    Snackbar snackbar = Snackbar.make(constraintLayout, "Empty!", Snackbar.LENGTH_SHORT);
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    snackbar.show();
+                }
+
             }
 
             @Override
             public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
+                Snackbar snackbar = Snackbar.make(constraintLayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                snackbar.show();
 
             }
         });
         return view;
+    }
+
+    public void swipe()
+    {
+        swipelayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipelayout.setRefreshing(true);
+
+
+                (new Handler()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        swipelayout.setRefreshing(false);
+                        ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
+                            @Override
+                            public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
+                                if (response.body().status==true) {
+                                    List <JobInfo> jobInfo = response.body().response;
+                                    adapter=new JobNotifiyAdapter(jobInfo,getActivity());
+                                    recyclerView.setAdapter(adapter);
+                                    String size;
+                                    size=String.valueOf(jobInfo.size());
+                                    if (size.equals("0")) {
+                                        imageView.setVisibility(View.VISIBLE);
+                                    }
+                                    else
+                                        imageView.setVisibility(View.GONE);
+
+                                }
+                                else
+                                {
+                                    Snackbar snackbar = Snackbar.make(constraintLayout, "Empty!", Snackbar.LENGTH_SHORT);
+                                    View sbView = snackbar.getView();
+                                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                    snackbar.show();
+                                }
+
+                            }
+                            @Override
+                            public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
+                                Snackbar snackbar = Snackbar.make(constraintLayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                                View sbView = snackbar.getView();
+                                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                snackbar.show();
+
+                            }
+                        });
+
+
+
+
+                    }
+                }, 3000);
+            }
+        });
+
+
+
+
+
     }
 
 
