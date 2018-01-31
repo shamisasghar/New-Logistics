@@ -23,6 +23,8 @@ import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
+import com.hypernymbiz.logistics.utils.AppUtils;
+import com.hypernymbiz.logistics.utils.Constants;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -100,13 +102,14 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                 }
                 else
                 {
-                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                    View sbView = snackbar.getView();
-                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    snackbar.show();
+                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+//                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+//                    View sbView = snackbar.getView();
+//                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+//                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+//                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+//                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                    snackbar.show();
 
                 }
 
@@ -115,13 +118,14 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
 
-                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                View sbView = snackbar.getView();
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                snackbar.show();
+                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+//                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+//                View sbView = snackbar.getView();
+//                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+//                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+//                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+//                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                snackbar.show();
             }
         });
 
@@ -206,14 +210,15 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 
                             @Override
                             public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
+                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
-                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                                View sbView = snackbar.getView();
-                                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                snackbar.show();
+//                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+//                                View sbView = snackbar.getView();
+//                                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+//                                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+//                                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+//                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                                snackbar.show();
                             }
                         });
                     }

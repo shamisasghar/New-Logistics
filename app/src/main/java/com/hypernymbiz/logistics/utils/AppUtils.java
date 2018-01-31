@@ -326,7 +326,7 @@ public class AppUtils {
                 tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             else
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
-            tv.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
+            tv.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorAccent));
             snackbar.show();
         }
     }
@@ -335,39 +335,39 @@ public class AppUtils {
         boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
         return useWhiteIcon ? R.drawable.ic_check_circle_36dp : R.mipmap.ic_launcher;
     }
-////
-//    public static String getErrorMessage(Context context, int statusCode) {
-//        String message = null;
-//        if (context != null) {
-//            message = context.getString(R.string.default_error);
-//            switch (statusCode) {
-//                case 1:
-//                    message = context.getString(R.string.network_error);
-//                    break;
 //
-//                case 204:
-//                    message = context.getString(R.string.error_204);
-//                    break;
-//
-//                case 400:
-//                    message = context.getString(R.string.error_400);
-//                    break;
-//
-//                case 401:
-//                    message = context.getString(R.string.error_401);
-//                    break;
-//
-//                case 406:
-//                    message = context.getString(R.string.error_406);
-//                    break;
-//
-//                case 500:
-//                    message = context.getString(R.string.error_500);
-//                    break;
-//            }
-//        }
-//        return message;
-//    }
+    public static String getErrorMessage(Context context, int statusCode) {
+        String message = null;
+        if (context != null) {
+            message = context.getString(R.string.default_error);
+            switch (statusCode) {
+                case 1:
+                    message = context.getString(R.string.network_error);
+                    break;
+
+                case 204:
+                    message = context.getString(R.string.error_204);
+                    break;
+
+                case 400:
+                    message = context.getString(R.string.error_400);
+                    break;
+
+                case 401:
+                    message = context.getString(R.string.error_401);
+                    break;
+
+                case 406:
+                    message = context.getString(R.string.error_406);
+                    break;
+
+                case 500:
+                    message = context.getString(R.string.error_500);
+                    break;
+            }
+        }
+        return message;
+    }
 
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);

@@ -47,6 +47,8 @@ import com.hypernymbiz.logistics.models.Time;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
+import com.hypernymbiz.logistics.utils.Constants;
 import com.hypernymbiz.logistics.utils.PrefUtils;
 
 import java.util.ArrayList;
@@ -277,6 +279,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
                 @Override
                 public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
+                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                 }
             });

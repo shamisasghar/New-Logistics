@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,8 @@ import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
+import com.hypernymbiz.logistics.utils.Constants;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import java.util.List;
@@ -51,7 +54,8 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
     private SwipeRefreshLayout swipelayout;
     private String getUserAssociatedEntity;
     private ProgressBar progressBar;
-    SwipeRefreshLayout rootlayout;
+    View mview;
+    private ConstraintLayout constraintLayout;
 
     public TextView compltd_job, faild_job;
 
@@ -82,7 +86,10 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
         mViewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
+        constraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_contraint);
+
         swipelayout.setColorSchemeColors(Color.BLUE);
         swipelayout();
 
@@ -91,18 +98,25 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.body().status!=null)
+                if (response.isSuccessful())
+                if(response.body().status)
                 {
                     jobInfo_s = response.body().response.job_info;
                     compltd_job.setText(Integer.toString(jobInfo_s.size()));
                   //  faild_job.setText(Integer.toString(jobInfo_s.size()));
 
                 }
+//                else {
+//
+//                 //   AppUtils.showSnackBar(mview,response.message());
+//                }
 
             }
 
             @Override
             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+
+                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 //                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                View sbView = snackbar.getView();
 //                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -122,29 +136,19 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
                       faild_job.setText(Integer.toString(jobInfo_s.size()));
 
                 }
-                else{
-
-                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                    View sbView = snackbar.getView();
-                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    snackbar.show();
-
-
-                }
+//                else{
+//
+//                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+//
+//
+//
+//                }
             }
 
             @Override
             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                View sbView = snackbar.getView();
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                snackbar.show();
+//                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
 
             }
         });
@@ -267,13 +271,8 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 
                             @Override
                             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                                View sbView = snackbar.getView();
-                                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                snackbar.show();
+                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
                             }
                         });
                         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
@@ -289,13 +288,8 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 
                             @Override
                             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                                View sbView = snackbar.getView();
-                                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                snackbar.show();
+//                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
                             }
                         });
 

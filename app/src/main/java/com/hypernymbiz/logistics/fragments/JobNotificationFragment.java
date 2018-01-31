@@ -28,6 +28,8 @@ import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
+import com.hypernymbiz.logistics.utils.AppUtils;
+import com.hypernymbiz.logistics.utils.Constants;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 import com.google.gson.Gson;
 
@@ -58,22 +60,23 @@ public class JobNotificationFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        fContext=context;
+        fContext = context;
         if (context instanceof ToolbarListener) {
             ((ToolbarListener) context).setTitle("Job Notification");
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_job_notification, container, false);
 
-       sharedPreferences = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
-        recyclerView= (RecyclerView) view.findViewById(R.id.notification_recycler);
-        imageView=(ImageView)view.findViewById(R.id.img_job_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.notification_recycler);
+        imageView = (ImageView) view.findViewById(R.id.img_job_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        swipelayout = (SwipeRefreshLayout)view.findViewById(R.id.layout_swipe);
+        swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
         constraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_constraint1);
         swipe();
 
@@ -123,55 +126,33 @@ public class JobNotificationFragment extends Fragment {
         ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
-                if (response.body().status==true) {
-                    List <JobInfo> jobInfo = response.body().response;
-                    adapter=new JobNotifiyAdapter(jobInfo,getActivity());
+                if (response.body().status == true) {
+                    List<JobInfo> jobInfo = response.body().response;
+                    adapter = new JobNotifiyAdapter(jobInfo, getActivity());
                     recyclerView.setAdapter(adapter);
                     String size;
-                    size=String.valueOf(jobInfo.size());
+                    size = String.valueOf(jobInfo.size());
                     if (size.equals("0")) {
                         imageView.setVisibility(View.VISIBLE);
-                    }
-                    else
+                    } else
                         imageView.setVisibility(View.GONE);
-
                 }
-                else
-                {
-                    Snackbar snackbar = Snackbar.make(constraintLayout, "Empty!", Snackbar.LENGTH_SHORT);
-                    View sbView = snackbar.getView();
-                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    snackbar.show();
-                }
-
             }
 
             @Override
             public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
-                Snackbar snackbar = Snackbar.make(constraintLayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                View sbView = snackbar.getView();
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                snackbar.show();
+                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
             }
         });
         return view;
     }
 
-    public void swipe()
-    {
+    public void swipe() {
         swipelayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipelayout.setRefreshing(true);
-
-
                 (new Handler()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -180,46 +161,29 @@ public class JobNotificationFragment extends Fragment {
                         ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
                             @Override
                             public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
-                                if (response.body().status==true) {
-                                    List <JobInfo> jobInfo = response.body().response;
-                                    adapter=new JobNotifiyAdapter(jobInfo,getActivity());
+                                if (response.body().status == true) {
+                                    List<JobInfo> jobInfo = response.body().response;
+                                    adapter = new JobNotifiyAdapter(jobInfo, getActivity());
                                     recyclerView.setAdapter(adapter);
                                     String size;
-                                    size=String.valueOf(jobInfo.size());
+                                    size = String.valueOf(jobInfo.size());
                                     if (size.equals("0")) {
                                         imageView.setVisibility(View.VISIBLE);
-                                    }
-                                    else
+                                    } else
                                         imageView.setVisibility(View.GONE);
 
-                                }
-                                else
-                                {
-                                    Snackbar snackbar = Snackbar.make(constraintLayout, "Empty!", Snackbar.LENGTH_SHORT);
-                                    View sbView = snackbar.getView();
-                                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    snackbar.show();
+                                } else {
+                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
                                 }
 
                             }
+
                             @Override
                             public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
-                                Snackbar snackbar = Snackbar.make(constraintLayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                                View sbView = snackbar.getView();
-                                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                                sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                snackbar.show();
+                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                             }
                         });
-
-
-
 
                     }
                 }, 3000);
@@ -227,15 +191,7 @@ public class JobNotificationFragment extends Fragment {
         });
 
 
-
-
-
     }
-
-
-
-
-
 
 
 }

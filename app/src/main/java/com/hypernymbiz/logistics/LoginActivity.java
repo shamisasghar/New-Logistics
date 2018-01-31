@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 //                                url = response.body().response.getPhoto();
 //                                driver_name = response.body().response.getName();
 //                                driver_id = Integer.toString(response.body().response.getId());
-                    email = response.body().response.getEmail();
+                                email = response.body().response.getEmail();
                                 editor = pref.edit();
                                 editor.putString("Email", email);
 //                                editor.putString("Url", url);
