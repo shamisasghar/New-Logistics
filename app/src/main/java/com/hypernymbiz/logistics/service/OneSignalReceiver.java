@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.hypernymbiz.logistics.FrameActivity;
+import com.hypernymbiz.logistics.HomeActivity;
+import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
 import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
 import com.hypernymbiz.logistics.models.PayloadNotification;
 import com.hypernymbiz.logistics.utils.AppUtils;
@@ -34,13 +36,13 @@ public class OneSignalReceiver extends NotificationExtenderService {
                 payloadNotification = new PayloadNotification();
                 try {
                     payloadNotification.title = additionalData.getString("title");
-                    payloadNotification.job_id = additionalData.getInt("id");
+                    payloadNotification.job_id = additionalData.getInt("job_id");
                     payloadNotification.message = additionalData.getString("message");
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
                     // AppUtils.makeNotification(this, JobDetailActivity.class, null, bundle, payloadNotification.title, false, payloadNotification.job_id);
                     //ActivityUtils.startActivity(this, FrameActivity.class,JobDetailFragment.class.getName(), bundle);
-                    AppUtils.makeNotification(this, FrameActivity.class, null, bundle, payloadNotification.title, false, payloadNotification.job_id);
+                    AppUtils.makeNotification(this, HomeActivity.class, null, bundle, payloadNotification.title, false, payloadNotification.job_id);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -52,11 +54,11 @@ public class OneSignalReceiver extends NotificationExtenderService {
                 {
                     payloadNotification = new PayloadNotification();
                     payloadNotification.title = additionalData.getString("title");
-                    payloadNotification.job_id = Integer.parseInt(additionalData.getString("id"));
+                    payloadNotification.job_id = Integer.parseInt(additionalData.getString("job_id"));
                     payloadNotification.message = additionalData.getString("message");
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
-                    AppUtils.makeNotification(this, FrameActivity.class, null, null, null, false, payloadNotification.job_id);
+                    AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
 
 //                    if (orderStatus.status == OrderPlacedEnum.READY_FOR_PAYMENT.getValue()) {
 //                        if (!AppUtils.isRunningInForeground(this)) {

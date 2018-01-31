@@ -171,9 +171,9 @@ public class JobDetailsFragment extends Fragment {
                 ApiInterface.retrofit.getalldata(payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
-                        if (response.body().status != null) {
+                        if (response.body().status ==true) {
                             jbname.setText(response.body().response.getName());
-                            jbstatus.setText(response.body().response.getStatus());
+                            jbstatus.setText(response.body().response.getJobStatus());
                             jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
                             jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
                             decrptin.setText(response.body().response.getDescription());
@@ -218,7 +218,7 @@ public class JobDetailsFragment extends Fragment {
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
                         if (response.body().status != null) {
                             jbname.setText(response.body().response.getName());
-                            jbstatus.setText(response.body().response.getStatus());
+                            jbstatus.setText(response.body().response.getJobStatus());
                             jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
                             jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
                             decrptin.setText(response.body().response.getDescription());

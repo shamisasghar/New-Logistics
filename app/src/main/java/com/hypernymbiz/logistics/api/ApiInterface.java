@@ -36,7 +36,8 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    String HTTP = "http://188.166.226.185/";
+    String HTTP = "http://192" +
+            ".168.2.120:8000/";
 
     String HTTPP = "http://192.168.2.185:8000/";
 
