@@ -333,7 +333,7 @@ public class AppUtils {
 
     private static int getNotificationIcon() {
         boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.ic_check_circle_36dp : R.mipmap.ic_launcher;
+        return useWhiteIcon ? R.drawable.ic_launcher : R.mipmap.ic_launcher;
     }
 //
     public static String getErrorMessage(Context context, int statusCode) {
@@ -343,6 +343,9 @@ public class AppUtils {
             switch (statusCode) {
                 case 1:
                     message = context.getString(R.string.network_error);
+                    break;
+                case 2:
+                    message = "Some Error Occurred. Please try later...";
                     break;
 
                 case 204:

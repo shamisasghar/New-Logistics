@@ -40,12 +40,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Profile_Fragment extends Fragment implements View.OnClickListener, ToolbarListener {
     private ViewHolder mHolder;
-    TextView email, drivername, drivercnic,martialstatus,dof;
+    TextView email, drivername, drivercnic, martialstatus, dof;
     private Toolbar mToolbar;
     private TextView mToolbarTitle;
     private SwipeRefreshLayout swipelayout;
     SharedPreferences pref;
-    String getUserAssociatedEntity,Email,Driver_name,Driver_id,Driver_photo;
+    String getUserAssociatedEntity, Email, Driver_name, Driver_id, Driver_photo;
     CircleImageView img_profile;
 
     @Override
@@ -69,7 +69,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
         drivercnic = (TextView) view.findViewById(R.id.txt_driverid);
         martialstatus = (TextView) view.findViewById(R.id.txt_gender);
         dof = (TextView) view.findViewById(R.id.txt_dateofjoin);
-        img_profile=(CircleImageView) view.findViewById(R.id.img_driver_profile);
+        img_profile = (CircleImageView) view.findViewById(R.id.img_driver_profile);
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
 
@@ -86,31 +86,23 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
         ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-                    if (response.body().status==true) {
+                if (response.isSuccessful()) {
+                    if (response.body().status) {
 
-                    String driverName, driverCnic,drivergender,driverdof;
-                    String url=response.body().response.getPhoto();
-                    driverName = response.body().response.getName();
-                    driverCnic = String.valueOf(response.body().response.getCnic());
-                    drivergender=response.body().response.getMaritalStatus();
-                    driverdof=response.body().response.getDateOfJoining();
-                    drivername.setText(driverName);
-                    drivercnic.setText(driverCnic);
-                    martialstatus.setText(drivergender);
-                    dof.setText(driverdof);
-                    Glide.with(getContext()).load(url).into(img_profile);
-                }
-                else
-                {
-                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-//                    Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-//                    View sbView = snackbar.getView();
-//                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-//                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-//                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-//                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//                    snackbar.show();
-
+                        String driverName, driverCnic, drivergender, driverdof;
+                        String url = response.body().response.getPhoto();
+                        driverName = response.body().response.getName();
+                        driverCnic = String.valueOf(response.body().response.getCnic());
+                        drivergender = response.body().response.getMaritalStatus();
+                        driverdof = response.body().response.getDateOfJoining();
+                        drivername.setText(driverName);
+                        drivercnic.setText(driverCnic);
+                        martialstatus.setText(drivergender);
+                        dof.setText(driverdof);
+                        Glide.with(getContext()).load(url).into(img_profile);
+                    }
+                } else {
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
                 }
 
             }
@@ -118,7 +110,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
 
-                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 //                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                View sbView = snackbar.getView();
 //                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -136,7 +128,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-     //   EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_profile)));
+        //   EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_profile)));
         mHolder.btn_sgnout.setOnClickListener(this);
 
     }
@@ -164,7 +156,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-      //  EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_profile)));
+        //  EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_profile)));
     }
 
     public static class ViewHolder {
@@ -196,11 +188,11 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                             public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
                                 if (response.body().status) {
 
-                                    String driverName,driverId;
+                                    String driverName, driverId;
 
                                     driverName = response.body().response.getName();
                                     driverId = Integer.toString(response.body().response.getId());
-                                    String url=response.body().response.getPhoto();
+                                    String url = response.body().response.getPhoto();
                                     drivername.setText(driverName);
 //                                    driverid.setText(driverId);
 //                                    Glide.with(getContext()).load(url).into(img_profile);
@@ -210,7 +202,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 
                             @Override
                             public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
-                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
 //                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                                View sbView = snackbar.getView();

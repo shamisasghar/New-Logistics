@@ -2,21 +2,16 @@ package com.hypernymbiz.logistics.fragments;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,32 +19,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
-import com.hypernymbiz.logistics.adapter.FailedJobAdapter;
 import com.hypernymbiz.logistics.api.ApiInterface;
-import com.hypernymbiz.logistics.models.AssignedTime;
+import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
+import com.hypernymbiz.logistics.models.ExpandableSubCategoryChild;
 import com.hypernymbiz.logistics.models.JobCount;
-import com.hypernymbiz.logistics.models.JobInfo_;
-import com.hypernymbiz.logistics.models.Respone_Completed_job;
-import com.hypernymbiz.logistics.models.Time;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
-import com.hypernymbiz.logistics.utils.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,7 +131,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                          l = (Location) location;
                         pos = new LatLng(l.getLatitude(), l.getLongitude());
                        // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
+//                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
                         googleMap.setTrafficEnabled(true);
 
                     }
@@ -182,22 +169,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
         ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
-        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<AssignedTime, Time>() {
+        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
             @Override
-            public void renderParent(View view, AssignedTime model, boolean isExpanded, int parentPosition) {
+            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
                 view.findViewById(R.id.arrow).setBackgroundResource(isExpanded ? R.drawable.up_arrow : R.drawable.up_arrow);
             }
 
             @Override
-            public void renderChild(View view, Time model, int parentPosition, int childPosition) {
-                ((TextView) view.findViewById(R.id.tvChild)).setText(model.name);
+            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
+                ((TextView)view.findViewById(R.id.label)).setText(model.getName());
+                ((TextView)view.findViewById(R.id.tvChild)).setText(model.getTime());
 
             }
         });
 
-        sectionLinearLayout.addSection(getsection());
-        sectionLinearLayout.addSection(getsection());
+
+        sectionLinearLayout.addSection(getsection("Assigned Time ","",""));
+        sectionLinearLayout.addSection(getsection("Driver Time ","",""));
         return view;
 
     }
@@ -239,14 +228,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
     }
 
-    public Section<AssignedTime, Time> getsection() {
-        Section<AssignedTime, Time> section = new Section<>();
-        AssignedTime phoneCategory = new AssignedTime("Assigned Time");
-        List<Time> list = new ArrayList<Time>();
+    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime) {
+        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
+        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
+        List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
         {
-            for (int i = 0; i <= 5; i++)
 
-                list.add(new Time("21313" + i));
+            list.add(new ExpandableSubCategoryChild("Start Time:",StartTime));
+            list.add(new ExpandableSubCategoryChild("End Time:",EndTime));
             section.parent = phoneCategory;
             section.children.addAll(list);
 

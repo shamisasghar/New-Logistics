@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,51 +89,66 @@ public class JobDetailsFragment extends Fragment {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent getintent=getActivity().getIntent();
-                String  id = getintent.getStringExtra("jobid");
+                Intent getintent = getActivity().getIntent();
+                String id = getintent.getStringExtra("jobid");
                 HashMap<String, Object> body = new HashMap<>();
-                body.put("job_id",Integer.parseInt(id));
-                body.put("actual_start_time", actual_start_time);
-                body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+
+
+                if (id != null) {
+                    body.put("job_id", Integer.parseInt(id));
+                    body.put("actual_start_time", actual_start_time);
+                    body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+
+
+                }
+                else
+                {
+                    body.put("job_id", payloadNotification.job_id);
+                    body.put("actual_start_time", actual_start_time);
+                    body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+                }
 
                 ApiInterface.retrofit.startjob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
-                        if (response.body().status!=null) {
+                        if (response.isSuccessful()) {
+                                if(response.body().status) {
+                                    String strlat, strlng, endlat, endlng;
+                                    strlat = String.valueOf(response.body().response.getJobStartLat());
+                                    strlng = String.valueOf(response.body().response.getJobStartLng());
+                                    endlat = String.valueOf(response.body().response.getJobEndLat());
+                                    endlng = String.valueOf(response.body().response.getJobEndLng());
 
-                            String strlat, strlng, endlat, endlng;
-                            strlat = String.valueOf(response.body().response.getJobStartLat());
-                            strlng = String.valueOf(response.body().response.getJobStartLng());
-                            endlat = String.valueOf(response.body().response.getJobEndLat());
-                            endlng = String.valueOf(response.body().response.getJobEndLng());
+                                    editor = pref.edit();
+                                    editor.putString("Startlat", strlat);
+                                    editor.putString("Startlng", strlng);
+                                    editor.putString("Endlat", endlat);
+                                    editor.putString("Endlng", endlng);
+                                    editor.putString("Actualstart", actual_start_time);
+                                    editor.commit();
+                                    // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getContext(), ActiveJobActivity.class);
+                                    Intent getintent = getActivity().getIntent();
 
-                            editor = pref.edit();
-                            editor.putString("Startlat", strlat);
-                            editor.putString("Startlng", strlng);
-                            editor.putString("Endlat", endlat);
-                            editor.putString("Endlng", endlng);
-                            editor.putString("Actualstart", actual_start_time);
-                            editor.commit();
-                            // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getContext(), ActiveJobActivity.class);
-                            Intent getintent=getActivity().getIntent();
-                            String  id = getintent.getStringExtra("jobid");
-                            intent.putExtra("jobid",id);
-                            startActivity(intent);
-                            getActivity().finish();
+                                    String id = getintent.getStringExtra("jobid");
+                                    if (id != null) {
+                                        Toast.makeText(getContext(), id, Toast.LENGTH_SHORT).show();
+                                        intent.putExtra("jobid", id);
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    } else {
+                                        intent.putExtra("jobid", "" + payloadNotification.job_id);
+                                        Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    }
+                                }
                         }
                         else
-                        {
-                            Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                            View sbView = snackbar.getView();
-                            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
-                            textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
-                            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            snackbar.show();
+                            {
 
-                        }
-
+                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+                            }
                     }
 
                     @Override
@@ -154,7 +170,7 @@ public class JobDetailsFragment extends Fragment {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FrameActivity frameActivity=(FrameActivity)getActivity();
+                FrameActivity frameActivity = (FrameActivity) getActivity();
                 frameActivity.onBackPressed();
 
             }
@@ -163,34 +179,37 @@ public class JobDetailsFragment extends Fragment {
         Bundle value = null;
         if (extras != null) {
             value = extras.getBundle(Constants.DATA);
-            if (value != null)
-            {
-
+            if (value != null) {
                 payloadNotification = GsonUtils.fromJson(value.getString(Constants.PAYLOAD), PayloadNotification.class);
 
                 ApiInterface.retrofit.getalldata(payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
-                        if (response.body().status ==true) {
-                            jbname.setText(response.body().response.getName());
-                            jbstatus.setText(response.body().response.getJobStatus());
-                            jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
-                            jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
-                            decrptin.setText(response.body().response.getDescription());
-                            String status=response.body().response.getJobStatus();
-                            if(status.equals("Accomplished")) {
-                                btn_start.setVisibility(View.GONE);
-                                btn_cancel.setVisibility(View.GONE);
+                        if(response.isSuccessful()) {
+                            if (response.body().status) {
+                                jbname.setText(response.body().response.getName());
+                                jbstatus.setText(response.body().response.getJobStatus());
+                                jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
+                                jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
+                                decrptin.setText(response.body().response.getDescription());
+                                String status = response.body().response.getJobStatus();
+                                if (status.equals("Accomplished")) {
+                                    btn_start.setVisibility(View.GONE);
+                                    btn_cancel.setVisibility(View.GONE);
+                                }
+                                String strttime, endtime;
 
+                                strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
+                                endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
+                                editor = pref.edit();
+                                editor.putString("Startjob", strttime);
+                                editor.putString("Startend", endtime);
+                                editor.commit();
                             }
-                            String strttime,endtime;
+                        }
+                        else {
 
-                            strttime=AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
-                            endtime=AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
-                            editor = pref.edit();
-                            editor.putString("Startjob",strttime);
-                            editor.putString("Startend",endtime);
-                            editor.commit();
+                            AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
                         }
 
                     }
@@ -208,45 +227,50 @@ public class JobDetailsFragment extends Fragment {
                     }
                 });
 
-            }
-            else
-                {
-                    Intent getintent=getActivity().getIntent();
-                    String  id = getintent.getStringExtra("jobid");
+            } else {
+                Intent getintent = getActivity().getIntent();
+                String id = getintent.getStringExtra("jobid");
                 ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
-                        if (response.body().status != null) {
-                            jbname.setText(response.body().response.getName());
-                            jbstatus.setText(response.body().response.getJobStatus());
-                            jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
-                            jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
-                            decrptin.setText(response.body().response.getDescription());
-                            String status=response.body().response.getJobStatus();
-                            if(status.equals("Accomplished")) {
-                                btn_start.setVisibility(View.GONE);
-                                btn_cancel.setVisibility(View.GONE);
-                            }
-                            String strttime,endtime;
+                        if (response.isSuccessful()) {
+                            if (response.body().status) {
+                                jbname.setText(response.body().response.getName());
+                                jbstatus.setText(response.body().response.getJobStatus());
+                                jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
+                                jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
+                                decrptin.setText(response.body().response.getDescription());
+                                String status = response.body().response.getJobStatus();
+                                if (status.equals("Accomplished")) {
+                                    btn_start.setVisibility(View.GONE);
+                                    btn_cancel.setVisibility(View.GONE);
+                                }
+                                String strttime, endtime;
 
-                            strttime=AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
-                            endtime=AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
-                            editor = pref.edit();
-                            editor.putString("Startjob",strttime);
-                            editor.putString("Startend",endtime);
-                            editor.commit();
+                                strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
+                                endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
+                                editor = pref.edit();
+                                editor.putString("Startjob", strttime);
+                                editor.putString("Startend", endtime);
+                                editor.commit();
+                            } else {
+                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
+                                View sbView = snackbar.getView();
+                                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+                                textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
+                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                snackbar.show();
+                            }
                         }
-                        else
-                        {
-                            Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                            View sbView = snackbar.getView();
-                            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
-                            textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
-                            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            snackbar.show();
+
+                        else {
+
+                            AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
                         }
                     }
+
+
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {

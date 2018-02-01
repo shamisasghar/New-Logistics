@@ -45,7 +45,7 @@
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:hint="Job Name"
+                android:hint="-"
                 android:textColorHint="#000000"/>
         </LinearLayout>
 
@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:hint="Job Status"
+                android:hint="-"
                 android:textColorHint="#000000"
                 />
         </LinearLayout>
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:hint="Job start Time"
+                android:hint="-"
                 android:textColorHint="#000000" />
         </LinearLayout>
 
@@ -125,7 +125,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:hint="Job End Time"
+                android:hint="-"
                 android:gravity="center"
                 android:textColorHint="#000000"/>
         </LinearLayout>
@@ -152,7 +152,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:hint="Job Description"
+                android:hint="-"
                 android:gravity="center_horizontal"
                 android:textColorHint="#000000"/>
         </LinearLayout>

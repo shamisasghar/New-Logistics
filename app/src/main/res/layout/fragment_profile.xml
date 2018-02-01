@@ -67,7 +67,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="50dp"
                         android:layout_below="@+id/img_driver_profile"
-                        android:text="Driver Name"
+                        android:text="-"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -112,7 +112,7 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="50dp"
                         android:layout_below="@+id/img_driver_profile"
-                        android:text="Driver1@kotal.com"
+                        android:text="-"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -156,7 +156,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="50dp"
                         android:layout_below="@+id/img_driver_profile"
-                        android:text="61101-64564888-9"
+                        android:text="-"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -199,7 +199,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="40dp"
                         android:layout_below="@+id/img_driver_profile"
-                        android:text="20/1/1997"
+                        android:text="-"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -242,7 +242,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:layout_marginLeft="30dp"
-                        android:text="Single"
+                        android:text="-"
                         android:layout_below="@+id/img_driver_profile"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="15sp" />

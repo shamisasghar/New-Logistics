@@ -92,9 +92,9 @@ public class CompleteJobAdapter extends RecyclerView.Adapter<CompleteJobAdapter.
 ////            ((ListViewHolder) holder).jobname.setText(JN);
 ////            JS = "Job Status";
 ////            ((ListViewHolder) holder).jobstatus.setText(JS);
-////            ST = "Start Time";
+////            ST = "Start ExpandableSubCategoryChild";
 ////            ((ListViewHolder) holder).starttime.setText(ST);
-////            ET = "End Time";
+////            ET = "End ExpandableSubCategoryChild";
 ////            ((ListViewHolder) holder).endtime.setText(ET);
 ////        }
 //

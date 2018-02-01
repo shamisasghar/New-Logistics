@@ -98,18 +98,17 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.isSuccessful())
-                if(response.body().status)
-                {
-                    jobInfo_s = response.body().response.job_info;
-                    compltd_job.setText(Integer.toString(jobInfo_s.size()));
-                  //  faild_job.setText(Integer.toString(jobInfo_s.size()));
-
+                if (response.isSuccessful()) {
+                    if (response.body().status) {
+                        jobInfo_s = response.body().response.job_info;
+                        compltd_job.setText(Integer.toString(jobInfo_s.size()));
+                        //  faild_job.setText(Integer.toString(jobInfo_s.size()));
+                    }
                 }
-//                else {
-//
-//                 //   AppUtils.showSnackBar(mview,response.message());
-//                }
+                 else {
+
+                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+               }
 
             }
 

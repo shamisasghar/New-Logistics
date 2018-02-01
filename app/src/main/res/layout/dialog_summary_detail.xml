@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="40dp"
     android:layout_marginBottom="40dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
     android:orientation="vertical"
     android:background="@color/colorAccent">
     <ScrollView
@@ -55,7 +55,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="January 26,2018 04:56 PM"
+                    android:text="-"
                     android:layout_weight="2"
                     android:id="@+id/txt_dialog_starttime"
                     android:gravity="center"/>
@@ -75,7 +75,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="January 26,2018 04:56 PM"
+                    android:text="-"
                     android:layout_weight="2"
                     android:id="@+id/txt_dialog_endtime"
                     android:gravity="center"/>
@@ -95,7 +95,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="January 26,2018 04:56 PM"
+                    android:text="-"
                     android:layout_weight="2"
                     android:id="@+id/txt_dialog_actualstart"
                     android:gravity="center"/>
@@ -115,7 +115,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="January 26,2018 04:56 PM"
+                    android:text="-"
                     android:id="@+id/txt_dialog_actualend"
                     android:layout_weight="2"
                     android:gravity="center"/>
@@ -135,7 +135,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="2000"
+                    android:text="-"
                     android:layout_weight="1"
                     android:id="@+id/txt_dialog_distancekm"
                     android:gravity="center"/>

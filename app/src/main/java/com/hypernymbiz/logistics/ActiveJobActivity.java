@@ -1,6 +1,5 @@
 package com.hypernymbiz.logistics;
 
-import android.*;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.capur16.digitspeedviewlib.DigitSpeedView;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,11 +32,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
-import com.hypernymbiz.logistics.models.AssignedTime;
+import com.hypernymbiz.logistics.fragments.HomeFragment;
+import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
 import com.hypernymbiz.logistics.models.DirectionsJSONParser;
+import com.hypernymbiz.logistics.models.ExpandableSubCategoryChild;
 import com.hypernymbiz.logistics.models.JobEnd;
-import com.hypernymbiz.logistics.models.Time;
+import com.hypernymbiz.logistics.models.PayloadNotification;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
+import com.hypernymbiz.logistics.utils.Constants;
+import com.hypernymbiz.logistics.utils.GsonUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 import org.json.JSONObject;
 
@@ -85,6 +89,8 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
     SharedPreferences.Editor editor;
     private SwipeRefreshLayout swipelayout;
     Dialog dialog_summary;
+    String Jobstart,Jobend,JobActualstart,JobActualend;
+    PayloadNotification payloadNotification;
 
 
 
@@ -172,9 +178,14 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                 Intent getintent=getIntent();
                 String  id = getintent.getStringExtra("jobid");
                 HashMap<String, Object> body = new HashMap<>();
-                body.put("job_id",id);
-                body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                body.put("actual_end_time", actual_end_time);
+
+
+                    body.put("job_id",id);
+                    body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+                    body.put("actual_end_time", actual_end_time);
+
+
+
 
 
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
@@ -218,7 +229,9 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         summary.hide();
-                        finish();
+//                        finish();
+
+                        ActivityUtils.startActivity(ActiveJobActivity.this,HomeActivity.class,true);
                     }
                 });
 
@@ -573,37 +586,40 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
     {
         ExpandableLayout sectionLinearLayout = (ExpandableLayout) findViewById(R.id.layout_expandable);
 
-        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<AssignedTime,Time>()
+        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent,ExpandableSubCategoryChild>()
         {
             @Override
-            public void renderParent(View view, AssignedTime model, boolean isExpanded, int parentPosition) {
+            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
                 view.findViewById(R.id.arrow).setBackgroundResource(isExpanded ? R.drawable.up_arrow : R.drawable.up_arrow);
             }
 
             @Override
-            public void renderChild(View view, Time model, int parentPosition, int childPosition) {
-                ((TextView) view.findViewById(R.id.tvChild)).setText(model.name);
+            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
+                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
+                ((TextView)view.findViewById(R.id.tvChild)).setText(model.getTime());
 
             }
         });
+                Jobstart=pref.getString("Startjob", "");
+                Jobend=pref.getString("Startend", "");
+                JobActualstart=pref.getString("Actualstart", "");
+                JobActualend=actual_end_time;
 
-
-        sectionLinearLayout.addSection(getsection());
-        sectionLinearLayout.addSection(getsection());
+        sectionLinearLayout.addSection(getsection("Assigned Time ",Jobstart,Jobend));
+        sectionLinearLayout.addSection(getsection("Driver Time ",JobActualstart,JobActualend));
 
     }
 
-    public Section<AssignedTime,Time> getsection() {
-        Section<AssignedTime, Time> section = new Section<>();
-
-        AssignedTime assignedTime=new AssignedTime("Assigned Time");
-        List<Time> list=new ArrayList<Time>();
+    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime) {
+        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
+        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
+        List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
         {
 
-            list.add(new Time("21313"));
-            list.add(new Time("12345"));
-            section.parent=assignedTime;
+            list.add(new ExpandableSubCategoryChild("Start Time:",StartTime));
+            list.add(new ExpandableSubCategoryChild("End Time:",EndTime));
+            section.parent = phoneCategory;
             section.children.addAll(list);
 
         }

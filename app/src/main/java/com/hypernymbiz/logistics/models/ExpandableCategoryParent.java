@@ -4,10 +4,11 @@ package com.hypernymbiz.logistics.models;
  * Created by Metis on 20-Jan-18.
  */
 
-public class AssignedTime {
+public class
+ExpandableCategoryParent {
     public String name;
 
-    public AssignedTime(String name) {
+    public ExpandableCategoryParent(String name) {
         this.name = name;
     }
 
