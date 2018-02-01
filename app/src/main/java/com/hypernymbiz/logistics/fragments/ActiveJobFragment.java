@@ -1,4 +1,4 @@
-package com.hypernymbiz.logistics;
+package com.hypernymbiz.logistics.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,10 +13,15 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,20 +35,22 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.hypernymbiz.logistics.ActiveJobActivity;
+import com.hypernymbiz.logistics.FrameActivity;
+import com.hypernymbiz.logistics.HomeActivity;
+import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
-import com.hypernymbiz.logistics.fragments.HomeFragment;
-import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
 import com.hypernymbiz.logistics.models.DirectionsJSONParser;
+import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
 import com.hypernymbiz.logistics.models.ExpandableSubCategoryChild;
 import com.hypernymbiz.logistics.models.JobEnd;
 import com.hypernymbiz.logistics.models.PayloadNotification;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
-import com.hypernymbiz.logistics.utils.AppUtils;
-import com.hypernymbiz.logistics.utils.Constants;
-import com.hypernymbiz.logistics.utils.GsonUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -65,14 +72,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
- * Created by Metis on 23-Jan-18.
+ * Created by Metis on 01-Feb-18.
  */
 
-public class ActiveJobActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
-    //    private List<AssestData> assestData = new ArrayList<>();
-//    private RecyclerView.Adapter adapter;
-//    RecyclerView recyclerView;
+public class ActiveJobFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
     ImageView info_img;
     Dialog summary,info;
     ProSwipeButton swipeButton;
@@ -91,60 +97,36 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
     Dialog dialog_summary;
     String Jobstart,Jobend,JobActualstart,JobActualend;
     PayloadNotification payloadNotification;
+    View view;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+//        if (!EventBus.getDefault().isRegistered(this))
+//            EventBus.getDefault().register(this);
+    }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_active_job);
-        pref = getApplicationContext().getSharedPreferences("TAG", MODE_PRIVATE);
-        mMapView = (MapView) findViewById(R.id.mapView);
-        digitSpeedView = (DigitSpeedView) findViewById(R.id.digit_speed_view1);
-        //  strttime=(TextView)findViewById(R.id.txt_starttime);
-//        endtime=(TextView)findViewById(R.id.txt_jobendtime);
-//        actual_start=(TextView)findViewById(R.id.txt_actual_time);
-       // actual_start.setText(pref.getString("Actualstart", ""));
-        //strttime.setText(pref.getString("Startjob", ""));
-        //endtime.setText(pref.getString("Startend", ""));
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        dig_dis=(TextView)findViewById(R.id.txt_dialog_actualend);
-        dig_vol=(TextView)findViewById(R.id.txt_dialog_actualend);
-
-        swipelayout = (SwipeRefreshLayout)findViewById(R.id.layout_swipe);
-        swipeButton = (ProSwipeButton) findViewById(R.id.btn_slide);
-        info_img = (ImageView) findViewById(R.id.info);
-        getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getApplicationContext());
-
-
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-        try {
-            MapsInitializer.initialize(getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (context instanceof ToolbarListener) {
+            ((ToolbarListener) context).setTitle("Active Job");
         }
-        mMapView.getMapAsync(this);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        Expandable();
+        inflater.inflate(R.menu.menu_active_job, menu);
+        View view = menu.findItem(R.id.info_truck).getActionView();
 
-        map();
-
-//        recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setNestedScrollingEnabled(false);
-//
-//        adapter=new AssetsAdapter(assestData,this);
-//        adapter.notifyItemInserted(0);
-//        recyclerView.getLayoutManager().scrollToPosition(adapter.getItemCount());
-//        recyclerView.setAdapter(adapter);  //
-
-
-        info_img.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                info = new Dialog(ActiveJobActivity.this);
+            public void onClick(View v) {
+                info = new Dialog(getContext());
                 info.setContentView(R.layout.dialog_truck_info);
                 info.show();
                 info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -155,8 +137,60 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                         info.hide();
                     }
                 });
+
+
             }
         });
+//        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
+//        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
+
+    }
+
+
+
+
+
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_active_job, container, false);
+        pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
+        mMapView = (MapView) view.findViewById(R.id.mapView);
+        digitSpeedView = (DigitSpeedView) view.findViewById(R.id.digit_speed_view1);
+        dig_dis=(TextView)view.findViewById(R.id.txt_dialog_actualend);
+        dig_vol=(TextView)view.findViewById(R.id.txt_dialog_actualend);
+        swipeButton = (ProSwipeButton) view.findViewById(R.id.btn_slide);
+        info_img = (ImageView) view.findViewById(R.id.info);
+        getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
+
+        mMapView.onCreate(savedInstanceState);
+        mMapView.onResume();
+        try {
+            MapsInitializer.initialize(getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mMapView.getMapAsync(this);
+        Expandable();
+        map();
+//        info_img.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                info = new Dialog(getContext());
+//                info.setContentView(R.layout.dialog_truck_info);
+//                info.show();
+//                info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                btn_cls = (Button) info.findViewById(R.id.btn_close);
+//                btn_cls.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        info.hide();
+//                    }
+//                });
+//            }
+//        });
 
         swipeButton.setOnSwipeListener(new ProSwipeButton.OnSwipeListener() {
             @Override
@@ -166,7 +200,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                     public void run() {
                         try
                         {
-                        swipeButton.showResultIcon(true);}
+                            swipeButton.showResultIcon(true);}
                         catch (Exception ex){}
                     }
                 }, 2000);
@@ -175,13 +209,13 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                 System.out.println("Current time =&gt; " + c.getTime());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 actual_end_time = df.format(c.getTime());
-                Intent getintent=getIntent();
+                Intent getintent=getActivity().getIntent();
                 String  id = getintent.getStringExtra("jobid");
                 HashMap<String, Object> body = new HashMap<>();
 
-                    body.put("job_id",id);
-                    body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                    body.put("actual_end_time", actual_end_time);
+                body.put("job_id",id);
+                body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+                body.put("actual_end_time", actual_end_time);
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobEnd>> call, Response<WebAPIResponse<JobEnd>> response) {
@@ -201,7 +235,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
 
-                summary = new Dialog(ActiveJobActivity.this);
+                summary = new Dialog(getContext());
                 summary.setContentView(R.layout.dialog_summary_detail);
                 summary.setCanceledOnTouchOutside(false);
                 dig_actend=(TextView)summary.findViewById(R.id.txt_dialog_actualend);
@@ -224,119 +258,21 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
                         summary.hide();
 //                        finish();
 
-                        ActivityUtils.startActivity(ActiveJobActivity.this,HomeActivity.class,true);
+                        ActivityUtils.startActivity(getActivity(),HomeActivity.class,true);
                     }
                 });
 
 
             }
         });
-//swipe work
-//        swipeButton.addOnSwipeCallback(new SwipeButton.Swipe() {
-//            @Override
-//            public void onButtonPress() {
-//
-//            }
-//
-//            @Override
-//            public void onSwipeCancel() {
-//            }
-//
-//            @Override
-//            public void onSwipeConfirm() {
-//
-//
-//                HashMap<String, Object> body = new HashMap<>();
-//                body.put("job_id",13);
-//                body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-//                body.put("actual_end_time", actual_end_time);
-//
-//
-//
-//
-//                ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
-//                    @Override
-//                    public void onResponse(Call<WebAPIResponse<JobEnd>> call, Response<WebAPIResponse<JobEnd>> response) {
-////                        if (response.body().status) {
-//
-//
-////                    }
-//                    }
-//                    @Override
-//                    public void onFailure(Call<WebAPIResponse<JobEnd>> call, Throwable t) {
-//
-////                        Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-////                        View sbView = snackbar.getView();
-////                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-////                        sbView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-////                        textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorDialogToolbarText));
-////                        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-////                        snackbar.show();
-//                    }
-//                });
-//
-//
-//                summary = new Dialog(ActiveJobActivity.this);
-//                summary.setContentView(R.layout.dialog_summary_detail);
-//
-//                dig_actend=(TextView)summary.findViewById(R.id.txt_dialog_actualend);
-//                btn_okk = (Button) summary.findViewById(R.id.btn_ok);
-//                dig_actstrt=(TextView)summary.findViewById(R.id.txt_dialog_actualstart);
-//                dig_strt=(TextView)summary.findViewById(R.id.txt_dialog_starttime);
-//                dig_end=(TextView)summary.findViewById(R.id.txt_dialog_endtime);
-//
-//                summary.show();
-//                summary.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//
-//                dig_actend.setText(actual_end_time);
-//                dig_actstrt.setText(pref.getString("Actualstart", ""));
-//                dig_strt.setText(pref.getString("Startjob", ""));
-//                dig_end.setText(pref.getString("Startend", ""));
-//
-//                btn_okk.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        summary.hide();
-//                        finish();
-//                    }
-//                });
-//
-//            }
-//        });
-        //    add();
 
+
+
+
+        return view;
     }
 
-    @Override
-    public void onBackPressed() {
-        mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_end_job),getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.button_positive:
-                        mSimpleDialog.dismiss();
-                        finish();
-                        break;
-                    case R.id.button_negative:
-                        mSimpleDialog.dismiss();
-                        break;
-                }
-            }
-        });
-        mSimpleDialog.show();
 
-    }
-
-//    public void add()
-//    {
-//        AssestData listitem=new AssestData("abc","Vehicle");
-//        assestData.add(listitem);
-//        AssestData listitem1=new AssestData("abc","Vehicle");
-//        assestData.add(listitem1);
-//        AssestData listite2=new AssestData("abc","Vehicle");
-//        assestData.add(listite2);
-//
-//    }
 
     @Override
     public void onClick(View v) {
@@ -345,7 +281,9 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
+
+            this.googleMap = googleMap;
+
     }
 
     public void map() {
@@ -355,100 +293,98 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
         elng = Double.parseDouble(pref.getString("Endlng", ""));
 
 
-        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
         }
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    LatLng pos;
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                LatLng pos;
 
-                    int currentspeed = (int) ((location.getSpeed() * 3600) / 1000);
-
-
-                    if (currentspeed <= 50) {
-                        digitSpeedView.updateSpeed(currentspeed);
-                        getWindow().getDecorView().setBackgroundColor(Color.WHITE);
-                    } else {
-
-                        digitSpeedView.updateSpeed(currentspeed);
-                        //   digit.hideUnit();
-                        getWindow().getDecorView().setBackgroundColor(Color.RED);
-                    }
-
-                    Location l = (Location) location;
-                    pos = new LatLng(l.getLatitude(), l.getLongitude());
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                   locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    if (googleMap != null) {
-                        googleMap.setMyLocationEnabled(true);
-                        //  googleMap.setTrafficEnabled(true);
-                        LatLng start = new LatLng(slat, slng);
-                        googleMap.addMarker(new MarkerOptions().position(start).title("Start Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
-                        //googleMap.animateCamera(CameraUpdateFactory.newLatLng(start));
-                        LatLng dest = new LatLng(elat, elng);
-                        googleMap.addMarker(new MarkerOptions().position(dest).title("Destination Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
-                        String url = getDirectionsUrl(start, dest);
-                        FetchUrl FetchUrl = new FetchUrl();
-                        FetchUrl.execute(url);
+                int currentspeed = (int) ((location.getSpeed() * 3600) / 1000);
 
 
-                    }
+                if (currentspeed <= 50) {
+                    digitSpeedView.updateSpeed(currentspeed);
+
+                } else {
+
+                    digitSpeedView.updateSpeed(currentspeed);
+                    //   digit.hideUnit();
+
+                }
+
+                Location l = (Location) location;
+                pos = new LatLng(l.getLatitude(), l.getLongitude());
+                if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                if (googleMap != null) {
+                    googleMap.setMyLocationEnabled(true);
+                    //  googleMap.setTrafficEnabled(true);
+                    LatLng start = new LatLng(slat, slng);
+                    googleMap.addMarker(new MarkerOptions().position(start).title("Start Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
+                    //googleMap.animateCamera(CameraUpdateFactory.newLatLng(start));
+                    LatLng dest = new LatLng(elat, elng);
+                    googleMap.addMarker(new MarkerOptions().position(dest).title("Destination Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
+                    String url = getDirectionsUrl(start, dest);
+                    FetchUrl FetchUrl = new  FetchUrl();
+                    FetchUrl.execute(url);
+
+
+                }
 //                 googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.maptruck)));
 
-                }
+            }
 
-                private String getDirectionsUrl(LatLng start, LatLng dest) {
+            private String getDirectionsUrl(LatLng start, LatLng dest) {
 
-                    // Origin of route
-                    String str_origin = "origin=" + start.latitude + "," + start.longitude;
+                // Origin of route
+                String str_origin = "origin=" + start.latitude + "," + start.longitude;
 
-                    // Destination of route
-                    String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+                // Destination of route
+                String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
-                    // Sensor enabled
-                    String sensor = "sensor=false";
+                // Sensor enabled
+                String sensor = "sensor=false";
 
-                    // Building the parameters to the web service
-                    String parameters = str_origin + "&" + str_dest + "&" + sensor;
+                // Building the parameters to the web service
+                String parameters = str_origin + "&" + str_dest + "&" + sensor;
 
-                    // Output format
-                    String output = "json";
+                // Output format
+                String output = "json";
 
-                    // Building the url to the web service
-                    String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+                // Building the url to the web service
+                String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-                    return url;
-                }
-
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String s) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String s) {
-
-                }
-            });
-
-        }
+                return url;
+            }
 
 
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        });
+
+    }
 
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
@@ -507,15 +443,13 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            ParserTask parserTask = new ParserTask();
+            ActiveJobFragment.ParserTask parserTask = new ActiveJobFragment.ParserTask();
 
             // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
 
         }
     }
-
-
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
         @Override
@@ -577,7 +511,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
     public void Expandable()
     {
-        ExpandableLayout sectionLinearLayout = (ExpandableLayout) findViewById(R.id.layout_expandable);
+        ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
         sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent,ExpandableSubCategoryChild>()
         {
@@ -594,10 +528,10 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 
             }
         });
-                Jobstart=pref.getString("Startjob", "");
-                Jobend=pref.getString("Startend", "");
-                JobActualstart=pref.getString("Actualstart", "");
-                JobActualend=actual_end_time;
+        Jobstart=pref.getString("Startjob", "");
+        Jobend=pref.getString("Startend", "");
+        JobActualstart=pref.getString("Actualstart", "");
+        JobActualend=actual_end_time;
 
         sectionLinearLayout.addSection(getsection("Assigned Time ",Jobstart,Jobend));
         sectionLinearLayout.addSection(getsection("Driver Time ",JobActualstart,JobActualend));
@@ -621,7 +555,7 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onResume() {
         mMapView.onResume();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && googleMap != null) {
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -639,4 +573,6 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
         super.onLowMemory();
         mMapView.onLowMemory();
     }
+
+
 }

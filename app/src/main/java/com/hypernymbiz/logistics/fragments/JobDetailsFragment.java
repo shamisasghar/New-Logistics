@@ -1,5 +1,6 @@
 package com.hypernymbiz.logistics.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import com.hypernymbiz.logistics.models.PayloadNotification;
 import com.hypernymbiz.logistics.models.StartJob;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
+import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
 import com.hypernymbiz.logistics.utils.GsonUtils;
@@ -139,8 +141,8 @@ public class JobDetailsFragment extends Fragment {
                                     } else {
                                         intent.putExtra("jobid", "" + payloadNotification.job_id);
                                         Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
-                                        startActivity(intent);
-                                        getActivity().finish();
+                                        ActivityUtils.startActivity(getActivity(),ActiveJobFragment.class,true);
+//                                        getActivity().finish();
                                     }
                                 }
                         }
