@@ -1,5 +1,6 @@
 package com.hypernymbiz.logistics.fragments;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +21,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.capur16.digitspeedviewlib.DigitSpeedView;
 import com.google.android.gms.maps.GoogleMap;
@@ -80,24 +83,25 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ActiveJobFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
     ImageView info_img;
-    Dialog summary,info;
+    Dialog summary, info;
     ProSwipeButton swipeButton;
-    Button btn_okk,btn_cls;
+    Button btn_okk, btn_cls;
     MapView mMapView;
     SharedPreferences pref;
     private GoogleMap googleMap;
     LocationManager locationManager;
     Double slat, slng, elat, elng;
     DigitSpeedView digitSpeedView;
-    String getUserAssociatedEntity ,actual_end_time;
+    String getUserAssociatedEntity, actual_end_time;
     private SimpleDialog mSimpleDialog;
-    TextView strttime,endtime,actual_start,dig_strt,dig_end,dig_actstrt,dig_actend,dig_dis,dig_vol;
+    TextView strttime, endtime, actual_start, dig_strt, dig_end, dig_actstrt, dig_actend, dig_dis, dig_vol;
     SharedPreferences.Editor editor;
     private SwipeRefreshLayout swipelayout;
     Dialog dialog_summary;
-    String Jobstart,Jobend,JobActualstart,JobActualend;
+    String Jobstart, Jobend, JobActualstart, JobActualend;
     PayloadNotification payloadNotification;
     View view;
+    Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,6 +121,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             ((ToolbarListener) context).setTitle("Active Job");
         }
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
@@ -147,11 +152,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     }
 
 
-
-
-
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -159,11 +159,12 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
         mMapView = (MapView) view.findViewById(R.id.mapView);
         digitSpeedView = (DigitSpeedView) view.findViewById(R.id.digit_speed_view1);
-        dig_dis=(TextView)view.findViewById(R.id.txt_dialog_actualend);
-        dig_vol=(TextView)view.findViewById(R.id.txt_dialog_actualend);
+        dig_dis = (TextView) view.findViewById(R.id.txt_dialog_actualend);
+        dig_vol = (TextView) view.findViewById(R.id.txt_dialog_actualend);
         swipeButton = (ProSwipeButton) view.findViewById(R.id.btn_slide);
         info_img = (ImageView) view.findViewById(R.id.info);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
+        context=getContext();
 
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
@@ -198,10 +199,10 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        try
-                        {
-                            swipeButton.showResultIcon(true);}
-                        catch (Exception ex){}
+                        try {
+                            swipeButton.showResultIcon(true);
+                        } catch (Exception ex) {
+                        }
                     }
                 }, 2000);
 
@@ -209,11 +210,14 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 System.out.println("Current time =&gt; " + c.getTime());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 actual_end_time = df.format(c.getTime());
-                Intent getintent=getActivity().getIntent();
-                String  id = getintent.getStringExtra("jobid");
+//                Intent intent = new Intent(getContext(),ActiveJobFragment.class);
+//                Bundle bundle = new Bundle();
+                String id=pref.getString("jobid","");
+//                String id = getintent.getStringExtra("jobid");
+                Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
                 HashMap<String, Object> body = new HashMap<>();
 
-                body.put("job_id",id);
+                body.put("job_id", id);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
@@ -222,6 +226,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 //                        if (response.body().status) {
 //                    }
                     }
+
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobEnd>> call, Throwable t) {
 
@@ -238,11 +243,11 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 summary = new Dialog(getContext());
                 summary.setContentView(R.layout.dialog_summary_detail);
                 summary.setCanceledOnTouchOutside(false);
-                dig_actend=(TextView)summary.findViewById(R.id.txt_dialog_actualend);
+                dig_actend = (TextView) summary.findViewById(R.id.txt_dialog_actualend);
                 btn_okk = (Button) summary.findViewById(R.id.btn_ok);
-                dig_actstrt=(TextView)summary.findViewById(R.id.txt_dialog_actualstart);
-                dig_strt=(TextView)summary.findViewById(R.id.txt_dialog_starttime);
-                dig_end=(TextView)summary.findViewById(R.id.txt_dialog_endtime);
+                dig_actstrt = (TextView) summary.findViewById(R.id.txt_dialog_actualstart);
+                dig_strt = (TextView) summary.findViewById(R.id.txt_dialog_starttime);
+                dig_end = (TextView) summary.findViewById(R.id.txt_dialog_endtime);
 
                 summary.show();
                 summary.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -257,8 +262,9 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                     public void onClick(View v) {
                         summary.hide();
 //                        finish();
-
-                        ActivityUtils.startActivity(getActivity(),HomeActivity.class,true);
+                        ActivityUtils.startActivity(getActivity(),FrameActivity.class,JobNotificationFragment.class.getName(),null);
+                        getActivity().finish();
+//                        finishActivity();
                     }
                 });
 
@@ -272,7 +278,8 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
-
+    public void finishActivity()
+    {}
 
     @Override
     public void onClick(View v) {
@@ -282,7 +289,12 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-            this.googleMap = googleMap;
+        this.googleMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        this.googleMap.setMyLocationEnabled(true);
+
 
     }
 
@@ -295,96 +307,90 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
-            return;
-        }
+        } else {
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                LatLng pos;
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        LatLng pos;
 
-                int currentspeed = (int) ((location.getSpeed() * 3600) / 1000);
+                        int currentspeed = (int) ((location.getSpeed() * 3600) / 1000);
+                        if (currentspeed <= 50) {
+                            digitSpeedView.updateSpeed(currentspeed);
 
+                        } else {
 
-                if (currentspeed <= 50) {
-                    digitSpeedView.updateSpeed(currentspeed);
+                            digitSpeedView.updateSpeed(currentspeed);
+                            //   digit.hideUnit();
 
-                } else {
+                        }
 
-                    digitSpeedView.updateSpeed(currentspeed);
-                    //   digit.hideUnit();
+                        Location l = (Location) location;
+                        pos = new LatLng(l.getLatitude(), l.getLongitude());
 
-                }
-
-                Location l = (Location) location;
-                pos = new LatLng(l.getLatitude(), l.getLongitude());
-                if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                if (googleMap != null) {
-                    googleMap.setMyLocationEnabled(true);
-                    //  googleMap.setTrafficEnabled(true);
-                    LatLng start = new LatLng(slat, slng);
-                    googleMap.addMarker(new MarkerOptions().position(start).title("Start Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
-                    //googleMap.animateCamera(CameraUpdateFactory.newLatLng(start));
-                    LatLng dest = new LatLng(elat, elng);
-                    googleMap.addMarker(new MarkerOptions().position(dest).title("Destination Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
-                    String url = getDirectionsUrl(start, dest);
-                    FetchUrl FetchUrl = new  FetchUrl();
-                    FetchUrl.execute(url);
+                        //  googleMap.setTrafficEnabled(true);
+                        LatLng start = new LatLng(slat, slng);
+                        googleMap.addMarker(new MarkerOptions().position(start).title("Start Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
+                        //googleMap.animateCamera(CameraUpdateFactory.newLatLng(start));
+                        LatLng dest = new LatLng(elat, elng);
+                        googleMap.addMarker(new MarkerOptions().position(dest).title("Destination Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
+                        String url = getDirectionsUrl(start, dest);
+                        FetchUrl FetchUrl = new FetchUrl();
+                        FetchUrl.execute(url);
 
 
-                }
 //                 googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.maptruck)));
 
+                    }
+
+                    private String getDirectionsUrl(LatLng start, LatLng dest) {
+
+                        // Origin of route
+                        String str_origin = "origin=" + start.latitude + "," + start.longitude;
+
+                        // Destination of route
+                        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+                        // Sensor enabled
+                        String sensor = "sensor=false";
+
+                        // Building the parameters to the web service
+                        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+
+                        // Output format
+                        String output = "json";
+
+                        // Building the url to the web service
+                        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+                        return url;
+                    }
+
+
+                    @Override
+                    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String s) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String s) {
+
+                    }
+                });
             }
-
-            private String getDirectionsUrl(LatLng start, LatLng dest) {
-
-                // Origin of route
-                String str_origin = "origin=" + start.latitude + "," + start.longitude;
-
-                // Destination of route
-                String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-
-                // Sensor enabled
-                String sensor = "sensor=false";
-
-                // Building the parameters to the web service
-                String parameters = str_origin + "&" + str_dest + "&" + sensor;
-
-                // Output format
-                String output = "json";
-
-                // Building the url to the web service
-                String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-
-                return url;
-            }
-
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-
-            }
-        });
-
+        }
     }
+
 
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
@@ -450,6 +456,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
         }
     }
+
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
         @Override
@@ -509,12 +516,10 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    public void Expandable()
-    {
+    public void Expandable() {
         ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
-        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent,ExpandableSubCategoryChild>()
-        {
+        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
             @Override
             public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
@@ -524,34 +529,46 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             @Override
             public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
                 ((TextView) view.findViewById(R.id.label)).setText(model.getName());
-                ((TextView)view.findViewById(R.id.tvChild)).setText(model.getTime());
+                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
 
             }
         });
-        Jobstart=pref.getString("Startjob", "");
-        Jobend=pref.getString("Startend", "");
-        JobActualstart=pref.getString("Actualstart", "");
-        JobActualend=actual_end_time;
+        Jobstart = pref.getString("Startjob", "");
+        Jobend = pref.getString("Startend", "");
+        JobActualstart = pref.getString("Actualstart", "");
+        JobActualend = actual_end_time;
 
-        sectionLinearLayout.addSection(getsection("Assigned Time ",Jobstart,Jobend));
-        sectionLinearLayout.addSection(getsection("Driver Time ",JobActualstart,JobActualend));
+        sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend,2));
+        sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend,1));
 
     }
 
-    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime) {
+    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime,int value) {
         Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
         ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
-        List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-        {
+       if (value==1){
+           List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+           {
 
-            list.add(new ExpandableSubCategoryChild("Start Time:",StartTime));
-            list.add(new ExpandableSubCategoryChild("End Time:",EndTime));
-            section.parent = phoneCategory;
-            section.children.addAll(list);
+               list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+               section.parent = phoneCategory;
+               section.children.addAll(list);
 
-        }
+           }
+       }
+       else{
+           List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+           {
+               list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+               list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
+               section.parent = phoneCategory;
+               section.children.addAll(list);
+
+           }
+       }
         return section;
     }
+
     @Override
     public void onResume() {
         mMapView.onResume();
@@ -562,6 +579,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         }
         super.onResume();
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         mMapView.onSaveInstanceState(outState);

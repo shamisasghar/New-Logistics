@@ -1,5 +1,6 @@
 package com.hypernymbiz.logistics.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -58,6 +59,8 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
                 intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
 //                    intent.putExtra(Constants.DATA, bundle);
                 context.startActivity(intent);
+                ((Activity)context).finish();
+
             }
         });
 

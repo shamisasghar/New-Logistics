@@ -104,18 +104,17 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
                         compltd_job.setText(Integer.toString(jobInfo_s.size()));
                         //  faild_job.setText(Integer.toString(jobInfo_s.size()));
                     }
-                }
-                 else {
+                } else {
 
-                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
-               }
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+                }
 
             }
 
             @Override
             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
 
-                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 //                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                View sbView = snackbar.getView();
 //                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -130,18 +129,19 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.body().status!=null) {
-                    jobInfo_s = response.body().response.job_info;
-                      faild_job.setText(Integer.toString(jobInfo_s.size()));
+                if (response.isSuccessful()) {
+
+                    if (response.body().status) {
+                        jobInfo_s = response.body().response.job_info;
+                        faild_job.setText(Integer.toString(jobInfo_s.size()));
+                    }
+
+                } else {
+
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
 
                 }
-//                else{
-//
-//                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-//
-//
-//
-//                }
             }
 
             @Override
@@ -197,7 +197,7 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new HomeFragment.ViewHolder(view);
-   //     EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_job)));
+        //     EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_job)));
         //       mHolder.button.setOnClickListener(this);
 //        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
 //        toolbar.setOnClickListener(this);
@@ -228,7 +228,7 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
     @Override
     public void onResume() {
         super.onResume();
-     //   EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_job)));
+        //   EventBus.getDefault().post(new DrawerItemSelectedEvent(getString(R.string.drawer_job)));
     }
 
     public static class ViewHolder {
@@ -260,27 +260,42 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
                         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
                             @Override
                             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-                                if (response.body().status) {
-                                    jobInfo_s = response.body().response.job_info;
-                                    compltd_job.setText(Integer.toString(jobInfo_s.size()));
-                                 //   faild_job.setText(Integer.toString(jobInfo_s.size()));
+                                if (response.isSuccessful()) {
+                                    if (response.body().status) {
+                                        jobInfo_s = response.body().response.job_info;
+                                        compltd_job.setText(Integer.toString(jobInfo_s.size()));
+                                        //   faild_job.setText(Integer.toString(jobInfo_s.size()));
+                                    }
+
+                                } else {
+
+                                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
 
                                 }
+
                             }
 
                             @Override
                             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                             }
                         });
                         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
                             @Override
                             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-                                if (response.body().status) {
-                                    jobInfo_s = response.body().response.job_info;
-                                    // compltd_job.setText(Integer.toString(jobInfo_s.size()));
-                                       faild_job.setText(Integer.toString(jobInfo_s.size()));
+                                if (response.isSuccessful()) {
+                                    if (response.body().status) {
+                                        jobInfo_s = response.body().response.job_info;
+                                        // compltd_job.setText(Integer.toString(jobInfo_s.size()));
+                                        faild_job.setText(Integer.toString(jobInfo_s.size()));
+
+                                    }
+                                } else {
+
+                                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
 
                                 }
                             }

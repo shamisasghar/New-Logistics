@@ -141,22 +141,22 @@ public class ActiveJobActivity extends AppCompatActivity implements View.OnClick
 //        recyclerView.setAdapter(adapter);  //
 
 
-        info_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                info = new Dialog(ActiveJobActivity.this);
-                info.setContentView(R.layout.dialog_truck_info);
-                info.show();
-                info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                btn_cls = (Button) info.findViewById(R.id.btn_close);
-                btn_cls.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        info.hide();
-                    }
-                });
-            }
-        });
+//        info_img.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                info = new Dialog(ActiveJobActivity.this);
+//                info.setContentView(R.layout.dialog_truck_info);
+//                info.show();
+//                info.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                btn_cls = (Button) info.findViewById(R.id.btn_close);
+//                btn_cls.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        info.hide();
+//                    }
+//                });
+//            }
+//        });
 
         swipeButton.setOnSwipeListener(new ProSwipeButton.OnSwipeListener() {
             @Override

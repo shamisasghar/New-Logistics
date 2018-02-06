@@ -126,16 +126,25 @@ public class JobNotificationFragment extends Fragment {
         ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
-                if (response.body().status == true) {
-                    List<JobInfo> jobInfo = response.body().response;
-                    adapter = new JobNotifiyAdapter(jobInfo, getActivity());
-                    recyclerView.setAdapter(adapter);
-                    String size;
-                    size = String.valueOf(jobInfo.size());
-                    if (size.equals("0")) {
-                        imageView.setVisibility(View.VISIBLE);
-                    } else
-                        imageView.setVisibility(View.GONE);
+                if (response.isSuccessful()) {
+                    if (response.body().status) {
+                        List<JobInfo> jobInfo = response.body().response;
+                        adapter = new JobNotifiyAdapter(jobInfo, getActivity());
+                        recyclerView.setAdapter(adapter);
+                        String size;
+                        size = String.valueOf(jobInfo.size());
+                        if (size.equals("0")) {
+                            imageView.setVisibility(View.VISIBLE);
+                        } else
+                            imageView.setVisibility(View.GONE);
+                    }
+                }
+                else{
+
+                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
+
+
+
                 }
             }
 
@@ -161,19 +170,21 @@ public class JobNotificationFragment extends Fragment {
                         ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
                             @Override
                             public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
-                                if (response.body().status == true) {
-                                    List<JobInfo> jobInfo = response.body().response;
-                                    adapter = new JobNotifiyAdapter(jobInfo, getActivity());
-                                    recyclerView.setAdapter(adapter);
-                                    String size;
-                                    size = String.valueOf(jobInfo.size());
-                                    if (size.equals("0")) {
-                                        imageView.setVisibility(View.VISIBLE);
-                                    } else
-                                        imageView.setVisibility(View.GONE);
+                                if (response.isSuccessful()) {
+                                    if (response.body().status) {
+                                        List<JobInfo> jobInfo = response.body().response;
+                                        adapter = new JobNotifiyAdapter(jobInfo, getActivity());
+                                        recyclerView.setAdapter(adapter);
+                                        String size;
+                                        size = String.valueOf(jobInfo.size());
+                                        if (size.equals("0")) {
+                                            imageView.setVisibility(View.VISIBLE);
+                                        } else
+                                            imageView.setVisibility(View.GONE);
 
-                                } else {
-                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                                    }
+                                }else {
+                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
                                 }
 
                             }

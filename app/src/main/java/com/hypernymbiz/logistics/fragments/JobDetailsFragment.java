@@ -94,14 +94,10 @@ public class JobDetailsFragment extends Fragment {
                 Intent getintent = getActivity().getIntent();
                 String id = getintent.getStringExtra("jobid");
                 HashMap<String, Object> body = new HashMap<>();
-
-
                 if (id != null) {
                     body.put("job_id", Integer.parseInt(id));
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-
-
                 }
                 else
                 {
@@ -129,20 +125,28 @@ public class JobDetailsFragment extends Fragment {
                                     editor.putString("Actualstart", actual_start_time);
                                     editor.commit();
                                     // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getContext(), ActiveJobActivity.class);
+                                    Intent intent = new Intent(getContext(), ActiveJobFragment.class);
                                     Intent getintent = getActivity().getIntent();
-
                                     String id = getintent.getStringExtra("jobid");
                                     if (id != null) {
                                         Toast.makeText(getContext(), id, Toast.LENGTH_SHORT).show();
-                                        intent.putExtra("jobid", id);
-                                        startActivity(intent);
+                                        editor = pref.edit();
+                                        editor.putString("jobid",id);
+                                        editor.commit();
+
+//                                        intent.putExtra("jobid",id);
+//                                        Bundle bundle = new Bundle();
+//                                        bundle.putString("jobid",id);
+//                                        ActivityUtils.startActivity(getActivity(),ActiveJobFragment.class,true);
+                                        ActivityUtils.startActivity(getActivity(),FrameActivity.class,ActiveJobFragment.class.getName(),null);
                                         getActivity().finish();
-                                    } else {
+                                    }
+                                    else {
                                         intent.putExtra("jobid", "" + payloadNotification.job_id);
                                         Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
-                                        ActivityUtils.startActivity(getActivity(),ActiveJobFragment.class,true);
-//                                        getActivity().finish();
+                                        ActivityUtils.startActivity(getActivity(),FrameActivity.class,ActiveJobFragment.class.getName(),null);
+                                        getActivity().finish();
+//
                                     }
                                 }
                         }
@@ -172,6 +176,7 @@ public class JobDetailsFragment extends Fragment {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FrameActivity frameActivity = (FrameActivity) getActivity();
                 frameActivity.onBackPressed();
 
@@ -229,7 +234,8 @@ public class JobDetailsFragment extends Fragment {
                     }
                 });
 
-            } else {
+            }
+            else {
                 Intent getintent = getActivity().getIntent();
                 String id = getintent.getStringExtra("jobid");
                 ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {

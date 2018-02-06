@@ -20,6 +20,7 @@ import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import java.util.List;
@@ -58,13 +59,22 @@ public class CompleteJobFragment extends Fragment {
         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-         if (response.body().status!=null) {
+         if (response.isSuccessful()) {
+             if (response.body().status) {
 
-                    // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
-                    jobInfo_s = response.body().response.job_info;
-                    completeJobAdapter = new CompleteJobAdapter(jobInfo_s);
-                    recyclerView.setAdapter(completeJobAdapter);
-                }
+                 // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
+                 jobInfo_s = response.body().response.job_info;
+                 completeJobAdapter = new CompleteJobAdapter(jobInfo_s);
+                 recyclerView.setAdapter(completeJobAdapter);
+             }
+         }
+         else{
+
+             AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
+
+
+
+         }
 
             }
 

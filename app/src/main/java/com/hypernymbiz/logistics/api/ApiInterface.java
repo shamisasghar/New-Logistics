@@ -9,6 +9,8 @@ import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.StartJob;
 import com.hypernymbiz.logistics.models.User;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,8 +38,9 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    String HTTP = "http://192" +
-            ".168.2.120:8000/";
+
+  //  String HTTP = "http://192.168.2.120:8000/";
+   String HTTP = "http://192.168.2.120:8000/";
 
     String HTTPP = "http://192.168.2.185:8000/";
 

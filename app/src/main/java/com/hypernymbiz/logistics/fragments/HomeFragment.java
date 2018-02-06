@@ -91,11 +91,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
 
 
-
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
+                ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
 
             }
         });
@@ -103,7 +102,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
 
     }
-
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,9 +115,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
-        }
-        else
-            {
+        } else {
             if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
 
@@ -127,12 +123,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                     @Override
                     public void onLocationChanged(Location location) {
 
-                        Log.d("TAAAG","on location change");
-                         l = (Location) location;
+                        Log.d("TAAAG", "on location change");
+                        l = (Location) location;
                         pos = new LatLng(l.getLatitude(), l.getLongitude());
-                       // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+                        // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 //                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
-                        googleMap.setTrafficEnabled(true);
+//                        googleMap.setTrafficEnabled(true);
 
                     }
 
@@ -156,7 +152,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         }
 
 
-
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         try {
@@ -178,15 +173,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
             @Override
             public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
-                ((TextView)view.findViewById(R.id.label)).setText(model.getName());
-                ((TextView)view.findViewById(R.id.tvChild)).setText(model.getTime());
+                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
+                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
 
             }
         });
 
 
-        sectionLinearLayout.addSection(getsection("Assigned Time ","",""));
-        sectionLinearLayout.addSection(getsection("Driver Time ","",""));
+        sectionLinearLayout.addSection(getsection("Assigned Time ", "", ""));
+        sectionLinearLayout.addSection(getsection("Driver Time ", "", ""));
         return view;
 
     }
@@ -212,7 +207,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-      this.googleMap.setMyLocationEnabled(true);
+        this.googleMap.setMyLocationEnabled(true);
 
 
     }
@@ -234,47 +229,60 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
         {
 
-            list.add(new ExpandableSubCategoryChild("Start Time:",StartTime));
-            list.add(new ExpandableSubCategoryChild("End Time:",EndTime));
+            list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+            list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
             section.parent = phoneCategory;
             section.children.addAll(list);
 
         }
         return section;
     }
-        @Override
+
+    @Override
     public void onResume() {
         mMapView.onResume();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && googleMap != null)
-        {
+                && googleMap != null) {
 
             googleMap.setMyLocationEnabled(true);
             googleMap.setTrafficEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         }
-            ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
-                @Override
-                public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
+        ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
+            @Override
+            public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().status) {
+                        Log.d("TAAAG", "" + response);
 
-                    //   Toast.makeText(getActivity(),response.body().response.get(0).getCount(), Toast.LENGTH_SHORT).show();
-                    Log.d("TAAAG",""+response);
+                        size = String.valueOf(response.body().response.get(0).getCount());
+                        mNumberOfCartItemsText.setText(size);
 
-                    size=String.valueOf(response.body().response.get(0).getCount());
-                    mNumberOfCartItemsText.setText(size);
+
+                    }
+
+                } else {
+
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+                }
+                //   Toast.makeText(getActivity(),response.body().response.get(0).getCount(), Toast.LENGTH_SHORT).show();
+
 
 //                mNumberOfCartItemsText.setText("000");
-                }
+            }
 
-                @Override
-                public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
-                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
-                }
-            });
+            @Override
+            public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
+                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
-            super.onResume();
+            }
+        });
+
+        super.onResume();
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         mMapView.onSaveInstanceState(outState);
@@ -286,7 +294,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
 
 
 }

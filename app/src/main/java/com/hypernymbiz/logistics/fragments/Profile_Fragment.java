@@ -186,16 +186,24 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                         ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
                             @Override
                             public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-                                if (response.body().status) {
+                                if (response.isSuccessful()) {
+                                    if (response.body().status) {
 
-                                    String driverName, driverId;
+                                        String driverName, driverId;
 
-                                    driverName = response.body().response.getName();
-                                    driverId = Integer.toString(response.body().response.getId());
-                                    String url = response.body().response.getPhoto();
-                                    drivername.setText(driverName);
+                                        driverName = response.body().response.getName();
+                                        driverId = Integer.toString(response.body().response.getId());
+                                        String url = response.body().response.getPhoto();
+                                        drivername.setText(driverName);
 //                                    driverid.setText(driverId);
 //                                    Glide.with(getContext()).load(url).into(img_profile);
+                                    }
+                                }
+                                else{
+
+                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
+
+
 
                                 }
                             }

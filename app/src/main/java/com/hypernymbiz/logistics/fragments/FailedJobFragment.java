@@ -22,6 +22,7 @@ import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import java.util.List;
@@ -59,14 +60,22 @@ public class FailedJobFragment extends Fragment {
             @Override
             public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.body().status!=null){
+                if (response.isSuccessful()) {
+                    if (response.body().status) {
 
-                   // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
-                    jobInfo_s=response.body().response.job_info;
-                    failedJobAdapter=new FailedJobAdapter(jobInfo_s);
-                    recyclerView.setAdapter(failedJobAdapter);
+                        // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
+                        jobInfo_s = response.body().response.job_info;
+                        failedJobAdapter = new FailedJobAdapter(jobInfo_s);
+                        recyclerView.setAdapter(failedJobAdapter);
+                    }
                 }
+                else{
 
+                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
+
+
+
+                }
             }
 
             @Override
