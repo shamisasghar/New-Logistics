@@ -9,20 +9,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.enumerations.AnimationEnum;
+import com.hypernymbiz.logistics.fragments.ActiveJobFragment;
 import com.hypernymbiz.logistics.fragments.HomeFragment;
+import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
+import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
+import com.hypernymbiz.logistics.models.JobDetail;
 import com.hypernymbiz.logistics.models.JobInfo_;
+import com.hypernymbiz.logistics.models.StartJob;
+import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Bilal Rashid on 10/11/2017.
@@ -30,15 +45,20 @@ import java.util.ArrayList;
 
 public class FrameActivity extends AppCompatActivity implements ToolbarListener {
     private Toolbar mToolbar;
+    String getUserAssociatedEntity;
     private SimpleDialog mSimpleDialog;
     SharedPreferences sharedPreferences;
     ArrayList<JobInfo_> infoList;
+
+    SharedPreferences pref;
     private TextView mNumberOfCartItemsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frame);
+        pref = getApplication().getSharedPreferences("TAG", MODE_PRIVATE);
+
         toolbarSetup();
         String fragmentName = getIntent().getStringExtra(Constants.FRAGMENT_NAME);
         Bundle bundle = getIntent().getBundleExtra(Constants.DATA);
@@ -91,14 +111,76 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
 
     @Override
     public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
 
         if (isTaskRoot()) {
             ActivityUtils.startHomeActivity(this, HomeActivity.class, HomeFragment.class.getName());
         }
         else {
-            FrameActivity.this.finish();
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            if (fragment instanceof JobNotificationFragment) {
+                FrameActivity.this.finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+            else if (fragment instanceof JobDetailsFragment) {
+                FrameActivity.this.finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+           else if (fragment instanceof ActiveJobFragment) {
+                mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_failed_job), getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mSimpleDialog.dismiss();
+                                String id = pref.getString("id","");
+                                String driverid = pref.getString("driver","");
+
+                                HashMap<String, Object> body = new HashMap<>();
+                                if (id != null) {
+                                    body.put("job_id", Integer.parseInt(id));
+                                    body.put("driver_id", Integer.parseInt(driverid));
+                                    body.put("flag",54);
+                                }
+                                ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
+                                    @Override
+                                    public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
+                                        if (response.isSuccessful())
+                                        {
+                                            if (response.body().status)
+                                            {
+
+                                            }
+                                            else
+                                            {
+//                                             AppUtils.showSnackBar(ge(),AppUtils.getErrorMessage(getContext(),2));
+                                                Toast.makeText(FrameActivity.this, "Error Occur", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
+//                                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                                        Toast.makeText(FrameActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+
+
+                               finish();
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
+
+            }
         }
+
+
 
     }
 

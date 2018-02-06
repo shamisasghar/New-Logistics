@@ -3,6 +3,7 @@ package com.hypernymbiz.logistics.fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -47,6 +48,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Bilal Rashid on 10/10/2017.
  */
@@ -55,6 +58,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     private ViewHolder mHolder;
     private Toolbar mToolbar;
     private Context mContext;
+    SharedPreferences pref;
     Location l;
     public static final int MY_LOCATION_PERMISSION_REQUEST_CODE = 1;
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 2;
@@ -64,6 +68,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     LatLng pos;
     String size;
     private TextView mNumberOfCartItemsText;
+    String Jobstart, Jobend, JobActualstart, JobActualend;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         inflater.inflate(R.menu.menu_main, menu);
         View view = menu.findItem(R.id.notification_bell).getActionView();
         mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
+        pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
 
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +114,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
+
+//        Jobstart = pref.getString("jobstart", "");
+//        Jobend = pref.getString("jobend", "");
+//        JobActualstart = pref.getString("actalstart", "");
+//        JobActualend = pref.getString("actalend", "");
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -258,7 +269,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                         size = String.valueOf(response.body().response.get(0).getCount());
                         mNumberOfCartItemsText.setText(size);
 
-
                     }
 
                 } else {
@@ -267,8 +277,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
                 }
                 //   Toast.makeText(getActivity(),response.body().response.get(0).getCount(), Toast.LENGTH_SHORT).show();
-
-
 //                mNumberOfCartItemsText.setText("000");
             }
 

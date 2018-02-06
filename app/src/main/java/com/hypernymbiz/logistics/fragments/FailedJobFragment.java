@@ -23,6 +23,7 @@ import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.utils.AppUtils;
+import com.hypernymbiz.logistics.utils.Constants;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import java.util.List;
@@ -80,6 +81,7 @@ public class FailedJobFragment extends Fragment {
 
             @Override
             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
             }
         });

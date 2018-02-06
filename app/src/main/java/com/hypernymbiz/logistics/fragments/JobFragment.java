@@ -146,8 +146,7 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 
             @Override
             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-//                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-
+                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
             }
         });
@@ -255,6 +254,7 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
                     public void run() {
 
                         swipelayout.setRefreshing(false);
+
 
                         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
                         ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {

@@ -177,6 +177,41 @@ public class JobDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                Intent getintent = getActivity().getIntent();
+                String id = getintent.getStringExtra("jobid");
+                HashMap<String, Object> body = new HashMap<>();
+                if (id != null) {
+                    body.put("job_id", Integer.parseInt(id));
+                    body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+                    body.put("flag",54);
+                }
+                ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
+                    @Override
+                    public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
+
+                        if (response.isSuccessful())
+                        {
+                            if (response.body().status)
+                            {
+
+                            }
+
+                        }
+                        else {
+
+                            AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
+                        AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),Constants.NETWORK_ERROR));
+
+                    }
+                });
+
                 FrameActivity frameActivity = (FrameActivity) getActivity();
                 frameActivity.onBackPressed();
 
@@ -204,6 +239,12 @@ public class JobDetailsFragment extends Fragment {
                                     btn_start.setVisibility(View.GONE);
                                     btn_cancel.setVisibility(View.GONE);
                                 }
+                                else if(status.equals("Failed"))
+                                {
+                                    btn_start.setVisibility(View.GONE);
+                                    btn_cancel.setVisibility(View.GONE);
+
+                                }
                                 String strttime, endtime;
 
                                 strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
@@ -224,13 +265,8 @@ public class JobDetailsFragment extends Fragment {
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
 
-                        Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                        View sbView = snackbar.getView();
-                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
-                        textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
-                        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        snackbar.show();
+                        AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),Constants.NETWORK_ERROR));
+
                     }
                 });
 
@@ -253,6 +289,12 @@ public class JobDetailsFragment extends Fragment {
                                     btn_start.setVisibility(View.GONE);
                                     btn_cancel.setVisibility(View.GONE);
                                 }
+                                else if(status.equals("Failed"))
+                                {
+                                    btn_start.setVisibility(View.GONE);
+                                    btn_cancel.setVisibility(View.GONE);
+
+                                }
                                 String strttime, endtime;
 
                                 strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
@@ -261,15 +303,11 @@ public class JobDetailsFragment extends Fragment {
                                 editor.putString("Startjob", strttime);
                                 editor.putString("Startend", endtime);
                                 editor.commit();
-                            } else {
-                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                                View sbView = snackbar.getView();
-                                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
-                                textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
-                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                snackbar.show();
-                            }
+                            } else
+                                {
+                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+
+                                }
                         }
 
                         else {
@@ -278,18 +316,11 @@ public class JobDetailsFragment extends Fragment {
                         }
                     }
 
-
-
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
 
-                        Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                        View sbView = snackbar.getView();
-                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
-                        textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
-                        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        snackbar.show();
+                        AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),Constants.NETWORK_ERROR));
+
                     }
                 });
             }

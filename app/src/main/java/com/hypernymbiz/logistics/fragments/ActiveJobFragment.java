@@ -101,6 +101,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     String Jobstart, Jobend, JobActualstart, JobActualend;
     PayloadNotification payloadNotification;
     View view;
+    String id;
     Context context;
 
     @Override
@@ -146,6 +147,9 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
             }
         });
+//       View view1=menu.findItem(R.id.home).getActionView();
+
+
 //        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
 //        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
 
@@ -164,7 +168,20 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         swipeButton = (ProSwipeButton) view.findViewById(R.id.btn_slide);
         info_img = (ImageView) view.findViewById(R.id.info);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
-        context=getContext();
+        context = getContext();
+        id= pref.getString("jobid", "");
+        Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
+
+
+
+//        editor = pref.edit();
+//        editor.putString("jobstart",Jobstart);
+//        editor.putString("jobend", Jobend);
+//        editor.putString("actualstart",JobActualstart);
+//        editor.putString("actualend", JobActualend);
+//        editor.putString("job", id);
+//        editor.commit();
+
 
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
@@ -210,16 +227,15 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 System.out.println("Current time =&gt; " + c.getTime());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 actual_end_time = df.format(c.getTime());
-//                Intent intent = new Intent(getContext(),ActiveJobFragment.class);
-//                Bundle bundle = new Bundle();
-                String id=pref.getString("jobid","");
-//                String id = getintent.getStringExtra("jobid");
-                Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
+//                id= pref.getString("jobid", "");
                 HashMap<String, Object> body = new HashMap<>();
-
                 body.put("job_id", id);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
+
+
+
+
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobEnd>> call, Response<WebAPIResponse<JobEnd>> response) {
@@ -261,25 +277,28 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                     @Override
                     public void onClick(View v) {
                         summary.hide();
-//                        finish();
-                        ActivityUtils.startActivity(getActivity(),FrameActivity.class,JobNotificationFragment.class.getName(),null);
+//
+                        ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
                         getActivity().finish();
-//                        finishActivity();
+//
                     }
                 });
 
 
             }
         });
-
-
-
+        editor = pref.edit();
+        editor.putString("id",id);
+        editor.putString("driver",getUserAssociatedEntity);
+        editor.putString("jobstart",Jobstart);
+        editor.putString("jobend",Jobend);
+        editor.putString("actalstart",JobActualstart);
+        editor.putString("actalend",JobActualend);
+        editor.commit();
 
         return view;
     }
 
-    public void finishActivity()
-    {}
 
     @Override
     public void onClick(View v) {
@@ -481,37 +500,45 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points;
+
             PolylineOptions lineOptions = null;
+            if(result!=null) {
 
-            // Traversing through all the routes
-            for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList<>();
-                lineOptions = new PolylineOptions();
+                // Traversing through all the routes
+                for (int i = 0; i < result.size(); i++) {
+                    points = new ArrayList<>();
+                    lineOptions = new PolylineOptions();
 
-                // Fetching i-th route
-                List<HashMap<String, String>> path = result.get(i);
+                    // Fetching i-th route
+                    List<HashMap<String, String>> path = result.get(i);
 
-                // Fetching all the points in i-th route
-                for (int j = 0; j < path.size(); j++) {
-                    HashMap<String, String> point = path.get(j);
+                    // Fetching all the points in i-th route
+                    for (int j = 0; j < path.size(); j++) {
+                        HashMap<String, String> point = path.get(j);
 
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
+                        double lat = Double.parseDouble(point.get("lat"));
+                        double lng = Double.parseDouble(point.get("lng"));
+                        LatLng position = new LatLng(lat, lng);
 
-                    points.add(position);
+                        points.add(position);
+                    }
+
+                    // Adding all the points in the route to LineOptions
+                    lineOptions.addAll(points);
+                    lineOptions.width(10);
+                    lineOptions.color(R.color.colorPrimary);
                 }
 
-                // Adding all the points in the route to LineOptions
-                lineOptions.addAll(points);
-                lineOptions.width(10);
-                lineOptions.color(R.color.colorPrimary);
+                // Drawing polyline in the Google Map for the i-th route
+                if (lineOptions != null) {
+                    googleMap.addPolyline(lineOptions);
+                } else {
+                }
             }
 
-            // Drawing polyline in the Google Map for the i-th route
-            if (lineOptions != null) {
-                googleMap.addPolyline(lineOptions);
-            } else {
+            else{
+                Toast.makeText(getContext(), "Enable Network ", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
@@ -538,34 +565,33 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         JobActualstart = pref.getString("Actualstart", "");
         JobActualend = actual_end_time;
 
-        sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend,2));
-        sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend,1));
+        sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend, 2));
+        sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend, 1));
 
     }
 
-    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime,int value) {
+    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime, int value) {
         Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
         ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
-       if (value==1){
-           List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-           {
+        if (value == 1) {
+            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+            {
 
-               list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-               section.parent = phoneCategory;
-               section.children.addAll(list);
+                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+                section.parent = phoneCategory;
+                section.children.addAll(list);
 
-           }
-       }
-       else{
-           List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-           {
-               list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-               list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
-               section.parent = phoneCategory;
-               section.children.addAll(list);
+            }
+        } else {
+            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+            {
+                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+                list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
+                section.parent = phoneCategory;
+                section.children.addAll(list);
 
-           }
-       }
+            }
+        }
         return section;
     }
 

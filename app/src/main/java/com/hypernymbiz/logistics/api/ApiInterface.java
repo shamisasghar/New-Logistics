@@ -61,7 +61,7 @@ public interface ApiInterface {
 
     @GET("iof/get_app_jobs/")
     Call<WebAPIResponse<Respone_Completed_job>> getalldata(@Query("driver_id") int driver_id, @Query("status_id") int status_id);
- @GET("iof/get_notifications")
+    @GET("iof/get_notifications")
     Call<WebAPIResponse<List<JobInfo>>> getallpendingdata(@Query("driver_id") int driver_id);
 
     @GET("iof/get_driver_info/")
@@ -75,6 +75,8 @@ public interface ApiInterface {
 
     @PUT("iof/driver_job_update")
     Call<WebAPIResponse<StartJob>> startjob(@Body HashMap<String, Object> body);
+    @PUT("iof/driver_job_update")
+    Call<WebAPIResponse<StartJob>> canceljob(@Body HashMap<String, Object> body);
 
     @PUT("iof/driver_job_update")
     Call<WebAPIResponse<JobEnd>> endjob(@Body HashMap<String, Object> body);
