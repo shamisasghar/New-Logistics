@@ -1,6 +1,7 @@
 package com.hypernymbiz.logistics.api;
 
 import com.hypernymbiz.logistics.models.JobCount;
+import com.hypernymbiz.logistics.models.JobCountPatch;
 import com.hypernymbiz.logistics.models.JobDetail;
 import com.hypernymbiz.logistics.models.JobEnd;
 import com.hypernymbiz.logistics.models.JobInfo;
@@ -28,6 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -67,8 +69,11 @@ public interface ApiInterface {
     @GET("iof/get_driver_info/")
     Call<WebAPIResponse<Profile>> getprofile(@Query("driver_id") int driver_id);
 
-    @GET("hypernet/get_user_alerts_count")
+    @GET("hypernet/notifications/get_user_alerts_count")
     Call<WebAPIResponse<List<JobCount>>> getcount();
+
+    @PATCH("hypernet/notifications/update_alert_flag_status/")
+    Call<WebAPIResponse<JobCountPatch>> getcountpatch();
 
     @GET("iof/get_app_jobs/")
     Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);

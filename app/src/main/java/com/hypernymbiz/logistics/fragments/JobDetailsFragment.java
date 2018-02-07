@@ -129,7 +129,6 @@ public class JobDetailsFragment extends Fragment {
                                     Intent getintent = getActivity().getIntent();
                                     String id = getintent.getStringExtra("jobid");
                                     if (id != null) {
-                                        Toast.makeText(getContext(), id, Toast.LENGTH_SHORT).show();
                                         editor = pref.edit();
                                         editor.putString("jobid",id);
                                         editor.commit();

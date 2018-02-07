@@ -59,7 +59,6 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
                 intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
 //                    intent.putExtra(Constants.DATA, bundle);
                 context.startActivity(intent);
-                ((Activity)context).finish();
 
             }
         });

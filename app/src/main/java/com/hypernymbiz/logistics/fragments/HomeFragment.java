@@ -2,6 +2,7 @@ package com.hypernymbiz.logistics.fragments;
 
 
 import android.Manifest;
+import android.app.job.JobService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +21,9 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -67,8 +71,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     MapView mMapView;
     LatLng pos;
     String size;
-    private TextView mNumberOfCartItemsText;
+    TextView mNumberOfCartItemsText;
     String Jobstart, Jobend, JobActualstart, JobActualend;
+    LinearLayout linearLayout;
+    NestedScrollView nestedScrollView;
+    ExpandableLayout sectionLinearLayout;
+    boolean status=true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,8 +102,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         inflater.inflate(R.menu.menu_main, menu);
         View view = menu.findItem(R.id.notification_bell).getActionView();
         mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
-        pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
-
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,13 +118,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
+        linearLayout=(LinearLayout) view.findViewById(R.id.linear_error);
+        nestedScrollView=(NestedScrollView) view.findViewById(R.id.layout_nestedview);
+        sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
-//        Jobstart = pref.getString("jobstart", "");
-//        Jobend = pref.getString("jobend", "");
-//        JobActualstart = pref.getString("actalstart", "");
-//        JobActualend = pref.getString("actalend", "");
+
+
+
+//        Jobstart=  pref.getString("jobstart","");
+//        Jobend= pref.getString("jobend","");
+//        JobActualstart= pref.getString("actalstart","");
+//        JobActualend=pref.getString("actalend","");
+//
+//      if(Jobstart.equals(""))
+//      {
+//          nestedScrollView.setVisibility(View.GONE);
+//          linearLayout.setVisibility(View.VISIBLE);
+//
+//      }
+//      else
+//      {
+//          nestedScrollView.setVisibility(View.VISIBLE);
+//          linearLayout.setVisibility(View.GONE);
+//
+//      }
+
+
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -128,7 +156,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
         } else {
             if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
 
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
                     @Override
@@ -173,7 +200,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         mMapView.getMapAsync(this);
 
 
-        ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
         sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
             @Override
@@ -190,9 +216,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             }
         });
 
-
-        sectionLinearLayout.addSection(getsection("Assigned Time ", "", ""));
-        sectionLinearLayout.addSection(getsection("Driver Time ", "", ""));
         return view;
 
     }
@@ -239,7 +262,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
         List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
         {
-
             list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
             list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
             section.parent = phoneCategory;
@@ -264,10 +286,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
                 if (response.isSuccessful()) {
                     if (response.body().status) {
-                        Log.d("TAAAG", "" + response);
+
 
                         size = String.valueOf(response.body().response.get(0).getCount());
-                        mNumberOfCartItemsText.setText(size);
+                        if(size!=null) {
+                            try {
+                                mNumberOfCartItemsText.setText(size);
+                            }
+                            catch (Exception ex) {
+
+                            }
+                        }
 
                     }
 
@@ -280,13 +309,41 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //                mNumberOfCartItemsText.setText("000");
             }
 
-
             @Override
             public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
             }
         });
+
+        Jobstart=  pref.getString("jobstart","");
+        Jobend= pref.getString("jobend","");
+        JobActualstart= pref.getString("actalstart","");
+        JobActualend=pref.getString("actalend","");
+
+        if(Jobstart.equals(""))
+        {
+            nestedScrollView.setVisibility(View.GONE);
+            linearLayout.setVisibility(View.VISIBLE);
+        }
+
+        else
+        {
+//
+            if(status==true)
+
+            {
+                sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend));
+                sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend));
+                status=false;
+            }
+                nestedScrollView.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.GONE);
+
+
+        }
+
+
 
         super.onResume();
     }

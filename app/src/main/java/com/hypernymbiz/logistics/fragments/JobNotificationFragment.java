@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 import com.hypernymbiz.logistics.adapter.JobNotifiyAdapter;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.models.JobCount;
+import com.hypernymbiz.logistics.models.JobCountPatch;
 import com.hypernymbiz.logistics.models.JobInfo;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.Profile;
@@ -55,7 +58,7 @@ public class JobNotificationFragment extends Fragment {
     Context fContext;
     ImageView imageView;
     View view;
-    String job_id;
+
 
     @Override
     public void onAttach(Context context) {
@@ -143,8 +146,6 @@ public class JobNotificationFragment extends Fragment {
 
                     AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
 
-
-
                 }
             }
 
@@ -154,6 +155,33 @@ public class JobNotificationFragment extends Fragment {
 
             }
         });
+
+//        ApiInterface.retrofit.getcountpatch().enqueue(new Callback<WebAPIResponse<JobCountPatch>>() {
+//            @Override
+//            public void onResponse(Call<WebAPIResponse<JobCountPatch>> call, Response<WebAPIResponse<JobCountPatch>> response) {
+//                if (response.isSuccessful()) {
+//                    if (response.body().status) {
+//                        Log.d("TAAAG", "" + response);
+//
+//                    }
+//
+//                } else {
+//
+//                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+//
+//                }
+//
+//            }
+//
+//
+//            @Override
+//            public void onFailure(Call<WebAPIResponse<JobCountPatch>> call, Throwable t) {
+//                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+//
+//            }
+//        });
+
+
         return view;
     }
 

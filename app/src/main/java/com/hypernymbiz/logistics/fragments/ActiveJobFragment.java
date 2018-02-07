@@ -97,7 +97,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     SharedPreferences.Editor editor;
     String Jobstart, Jobend, JobActualstart, JobActualend;
     View view;
-    String id;
+
     Context context;
 
     @Override
@@ -143,11 +143,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
             }
         });
-//       View view1=menu.findItem(R.id.home).getActionView();
-
-
-//        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
-//        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
 
     }
 
@@ -165,8 +160,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         info_img = (ImageView) view.findViewById(R.id.info);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
         context = getContext();
-        id= pref.getString("jobid", "");
-        Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -214,13 +208,16 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 System.out.println("Current time =&gt; " + c.getTime());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 actual_end_time = df.format(c.getTime());
-//                id= pref.getString("jobid", "");
+                String  id= pref.getString("jobid", "");
+                Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("job_id", id);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
 
-
+                editor=pref.edit();
+                editor.putString("actalend",actual_end_time);
+                editor.commit();
 
 
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
@@ -265,7 +262,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                     public void onClick(View v) {
                         summary.hide();
 //
-                        ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
+//                        ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
                         getActivity().finish();
 //
                     }
@@ -275,12 +272,11 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             }
         });
         editor = pref.edit();
-        editor.putString("id",id);
         editor.putString("driver",getUserAssociatedEntity);
         editor.putString("jobstart",Jobstart);
         editor.putString("jobend",Jobend);
         editor.putString("actalstart",JobActualstart);
-        editor.putString("actalend",JobActualend);
+
         editor.commit();
 
         return view;
