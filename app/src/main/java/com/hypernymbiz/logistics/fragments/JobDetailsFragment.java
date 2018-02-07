@@ -146,7 +146,6 @@ public class JobDetailsFragment extends Fragment {
                                         Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
                                         ActivityUtils.startActivity(getActivity(),FrameActivity.class,ActiveJobFragment.class.getName(),null);
                                         getActivity().finish();
-//
                                     }
                                 }
                         }

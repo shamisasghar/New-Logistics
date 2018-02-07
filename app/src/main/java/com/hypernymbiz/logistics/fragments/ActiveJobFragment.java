@@ -93,13 +93,9 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     Double slat, slng, elat, elng;
     DigitSpeedView digitSpeedView;
     String getUserAssociatedEntity, actual_end_time;
-    private SimpleDialog mSimpleDialog;
-    TextView strttime, endtime, actual_start, dig_strt, dig_end, dig_actstrt, dig_actend, dig_dis, dig_vol;
+    TextView dig_strt, dig_end, dig_actstrt, dig_actend, dig_dis, dig_vol;
     SharedPreferences.Editor editor;
-    private SwipeRefreshLayout swipelayout;
-    Dialog dialog_summary;
     String Jobstart, Jobend, JobActualstart, JobActualend;
-    PayloadNotification payloadNotification;
     View view;
     String id;
     Context context;
@@ -172,15 +168,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         id= pref.getString("jobid", "");
         Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
 
-
-
-//        editor = pref.edit();
-//        editor.putString("jobstart",Jobstart);
-//        editor.putString("jobend", Jobend);
-//        editor.putString("actualstart",JobActualstart);
-//        editor.putString("actualend", JobActualend);
-//        editor.putString("job", id);
-//        editor.commit();
 
 
         mMapView.onCreate(savedInstanceState);
@@ -557,7 +544,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
                 ((TextView) view.findViewById(R.id.label)).setText(model.getName());
                 ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
-
             }
         });
         Jobstart = pref.getString("Startjob", "");
@@ -576,7 +562,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         if (value == 1) {
             List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
             {
-
                 list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
                 section.parent = phoneCategory;
                 section.children.addAll(list);

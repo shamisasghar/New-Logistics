@@ -14,9 +14,11 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="Start:"
+            android:textColor="@color/colorAccent2"
             android:layout_marginLeft="100dp"/>
 
         <TextView
+
             android:id="@+id/tvChild"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,9 +29,5 @@
             android:text="value"
             android:layout_toEndOf="@+id/label"
             android:layout_toRightOf="@+id/label"/>
-
-
     </RelativeLayout>
-
-
 </LinearLayout>
