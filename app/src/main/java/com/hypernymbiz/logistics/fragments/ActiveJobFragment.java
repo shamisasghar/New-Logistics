@@ -44,13 +44,16 @@ import com.hypernymbiz.logistics.HomeActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
+import com.hypernymbiz.logistics.models.ActiveJobResume;
 import com.hypernymbiz.logistics.models.DirectionsJSONParser;
 import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
 import com.hypernymbiz.logistics.models.ExpandableSubCategoryChild;
 import com.hypernymbiz.logistics.models.JobEnd;
 import com.hypernymbiz.logistics.models.PayloadNotification;
+import com.hypernymbiz.logistics.models.StartJob;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
+import com.hypernymbiz.logistics.utils.ActiveJobUtils;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
@@ -86,6 +89,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     Dialog summary, info;
     ProSwipeButton swipeButton;
     Button btn_okk, btn_cls;
+    private SimpleDialog mSimpleDialog;
     MapView mMapView;
     SharedPreferences pref;
     private GoogleMap googleMap;
@@ -161,8 +165,21 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
         context = getContext();
 
+        if (!ActiveJobUtils.isJobResumed(getContext())) {
+            String start_job = pref.getString("Startjob", "");
+            String start_end = pref.getString("Startend", "");
+            String driver_start_time = pref.getString("Actualstart", "");
+            Double slat = Double.parseDouble(pref.getString("Startlat", ""));
+            Double slong = Double.parseDouble(pref.getString("Startlng", ""));
+            Double elat = Double.parseDouble(pref.getString("Endlat", ""));
+            Double elong = Double.parseDouble(pref.getString("Endlng", ""));
+            Integer jobid = Integer.parseInt(pref.getString("jobid", ""));
+            Integer driver_id = Integer.parseInt(getUserAssociatedEntity);
+            ActiveJobUtils.jobResumed(getContext());
+            ActiveJobUtils.saveJobResume(getContext(), new ActiveJobResume(slat, slong, elat, elong, driver_id, jobid, start_job, start_end, driver_start_time));
 
 
+        }
 
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
@@ -208,17 +225,25 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 System.out.println("Current time =&gt; " + c.getTime());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 actual_end_time = df.format(c.getTime());
-                String  id= pref.getString("jobid", "");
+                String id ;
+
+                if (ActiveJobUtils.isJobResumed(getContext())) {
+                    id = Integer.toString(ActiveJobUtils.getJobResume(getContext()).getJob_id());
+                }
+                else {
+                    id = pref.getString("jobid", "");
+                }
                 Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("job_id", id);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
 
-                editor=pref.edit();
-                editor.putString("actalend",actual_end_time);
+                editor = pref.edit();
+                editor.putString("actalend", actual_end_time);
                 editor.commit();
 
+                ActiveJobUtils.clearJobResumed(getContext());
 
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
                     @Override
@@ -263,6 +288,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                         summary.hide();
 //
 //                        ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
+                        getActivity().onBackPressed();
                         getActivity().finish();
 //
                     }
@@ -271,11 +297,14 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
             }
         });
+       String ID = pref.getString("jobid", "");
         editor = pref.edit();
-        editor.putString("driver",getUserAssociatedEntity);
-        editor.putString("jobstart",Jobstart);
-        editor.putString("jobend",Jobend);
-        editor.putString("actalstart",JobActualstart);
+
+        editor.putString("id",ID);
+        editor.putString("driver", getUserAssociatedEntity);
+        editor.putString("jobstart", Jobstart);
+        editor.putString("jobend", Jobend);
+        editor.putString("actalstart", JobActualstart);
 
         editor.commit();
 
@@ -485,7 +514,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             ArrayList<LatLng> points;
 
             PolylineOptions lineOptions = null;
-            if(result!=null) {
+            if (result != null) {
 
                 // Traversing through all the routes
                 for (int i = 0; i < result.size(); i++) {
@@ -517,9 +546,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                     googleMap.addPolyline(lineOptions);
                 } else {
                 }
-            }
-
-            else{
+            } else {
                 Toast.makeText(getContext(), "Enable Network ", Toast.LENGTH_SHORT).show();
 
             }

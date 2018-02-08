@@ -139,15 +139,12 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
                 } else {
 
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
-
-
                 }
             }
 
             @Override
             public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-
             }
         });
         return view;

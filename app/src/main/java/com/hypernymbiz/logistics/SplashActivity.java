@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.hypernymbiz.logistics.fragments.ActiveJobFragment;
+import com.hypernymbiz.logistics.utils.ActiveJobUtils;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.ScheduleUtils;
 import com.onesignal.OneSignal;
@@ -20,7 +22,15 @@ public class SplashActivity extends AppCompatActivity {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            ActivityUtils.startActivity(SplashActivity.this, LoginActivity.class, true);
+            if (ActiveJobUtils.isJobResumed(getApplicationContext())){
+                ActivityUtils.startActivity(SplashActivity.this,FrameActivity.class, ActiveJobFragment.class.getName(),null);
+                finish();
+
+            }
+            else{
+                ActivityUtils.startActivity(SplashActivity.this, LoginActivity.class, true);
+            }
+
         }
     };
 

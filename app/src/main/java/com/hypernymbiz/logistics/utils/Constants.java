@@ -58,4 +58,8 @@ public class Constants {
     // Paytabs
     public static final String pt_shared_prefs_name = "coffee_shop_shared";
     public static final String PAYLOAD = "pay_load";
+
+    // Job Resume
+    public static final String JOB_RESUME_STATUS = "job_resume_status";
+    public static final String JOB = "job";
 }

@@ -25,6 +25,7 @@ import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.StartJob;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
+import com.hypernymbiz.logistics.utils.ActiveJobUtils;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
@@ -73,10 +74,9 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
         sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("list", null);
-        Type type = new TypeToken<ArrayList<JobInfo_>>() {}.getType();
+        Type type = new TypeToken<ArrayList<JobInfo_>>() {
+        }.getType();
         infoList = gson.fromJson(json, type);
-
-
 
 
 //        if (!EventBus.getDefault().isRegistered(this))
@@ -91,7 +91,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(" ");
-        ActivityUtils.centerToolbarTitle(mToolbar,true);
+        ActivityUtils.centerToolbarTitle(mToolbar, true);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -112,46 +112,32 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-
         if (isTaskRoot()) {
-            ActivityUtils.startHomeActivity(this, HomeActivity.class, HomeFragment.class.getName());
-        }
-        else {
-            if (fragment instanceof JobNotificationFragment) {
-                FrameActivity.this.finish();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            }
-            else if (fragment instanceof JobDetailsFragment) {
-                FrameActivity.this.finish();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            }
-           else if (fragment instanceof ActiveJobFragment) {
+
+            if(fragment instanceof ActiveJobFragment&&ActiveJobUtils.isJobResumed(this))
+            {
                 mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_failed_job), getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         switch (view.getId()) {
                             case R.id.button_positive:
                                 mSimpleDialog.dismiss();
-                                String id = pref.getString("id","");
-                                String driverid = pref.getString("driver","");
+                                String id = pref.getString("id", "");
+                                String driverid = pref.getString("driver", "");
 
                                 HashMap<String, Object> body = new HashMap<>();
                                 if (id != null) {
                                     body.put("job_id", Integer.parseInt(id));
                                     body.put("driver_id", Integer.parseInt(driverid));
-                                    body.put("flag",54);
+                                    body.put("flag", 54);
                                 }
                                 ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                                     @Override
                                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
-                                        if (response.isSuccessful())
-                                        {
-                                            if (response.body().status)
-                                            {
+                                        if (response.isSuccessful()) {
+                                            if (response.body().status) {
 
-                                            }
-                                            else
-                                            {
+                                            } else {
 //                                             AppUtils.showSnackBar(ge(),AppUtils.getErrorMessage(getContext(),2));
                                                 Toast.makeText(FrameActivity.this, "Error Occur", Toast.LENGTH_SHORT).show();
                                             }
@@ -165,9 +151,9 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
 
                                     }
                                 });
-
-
-                               finish();
+                                finish();
+                                ActivityUtils.startHomeActivity(getApplicationContext(), HomeActivity.class, HomeFragment.class.getName());
+                                ActiveJobUtils.clearJobResumed(getApplicationContext());
                                 break;
                             case R.id.button_negative:
                                 mSimpleDialog.dismiss();
@@ -178,7 +164,70 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 mSimpleDialog.show();
 
             }
+
+            else {
+                ActivityUtils.startHomeActivity(this, HomeActivity.class, HomeFragment.class.getName());
+            }
+
         }
+
+        else
+            {
+            if (fragment instanceof JobNotificationFragment) {
+                FrameActivity.this.finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else if (fragment instanceof JobDetailsFragment) {
+                FrameActivity.this.finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else if (fragment instanceof ActiveJobFragment) {
+
+                    mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_failed_job), getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            switch (view.getId()) {
+                                case R.id.button_positive:
+                                    mSimpleDialog.dismiss();
+                                    String id = pref.getString("id", "");
+                                    String driverid = pref.getString("driver", "");
+
+                                    HashMap<String, Object> body = new HashMap<>();
+                                    if (id != null) {
+                                        body.put("job_id", Integer.parseInt(id));
+                                        body.put("driver_id", Integer.parseInt(driverid));
+                                        body.put("flag", 54);
+                                    }
+                                    ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
+                                        @Override
+                                        public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
+                                            if (response.isSuccessful()) {
+                                                if (response.body().status) {
+
+                                                } else {
+//                                             AppUtils.showSnackBar(ge(),AppUtils.getErrorMessage(getContext(),2));
+                                                    Toast.makeText(FrameActivity.this, "Error Occur", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
+//                                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                                            Toast.makeText(FrameActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                                    finish();
+                                    break;
+                                case R.id.button_negative:
+                                    mSimpleDialog.dismiss();
+                                    break;
+                            }
+                        }
+                    });
+                    mSimpleDialog.show();
+
+                }
+            }
 
 
 
@@ -225,7 +274,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
 //                ActivityUtils.startActivity(this,FrameActivity.class,HomeFragment.class.getName(),null, AnimationEnum.VERTICAL);
 //                break;
 //            default:
-                // ...
+            // ...
         }
         return super.onOptionsItemSelected(item);
     }
