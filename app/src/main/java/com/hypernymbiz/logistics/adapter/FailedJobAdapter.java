@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.models.JobInfo_;
+import com.hypernymbiz.logistics.utils.AppUtils;
 
 import java.util.List;
 
@@ -36,8 +37,10 @@ public class FailedJobAdapter extends RecyclerView.Adapter<FailedJobAdapter.MyVi
 
         holder.jobname.setText(jobInfo_s.get(position).getJob_name());
         holder.jobstatus.setText(jobInfo_s.get(position).getJob_status());
-        holder.starttime.setText(jobInfo_s.get(position).getJob_start_time());
-        holder.endtime.setText(jobInfo_s.get(position).getJob_end_time());
+        holder.starttime.setText(AppUtils.getFormattedDate(jobInfo_s.get(position).getJob_start_time()) + " " + AppUtils.getTime(jobInfo_s.get(position).getJob_start_time()));
+        holder.endtime.setText(AppUtils.getFormattedDate(jobInfo_s.get(position).getJob_end_time()) + " " + AppUtils.getTime(jobInfo_s.get(position).getJob_end_time()));
+
+//        holder.endtime.setText(jobInfo_s.get(position).getJob_end_time());
         // holder.failed_job.setText(jobInfo_s.size());
 
 

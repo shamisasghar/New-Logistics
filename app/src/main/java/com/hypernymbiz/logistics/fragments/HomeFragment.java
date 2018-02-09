@@ -64,8 +64,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     private Context mContext;
     SharedPreferences pref;
     Location l;
-    public static final int MY_LOCATION_PERMISSION_REQUEST_CODE = 1;
-    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 2;
     private GoogleMap googleMap;
     LocationManager locationManager;
     MapView mMapView;
@@ -76,7 +74,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     LinearLayout linearLayout;
     NestedScrollView nestedScrollView;
     ExpandableLayout sectionLinearLayout;
-    boolean status=true;
+    boolean status = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,11 +119,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
-        linearLayout=(LinearLayout) view.findViewById(R.id.linear_error);
-        nestedScrollView=(NestedScrollView) view.findViewById(R.id.layout_nestedview);
+        linearLayout = (LinearLayout) view.findViewById(R.id.linear_error);
+        nestedScrollView = (NestedScrollView) view.findViewById(R.id.layout_nestedview);
         sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
-
-
 
 
 //        Jobstart=  pref.getString("jobstart","");
@@ -147,7 +143,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //      }
 
 
-
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{
@@ -161,7 +156,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                     @Override
                     public void onLocationChanged(Location location) {
 
-                        Log.d("TAAAG", "on location change");
+//                        Log.d("TAAAG", "on location change");
                         l = (Location) location;
                         pos = new LatLng(l.getLatitude(), l.getLongitude());
                         // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
@@ -189,7 +184,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             }
         }
 
-
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         try {
@@ -200,12 +194,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         mMapView.getMapAsync(this);
 
 
-
         sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
             @Override
             public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
-                view.findViewById(R.id.arrow).setBackgroundResource(isExpanded ? R.drawable.up_arrow : R.drawable.up_arrow);
+                view.findViewById(R.id.arrow).setBackgroundResource(isExpanded ? R.drawable.up_arrow : R.drawable.down_arrow);
+
             }
 
             @Override
@@ -242,7 +236,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             return;
         }
         this.googleMap.setMyLocationEnabled(true);
-
 
     }
 
@@ -286,14 +279,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
                 if (response.isSuccessful()) {
                     if (response.body().status) {
-
-
                         size = String.valueOf(response.body().response.get(0).getCount());
-                        if(size!=null) {
+                        if (size != null) {
                             try {
                                 mNumberOfCartItemsText.setText(size);
-                            }
-                            catch (Exception ex) {
+                            } catch (Exception ex) {
 
                             }
                         }
@@ -315,35 +305,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
             }
         });
-
-        Jobstart=  pref.getString("jobstart","");
-        Jobend= pref.getString("jobend","");
-        JobActualstart= pref.getString("actalstart","");
-        JobActualend=pref.getString("actalend","");
-
-        if(Jobstart.equals(""))
-        {
+        Jobstart = pref.getString("jobstart", "");
+        Jobend = pref.getString("jobend", "");
+        JobActualstart = pref.getString("actalstart", "");
+        JobActualend = pref.getString("actalend", "");
+        if (Jobstart.equals("")) {
             nestedScrollView.setVisibility(View.GONE);
             linearLayout.setVisibility(View.VISIBLE);
-        }
-
-        else
-        {
-//
-            if(status==true)
-
-            {
+        } else {
+            if (status == true) {
                 sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend));
                 sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend));
-                status=false;
+                status = false;
             }
-                nestedScrollView.setVisibility(View.VISIBLE);
-                linearLayout.setVisibility(View.GONE);
-
-
+            nestedScrollView.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.GONE);
         }
-
-
 
         super.onResume();
     }

@@ -73,8 +73,6 @@ public class CompleteJobFragment extends Fragment {
 
              AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
 
-
-
          }
 
             }

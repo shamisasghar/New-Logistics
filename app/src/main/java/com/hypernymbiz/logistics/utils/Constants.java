@@ -51,6 +51,7 @@ public class Constants {
     public static final String SECONDARY_FONT_NAME = "secondary_font_name";
     public static final String PAYMENT_GATEWAY = "payment_gateway";
     public static final int NETWORK_ERROR = 1;
+
     public static final String AUTH_TOKEN = "Token";
     public static final String CLEAR_CACHE = "clear_cache";
     public static final String SHOP_ID = "shop_id";
@@ -62,4 +63,6 @@ public class Constants {
     // Job Resume
     public static final String JOB_RESUME_STATUS = "job_resume_status";
     public static final String JOB = "job";
+
+    public static final String MissingLocation="Location Lat Long Missing";
 }

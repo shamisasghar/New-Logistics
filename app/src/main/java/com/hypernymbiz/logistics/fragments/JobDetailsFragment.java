@@ -98,9 +98,7 @@ public class JobDetailsFragment extends Fragment {
                     body.put("job_id", Integer.parseInt(id));
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                }
-                else
-                {
+                } else {
                     body.put("job_id", payloadNotification.job_id);
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
@@ -110,61 +108,67 @@ public class JobDetailsFragment extends Fragment {
                     @Override
                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
                         if (response.isSuccessful()) {
-                                if(response.body().status) {
-                                    String strlat, strlng, endlat, endlng;
-                                    strlat = String.valueOf(response.body().response.getJobStartLat());
-                                    strlng = String.valueOf(response.body().response.getJobStartLng());
-                                    endlat = String.valueOf(response.body().response.getJobEndLat());
-                                    endlng = String.valueOf(response.body().response.getJobEndLng());
+                            if (response.body().status) {
+                                String strlat, strlng, endlat, endlng;
 
-                                    editor = pref.edit();
+                                strlat = String.valueOf(response.body().response.getJobStartLat());
+                                strlng = String.valueOf(response.body().response.getJobStartLng());
+                                endlat = String.valueOf(response.body().response.getJobEndLat());
+                                endlng = String.valueOf(response.body().response.getJobEndLng());
+
+                                if (!strlat.equals("") && !strlng.equals("") && !endlat.equals("") && !endlng.equals("")) {
+
+
                                     editor.putString("Startlat", strlat);
                                     editor.putString("Startlng", strlng);
                                     editor.putString("Endlat", endlat);
                                     editor.putString("Endlng", endlng);
                                     editor.putString("Actualstart", actual_start_time);
                                     editor.commit();
-                                    // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getContext(), ActiveJobFragment.class);
-                                    Intent getintent = getActivity().getIntent();
-                                    String id = getintent.getStringExtra("jobid");
-                                    if (id != null) {
-                                        editor = pref.edit();
-                                        editor.putString("jobid",id);
-                                        editor.commit();
+                                } else {
+
+                                    Snackbar snackbar = Snackbar.make(swipelayout, "Missing Route Parameters", Snackbar.LENGTH_SHORT);
+                                    View sbView = snackbar.getView();
+                                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                    snackbar.show();
+
+                                }
+                                // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getContext(), ActiveJobFragment.class);
+                                Intent getintent = getActivity().getIntent();
+                                String id = getintent.getStringExtra("jobid");
+                                if (id != null) {
+                                    editor = pref.edit();
+                                    editor.putString("jobid", id);
+                                    editor.commit();
 
 //                                        intent.putExtra("jobid",id);
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("jobid",id);
 //                                        ActivityUtils.startActivity(getActivity(),ActiveJobFragment.class,true);
-                                        ActivityUtils.startActivity(getActivity(),FrameActivity.class,ActiveJobFragment.class.getName(),null);
-                                        getActivity().finish();
-                                    }
-                                    else {
-                                        intent.putExtra("jobid", "" + payloadNotification.job_id);
-                                        Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
-                                        ActivityUtils.startActivity(getActivity(),FrameActivity.class,ActiveJobFragment.class.getName(),null);
-                                        getActivity().finish();
-                                    }
+                                    ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
+                                    getActivity().finish();
+                                } else {
+                                    intent.putExtra("jobid", "" + payloadNotification.job_id);
+                                    Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
+                                    ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
+                                    getActivity().finish();
                                 }
-                        }
-                        else
-                            {
-
-                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
                             }
+                        } else {
+
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
 
-                        Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
-                        View sbView = snackbar.getView();
-                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
-                        textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDialogToolbarText));
-                        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        snackbar.show();
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
                     }
                 });
 
@@ -181,23 +185,20 @@ public class JobDetailsFragment extends Fragment {
                 if (id != null) {
                     body.put("job_id", Integer.parseInt(id));
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                    body.put("flag",54);
+                    body.put("flag", 54);
                 }
                 ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
 
-                        if (response.isSuccessful())
-                        {
-                            if (response.body().status)
-                            {
+                        if (response.isSuccessful()) {
+                            if (response.body().status) {
 
                             }
 
-                        }
-                        else {
+                        } else {
 
-                            AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                         }
 
@@ -205,7 +206,7 @@ public class JobDetailsFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
-                        AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),Constants.NETWORK_ERROR));
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                     }
                 });
@@ -225,7 +226,7 @@ public class JobDetailsFragment extends Fragment {
                 ApiInterface.retrofit.getalldata(payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             if (response.body().status) {
                                 jbname.setText(response.body().response.getName());
                                 jbstatus.setText(response.body().response.getJobStatus());
@@ -236,9 +237,7 @@ public class JobDetailsFragment extends Fragment {
                                 if (status.equals("Accomplished")) {
                                     btn_start.setVisibility(View.GONE);
                                     btn_cancel.setVisibility(View.GONE);
-                                }
-                                else if(status.equals("Failed"))
-                                {
+                                } else if (status.equals("Failed")) {
                                     btn_start.setVisibility(View.GONE);
                                     btn_cancel.setVisibility(View.GONE);
 
@@ -252,10 +251,9 @@ public class JobDetailsFragment extends Fragment {
                                 editor.putString("Startend", endtime);
                                 editor.commit();
                             }
-                        }
-                        else {
+                        } else {
 
-                            AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                         }
 
                     }
@@ -263,13 +261,12 @@ public class JobDetailsFragment extends Fragment {
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
 
-                        AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),Constants.NETWORK_ERROR));
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                     }
                 });
 
-            }
-            else {
+            } else {
                 Intent getintent = getActivity().getIntent();
                 String id = getintent.getStringExtra("jobid");
                 ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
@@ -283,7 +280,7 @@ public class JobDetailsFragment extends Fragment {
                                 jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
                                 decrptin.setText(response.body().response.getDescription());
                                 String status = response.body().response.getJobStatus();
-                                if(status!=null) {
+                                if (status != null) {
                                     if (status.equals("Accomplished")) {
                                         btn_start.setVisibility(View.GONE);
                                         btn_cancel.setVisibility(View.GONE);
@@ -292,10 +289,8 @@ public class JobDetailsFragment extends Fragment {
                                         btn_cancel.setVisibility(View.GONE);
 
                                     }
-                                }
-                                else
-                                {
-                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+                                } else {
+                                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                                 }
                                 String strttime, endtime;
@@ -306,23 +301,20 @@ public class JobDetailsFragment extends Fragment {
                                 editor.putString("Startjob", strttime);
                                 editor.putString("Startend", endtime);
                                 editor.commit();
-                            } else
-                                {
-                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+                            } else {
+                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
-                                }
-                        }
+                            }
+                        } else {
 
-                        else {
-
-                            AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),2));
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                         }
                     }
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
 
-                        AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(),Constants.NETWORK_ERROR));
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                     }
                 });
