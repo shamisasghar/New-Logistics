@@ -98,7 +98,8 @@ public class JobDetailsFragment extends Fragment {
                     body.put("job_id", Integer.parseInt(id));
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                } else {
+                } else
+                    {
                     body.put("job_id", payloadNotification.job_id);
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));

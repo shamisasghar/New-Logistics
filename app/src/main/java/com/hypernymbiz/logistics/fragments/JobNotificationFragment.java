@@ -81,7 +81,7 @@ public class JobNotificationFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
         constraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_constraint1);
-        swipe();
+      //  swipe();
 
 
 //        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity),53).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
@@ -126,35 +126,41 @@ public class JobNotificationFragment extends Fragment {
 //                snackbar.show();
 //            }
 //        });
-        ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
-            @Override
-            public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
-                if (response.isSuccessful()) {
-                    if (response.body().status) {
-                        List<JobInfo> jobInfo = response.body().response;
-                        adapter = new JobNotifiyAdapter(jobInfo, getActivity());
-                        recyclerView.setAdapter(adapter);
-                        String size;
-                        size = String.valueOf(jobInfo.size());
-                        if (size.equals("0")) {
-                            imageView.setVisibility(View.VISIBLE);
-                        } else
-                            imageView.setVisibility(View.GONE);
+        if(getUserAssociatedEntity!=null) {
+            ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
+                @Override
+                public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().status) {
+                            List<JobInfo> jobInfo = response.body().response;
+                            adapter = new JobNotifiyAdapter(jobInfo, getActivity());
+                            recyclerView.setAdapter(adapter);
+                            String size;
+                            size = String.valueOf(jobInfo.size());
+                            if (size.equals("0")) {
+                                imageView.setVisibility(View.VISIBLE);
+                            } else
+                                imageView.setVisibility(View.GONE);
+                        }
+                    } else {
+
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
                     }
                 }
-                else{
 
-                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
+                @Override
+                public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                 }
-            }
+            });
+        }
+        else
+        {
+            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
-            @Override
-            public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
-                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-
-            }
-        });
+        }
 
 //        ApiInterface.retrofit.getcountpatch().enqueue(new Callback<WebAPIResponse<JobCountPatch>>() {
 //            @Override
@@ -185,52 +191,52 @@ public class JobNotificationFragment extends Fragment {
         return view;
     }
 
-    public void swipe() {
-        swipelayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipelayout.setRefreshing(true);
-                (new Handler()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        swipelayout.setRefreshing(false);
-                        ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
-                            @Override
-                            public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
-                                if (response.isSuccessful()) {
-                                    if (response.body().status) {
-                                        List<JobInfo> jobInfo = response.body().response;
-                                        adapter = new JobNotifiyAdapter(jobInfo, getActivity());
-                                        recyclerView.setAdapter(adapter);
-                                        String size;
-                                        size = String.valueOf(jobInfo.size());
-                                        if (size.equals("0")) {
-                                            imageView.setVisibility(View.VISIBLE);
-                                        } else
-                                            imageView.setVisibility(View.GONE);
-
-                                    }
-                                }else {
-                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
-                                }
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
-                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-
-                            }
-                        });
-
-                    }
-                }, 3000);
-            }
-        });
-
-
-    }
+//    public void swipe() {
+//        swipelayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                swipelayout.setRefreshing(true);
+//                (new Handler()).postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        swipelayout.setRefreshing(false);
+//                        ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
+//                            @Override
+//                            public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
+//                                if (response.isSuccessful()) {
+//                                    if (response.body().status) {
+//                                        List<JobInfo> jobInfo = response.body().response;
+//                                        adapter = new JobNotifiyAdapter(jobInfo, getActivity());
+//                                        recyclerView.setAdapter(adapter);
+//                                        String size;
+//                                        size = String.valueOf(jobInfo.size());
+//                                        if (size.equals("0")) {
+//                                            imageView.setVisibility(View.VISIBLE);
+//                                        } else
+//                                            imageView.setVisibility(View.GONE);
+//
+//                                    }
+//                                }else {
+//                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
+//                                }
+//
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
+//                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+//
+//                            }
+//                        });
+//
+//                    }
+//                }, 3000);
+//            }
+//        });
+//
+//
+//    }
 
 
 }

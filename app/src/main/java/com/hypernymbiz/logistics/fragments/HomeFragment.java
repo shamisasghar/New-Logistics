@@ -23,7 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
 import com.hypernymbiz.logistics.models.ExpandableSubCategoryChild;
 import com.hypernymbiz.logistics.models.JobCount;
@@ -70,7 +71,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     SharedPreferences pref;
     CameraUpdate update;
     Location l;
-    ProgressBar progressBar;
+
     private GoogleMap googleMap;
     LocationManager locationManager;
     MapView mMapView;
@@ -83,7 +84,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     ExpandableLayout sectionLinearLayout;
     boolean status = true;
     RelativeLayout relativeLayout;
-    Button button;
+    LoadingDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,17 +123,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
-        progressBar = (ProgressBar) view.findViewById(R.id.loader);
-
-
-        relativeLayout = (RelativeLayout) view.findViewById(R.id.layout_relative_expandable);
-
         mMapView = (MapView) view.findViewById(R.id.mapView);
         linearLayout = (LinearLayout) view.findViewById(R.id.linear_error);
         nestedScrollView = (NestedScrollView) view.findViewById(R.id.layout_nestedview);
         sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
-
-        progressBar.setVisibility(View.VISIBLE);
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
 //        Jobstart=  pref.getString("jobstart","");
 //        Jobend= pref.getString("jobend","");
@@ -169,8 +167,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //                        Log.d("TAAAG", "on location change");
                         l = (Location) location;
                         pos = new LatLng(l.getLatitude(), l.getLongitude());
-                        update = CameraUpdateFactory.newLatLngZoom(pos, 15.4f);
-                        googleMap.animateCamera(update);
+//                        update = CameraUpdateFactory.newLatLngZoom(pos, 15.4f);
+//                        googleMap.animateCamera(update);
                         // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
                         // googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
 //                        googleMap.setTrafficEnabled(true);
@@ -210,7 +208,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             @Override
             public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
-                Toast.makeText(getContext(), "" + isExpanded, Toast.LENGTH_SHORT).show();
 
                 if (isExpanded) {
 
@@ -314,8 +311,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
-                progressBar.setVisibility(View.VISIBLE);
-
+                dialog.dismiss();
                 if (response.isSuccessful()) {
                     if (response.body().status) {
                         size = String.valueOf(response.body().response.get(0).getCount());
@@ -330,7 +326,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                     }
 
                 } else {
-
+                    dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                 }
@@ -340,6 +336,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
             @Override
             public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
+                dialog.dismiss();
                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
             }

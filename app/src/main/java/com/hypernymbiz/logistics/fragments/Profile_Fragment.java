@@ -83,34 +83,35 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 //        drivercnic.setText(Driver_id);
         swipelayout();
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
-        ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
-            @Override
-            public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-                if (response.isSuccessful()) {
-                    if (response.body().status) {
+        if(getUserAssociatedEntity!=null) {
+            ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
+                @Override
+                public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().status) {
 
-                        String driverName, driverCnic, drivergender, driverdof;
-                        String url = response.body().response.getPhoto();
-                        driverName = response.body().response.getName();
-                        driverCnic = String.valueOf(response.body().response.getCnic());
-                        drivergender = response.body().response.getMaritalStatus();
-                        driverdof = response.body().response.getDateOfJoining();
-                        drivername.setText(driverName);
-                        drivercnic.setText(driverCnic);
-                        martialstatus.setText(drivergender);
-                        dof.setText(driverdof);
-                        Glide.with(getContext()).load(url).into(img_profile);
+                            String driverName, driverCnic, drivergender, driverdof;
+                            String url = response.body().response.getPhoto();
+                            driverName = response.body().response.getName();
+                            driverCnic = String.valueOf(response.body().response.getCnic());
+                            drivergender = response.body().response.getMaritalStatus();
+                            driverdof = response.body().response.getDateOfJoining();
+                            drivername.setText(driverName);
+                            drivercnic.setText(driverCnic);
+                            martialstatus.setText(drivergender);
+                            dof.setText(driverdof);
+                            Glide.with(getContext()).load(url).into(img_profile);
+                        }
+                    } else {
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(),2));
                     }
-                } else {
-                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
                 }
 
-            }
+                @Override
+                public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
-
-                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 //                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                View sbView = snackbar.getView();
 //                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -118,8 +119,14 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 //                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
 //                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 //                snackbar.show();
-            }
-        });
+                }
+            });
+        }
+        else {
+
+            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(),2));
+
+        }
 
         return view;
     }
@@ -183,34 +190,34 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                         swipelayout.setRefreshing(false);
 
                         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
-                        ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
-                            @Override
-                            public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-                                if (response.isSuccessful()) {
-                                    if (response.body().status) {
 
-                                        String driverName, driverId;
+                        if (getUserAssociatedEntity!=null) {
+                            ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
+                                @Override
+                                public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
+                                    if (response.isSuccessful()) {
+                                        if (response.body().status) {
 
-                                        driverName = response.body().response.getName();
-                                        driverId = Integer.toString(response.body().response.getId());
-                                        String url = response.body().response.getPhoto();
-                                        drivername.setText(driverName);
+                                            String driverName, driverId;
+
+                                            driverName = response.body().response.getName();
+                                            driverId = Integer.toString(response.body().response.getId());
+                                            String url = response.body().response.getPhoto();
+                                            drivername.setText(driverName);
 //                                    driverid.setText(driverId);
 //                                    Glide.with(getContext()).load(url).into(img_profile);
+                                        }
+                                    } else {
+
+                                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+
                                     }
                                 }
-                                else{
 
-                                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
-
-
-
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
-                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                                @Override
+                                public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
+                                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
 //                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                                View sbView = snackbar.getView();
@@ -219,8 +226,15 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 //                                textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
 //                                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 //                                snackbar.show();
-                            }
-                        });
+                                }
+                            });
+                        }
+                        else {
+
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+                        }
+
                     }
                 }, 3000);
             }

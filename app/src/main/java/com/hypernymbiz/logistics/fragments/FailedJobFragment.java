@@ -57,34 +57,39 @@ public class FailedJobFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         getUserAssociatedEntity= LoginUtils.getUserAssociatedEntity(getContext());
-        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity),54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
-            @Override
-            public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
+        if (getUserAssociatedEntity!=null) {
+            ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
+                @Override
+                public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.isSuccessful()) {
-                    if (response.body().status) {
+                    if (response.isSuccessful()) {
+                        if (response.body().status) {
 
-                        // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
-                        jobInfo_s = response.body().response.job_info;
-                        failedJobAdapter = new FailedJobAdapter(jobInfo_s);
-                        recyclerView.setAdapter(failedJobAdapter);
+                            // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
+                            jobInfo_s = response.body().response.job_info;
+                            failedJobAdapter = new FailedJobAdapter(jobInfo_s);
+                            recyclerView.setAdapter(failedJobAdapter);
+                        }
+                    } else {
+
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+
                     }
                 }
-                else{
 
-                    AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), 2));
-
-
+                @Override
+                public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                 }
-            }
+            });
+        }
+        else
+        {
+            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
-            @Override
-            public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-
-            }
-        });
+        }
 
         return view;
     }

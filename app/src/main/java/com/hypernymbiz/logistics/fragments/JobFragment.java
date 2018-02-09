@@ -94,27 +94,31 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
         swipelayout();
 
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
-        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
-            @Override
-            public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-                if (response.isSuccessful()) {
-                    if (response.body().status) {
-                        jobInfo_s = response.body().response.job_info;
-                        compltd_job.setText(Integer.toString(jobInfo_s.size()));
-                        //  faild_job.setText(Integer.toString(jobInfo_s.size()));
+
+        if (getUserAssociatedEntity!=null) {
+
+            ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
+                @Override
+                public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
+
+                    if (response.isSuccessful()) {
+                        if (response.body().status) {
+                            jobInfo_s = response.body().response.job_info;
+                            compltd_job.setText(Integer.toString(jobInfo_s.size()));
+                            //  faild_job.setText(Integer.toString(jobInfo_s.size()));
+                        }
+                    } else {
+
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                     }
-                } else {
 
-                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                 }
 
-            }
+                @Override
+                public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-
-                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 //                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                View sbView = snackbar.getView();
 //                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -123,30 +127,37 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 //                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 //                snackbar.show();
 
-            }
-        });
-        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
-            @Override
-            public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-
-                if (response.isSuccessful()) {
-
-                    if (response.body().status) {
-                        jobInfo_s = response.body().response.job_info;
-                        faild_job.setText(Integer.toString(jobInfo_s.size()));
-                    }
-
-                } else {
-
-                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                 }
-            }
+            });
+            ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
+                @Override
+                public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
-            @Override
-            public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-            }
-        });
+                    if (response.isSuccessful()) {
+
+                        if (response.body().status) {
+                            jobInfo_s = response.body().response.job_info;
+                            faild_job.setText(Integer.toString(jobInfo_s.size()));
+                        }
+
+                    } else {
+
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                }
+            });
+        }
+        else
+        {
+            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+        }
+
         return view;
     }
 
@@ -254,55 +265,62 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 
 
                         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
-                        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
-                            @Override
-                            public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-                                if (response.isSuccessful()) {
-                                    if (response.body().status) {
-                                        jobInfo_s = response.body().response.job_info;
-                                        compltd_job.setText(Integer.toString(jobInfo_s.size()));
-                                        //   faild_job.setText(Integer.toString(jobInfo_s.size()));
+
+                        if (getUserAssociatedEntity!=null) {
+                            ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
+                                @Override
+                                public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
+                                    if (response.isSuccessful()) {
+                                        if (response.body().status) {
+                                            jobInfo_s = response.body().response.job_info;
+                                            compltd_job.setText(Integer.toString(jobInfo_s.size()));
+                                            //   faild_job.setText(Integer.toString(jobInfo_s.size()));
+                                        }
+
+                                    } else {
+
+                                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+
                                     }
-
-                                } else {
-
-                                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
-
 
                                 }
 
-                            }
-
-                            @Override
-                            public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
-                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-
-                            }
-                        });
-                        ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
-                            @Override
-                            public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-                                if (response.isSuccessful()) {
-                                    if (response.body().status) {
-                                        jobInfo_s = response.body().response.job_info;
-                                        // compltd_job.setText(Integer.toString(jobInfo_s.size()));
-                                        faild_job.setText(Integer.toString(jobInfo_s.size()));
-
-                                    }
-                                } else {
-
-                                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
-
+                                @Override
+                                public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+                                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                                 }
-                            }
+                            });
+                            ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 54).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
+                                @Override
+                                public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
+                                    if (response.isSuccessful()) {
+                                        if (response.body().status) {
+                                            jobInfo_s = response.body().response.job_info;
+                                            // compltd_job.setText(Integer.toString(jobInfo_s.size()));
+                                            faild_job.setText(Integer.toString(jobInfo_s.size()));
 
-                            @Override
-                            public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+                                        }
+                                    } else {
+
+                                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
 //                                AppUtils.showSnackBar(getView(),AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                                }
+                            });
 
-                            }
-                        });
+                        }
+                        else {
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+
+                        }
 
 
                     }
