@@ -52,6 +52,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "com.android.support:support-v4:$supportLib"
     compile "com.android.support:design:$supportLib"
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
     compile 'com.github.iammert:ExpandableLayout:1.4.1'
     compile 'com.github.bumptech.glide:glide:4.0.0'
     compile 'com.google.gms:google-services:3.1.0'

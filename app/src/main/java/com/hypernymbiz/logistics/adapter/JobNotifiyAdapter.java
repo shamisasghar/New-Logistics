@@ -51,18 +51,20 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
             int pos=holder.getAdapterPosition();
             Integer id= jobInfo_s.get(position).getJobId();
 
+
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, FrameActivity.class);
+                Toast.makeText(context, ""+id.toString(), Toast.LENGTH_SHORT).show();
                 intent.putExtra("jobid",Integer.toString(id));
                 intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
 //                    intent.putExtra(Constants.DATA, bundle);
                 context.startActivity(intent);
 
             }
-        });
 
+        });
     }
 
 

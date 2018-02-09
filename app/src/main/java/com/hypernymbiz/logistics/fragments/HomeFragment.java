@@ -6,6 +6,7 @@ import android.app.job.JobService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -22,9 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -46,6 +50,7 @@ import com.hypernymbiz.logistics.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import iammert.com.expandablelib.ExpandCollapseListener;
 import iammert.com.expandablelib.ExpandableLayout;
 import iammert.com.expandablelib.Section;
 import retrofit2.Call;
@@ -55,7 +60,7 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by Bilal Rashid on 10/10/2017.
+ * Created by shamis on 10/12/2017.
  */
 
 public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
@@ -63,7 +68,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     private Toolbar mToolbar;
     private Context mContext;
     SharedPreferences pref;
+    CameraUpdate update;
     Location l;
+    ProgressBar progressBar;
     private GoogleMap googleMap;
     LocationManager locationManager;
     MapView mMapView;
@@ -75,6 +82,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     NestedScrollView nestedScrollView;
     ExpandableLayout sectionLinearLayout;
     boolean status = true;
+    RelativeLayout relativeLayout;
+    Button button;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,16 +109,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         inflater.inflate(R.menu.menu_main, menu);
         View view = menu.findItem(R.id.notification_bell).getActionView();
         mNumberOfCartItemsText = (TextView) view.findViewById(R.id.text_number_of_cart_items);
-
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
-
             }
         });
-//        ImageView cartImage = (ImageView) view.findViewById(R.id.image_cart);
-//        cartImage.setColorFilter(ContextCompat.getColor(this, R.color.colorToolbarIcon));
 
     }
 
@@ -117,12 +122,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
+        progressBar = (ProgressBar) view.findViewById(R.id.loader);
+
+
+        relativeLayout = (RelativeLayout) view.findViewById(R.id.layout_relative_expandable);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         linearLayout = (LinearLayout) view.findViewById(R.id.linear_error);
         nestedScrollView = (NestedScrollView) view.findViewById(R.id.layout_nestedview);
         sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
+        progressBar.setVisibility(View.VISIBLE);
 
 //        Jobstart=  pref.getString("jobstart","");
 //        Jobend= pref.getString("jobend","");
@@ -159,8 +169,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //                        Log.d("TAAAG", "on location change");
                         l = (Location) location;
                         pos = new LatLng(l.getLatitude(), l.getLongitude());
+                        update = CameraUpdateFactory.newLatLngZoom(pos, 15.4f);
+                        googleMap.animateCamera(update);
                         // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-//                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
+                        // googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
 //                        googleMap.setTrafficEnabled(true);
 
                     }
@@ -193,12 +205,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         }
         mMapView.getMapAsync(this);
 
-
+        sectionLinearLayout.animate();
         sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
             @Override
             public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
-                view.findViewById(R.id.arrow).setBackgroundResource(isExpanded ? R.drawable.up_arrow : R.drawable.down_arrow);
+                Toast.makeText(getContext(), "" + isExpanded, Toast.LENGTH_SHORT).show();
+
+                if (isExpanded) {
+
+                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+                } else
+                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+
 
             }
 
@@ -212,12 +231,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
         return view;
 
+
     }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
+        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
+
+            @Override
+            public void onExpanded(int i, Object o, View view) {
+                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+            }
+        });
+        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
+
+            @Override
+            public void onCollapsed(int i, Object o, View view) {
+                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+
+            }
+        });
+
         //    mHolder.button.setOnClickListener(this);
 //        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
 //        toolbar.setOnClickListener(this);
@@ -277,6 +314,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
+                progressBar.setVisibility(View.VISIBLE);
+
                 if (response.isSuccessful()) {
                     if (response.body().status) {
                         size = String.valueOf(response.body().response.get(0).getCount());
@@ -314,6 +353,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             linearLayout.setVisibility(View.VISIBLE);
         } else {
             if (status == true) {
+
                 sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend));
                 sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend));
                 status = false;

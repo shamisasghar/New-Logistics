@@ -21,6 +21,7 @@ import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.User;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 import com.onesignal.OneSignal;
 
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout inputLayout_username, inputLayout_password;
     private ProgressBar progressBar;
     SharedPreferences pref;
+
     SharedPreferences.Editor editor;
     String email, driver_name, driver_id, url,getUserAssociatedEntity;
 
@@ -52,11 +54,14 @@ public class LoginActivity extends AppCompatActivity {
         btn_sign = (Button) findViewById(R.id.sign_in);
         edit_username = (EditText) findViewById(R.id.edittext_username);
         edit_password = (EditText) findViewById(R.id.edittext_password);
+        progressBar = (ProgressBar) findViewById(R.id.loader);
+
         inputLayout_username = (TextInputLayout) findViewById(R.id.input_layout_username);
         inputLayout_password = (TextInputLayout) findViewById(R.id.input_layout_password);
         edit_username.addTextChangedListener(new MyTextWatcher(edit_username));
         edit_password.addTextChangedListener(new MyTextWatcher(edit_password));
         pref = getApplicationContext().getSharedPreferences("TAG", MODE_PRIVATE);
+        progressBar.setVisibility(View.GONE);
 
         if (LoginUtils.isUserLogin(getApplicationContext())) {
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -80,6 +85,8 @@ public class LoginActivity extends AppCompatActivity {
         if (!validatePassword())
             return;
 
+        progressBar.setVisibility(View.VISIBLE);
+
         String username = edit_username.getText().toString(); //    "driver1@kotal.com"
         String password = edit_password.getText().toString();//    "driver@2017"
 
@@ -91,15 +98,16 @@ public class LoginActivity extends AppCompatActivity {
         ApiInterface.retrofit.loginUser(body).enqueue(new Callback<WebAPIResponse<User>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<User>> call, Response<WebAPIResponse<User>> response) {
-  //              progressBar.setVisibility(View.GONE);
-                if (response.body().status) {
+                progressBar.setVisibility(View.GONE);
+                if (response.isSuccessful()) {
+                    if (response.body().status) {
 
-                    OneSignal.sendTag("email",response.body().response.getEmail());
-                   // Toast.makeText(LoginActivity.this, response.body().response.getToken(), Toast.LENGTH_SHORT).show();
-                    LoginUtils.saveUserToken(LoginActivity.this, response.body().response.getToken(), Integer.toString(response.body().response.getAssociatedEntity()));
-                    LoginUtils.userLoggedIn(LoginActivity.this);
+                        OneSignal.sendTag("email", response.body().response.getEmail());
+                        // Toast.makeText(LoginActivity.this, response.body().response.getToken(), Toast.LENGTH_SHORT).show();
+                        LoginUtils.saveUserToken(LoginActivity.this, response.body().response.getToken(), Integer.toString(response.body().response.getAssociatedEntity()));
+                        LoginUtils.userLoggedIn(LoginActivity.this);
 
-                    getUserAssociatedEntity=response.body().response.getAssociatedEntity().toString();
+                        getUserAssociatedEntity = response.body().response.getAssociatedEntity().toString();
 //                    ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
 //                        @Override
 //                        public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
@@ -109,15 +117,15 @@ public class LoginActivity extends AppCompatActivity {
 //                                url = response.body().response.getPhoto();
 //                                driver_name = response.body().response.getName();
 //                                driver_id = Integer.toString(response.body().response.getId());
-                                email = response.body().response.getEmail();
-                                editor = pref.edit();
-                                editor.putString("Email", email);
+                        email = response.body().response.getEmail();
+                        editor = pref.edit();
+                        editor.putString("Email", email);
 //                                editor.putString("Url", url);
 //                                editor.putString("Name", driver_name);
 //                                editor.putString("Id", driver_id);
-                                editor.commit();
+                        editor.commit();
 
-                          //      Glide.with(getApplicationContext()).load(url).into(img_profile);
+                        //      Glide.with(getApplicationContext()).load(url).into(img_profile);
 //                            }
 //                        }
 
@@ -127,31 +135,32 @@ public class LoginActivity extends AppCompatActivity {
 //                    });
 
 
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else {
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Wrong Email & Password", Snackbar.LENGTH_LONG);
+                        View view = snackbar.getView();
+                        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                        view.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.colorPrimary));
+                        tv.setTextColor(ContextCompat.getColor(getApplication(), R.color.colorDialogToolbarText));
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        snackbar.show();
 
-                else {
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Wrong Email & Password", Snackbar.LENGTH_LONG);
-                    View view = snackbar.getView();
-                    TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                    view.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.colorPrimary));
-                    tv.setTextColor(ContextCompat.getColor(getApplication(), R.color.colorDialogToolbarText));
-                    tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    snackbar.show();
+                    }
+
                 }
 
             }
 
             @Override
             public void onFailure(Call<WebAPIResponse<User>> call, Throwable t) {
-
-               // progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Establish Network Connection!", Snackbar.LENGTH_LONG);
                 View view = snackbar.getView();
                 TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                view.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.colorPrimaryDark));
+                view.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.colorPrimary));
                 tv.setTextColor(ContextCompat.getColor(getApplication(), R.color.colorDialogToolbarText));
                 tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 snackbar.show();

@@ -3,6 +3,7 @@
     <!--Basic-->
     <color name="colorPrimary">#33413D</color><!-- ok Only used in styles.xml -->
     <color name="colorPrimaryDark">#979899</color> <!-- Toolbar Color -->
+    <color name="colorPrimaryDark1">#e7e7e7</color> <!-- Toolbar Color -->
     <color name="colorAccent">#ffffff</color> <!-- ok Only used in styles.xml -->
     <color name="colorAccent2">#FB360D</color>
     <color name="colorMain">#c82209</color>

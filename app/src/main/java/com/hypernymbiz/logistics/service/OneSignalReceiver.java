@@ -42,7 +42,7 @@ public class OneSignalReceiver extends NotificationExtenderService {
                     bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
                     // AppUtils.makeNotification(this, JobDetailActivity.class, null, bundle, payloadNotification.title, false, payloadNotification.job_id);
                     //ActivityUtils.startActivity(this, FrameActivity.class,JobDetailFragment.class.getName(), bundle);
-                    AppUtils.makeNotification(this, HomeActivity.class, null, bundle, payloadNotification.title, false, payloadNotification.job_id);
+                    AppUtils.makeNotification(this, null, null, bundle, payloadNotification.title, false, payloadNotification.job_id);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

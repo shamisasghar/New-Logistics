@@ -117,8 +117,6 @@ public class JobDetailsFragment extends Fragment {
                                 endlng = String.valueOf(response.body().response.getJobEndLng());
 
                                 if (!strlat.equals("") && !strlng.equals("") && !endlat.equals("") && !endlng.equals("")) {
-
-
                                     editor.putString("Startlat", strlat);
                                     editor.putString("Startlng", strlng);
                                     editor.putString("Endlat", endlat);

@@ -59,12 +59,11 @@
 
                     <iammert.com.expandablelib.ExpandableLayout
                         android:id="@+id/layout_expandable"
-                        android:layout_width="match_parent"
 
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:childLayout="@layout/layout_child"
-                        app:parentLayout="@layout/layout_parent"
-                        />
+                        app:parentLayout="@layout/layout_parent"/>
                 </android.support.v4.widget.NestedScrollView>
 
                 <LinearLayout
@@ -82,8 +81,7 @@
                         android:id="@+id/img_job_list"
                         android:background="@drawable/ic_job_list"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:backgroundTint="@color/imgcolor"
-                       />
+                        android:backgroundTint="@color/imgcolor"/>
                 </LinearLayout>
 
             </FrameLayout>
@@ -91,5 +89,14 @@
 
     </RelativeLayout>
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/loader"
+        android:layout_width="50dp"
+        style="@style/SpinKitView.Large.FadingCircle"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:SpinKit_Color="@color/colorPrimary"/>
 
 </android.support.constraint.ConstraintLayout>
