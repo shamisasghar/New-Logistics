@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
@@ -53,10 +54,9 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
     private List<JobInfo_> jobInfo_s;
     private SwipeRefreshLayout swipelayout;
     private String getUserAssociatedEntity;
-    private ProgressBar progressBar;
     View mview;
     private ConstraintLayout constraintLayout;
-
+    LoadingDialog dialog;
     public TextView compltd_job, faild_job;
 
 
@@ -86,22 +86,23 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
         mViewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
         constraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_contraint);
-
         swipelayout.setColorSchemeColors(Color.BLUE);
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
         swipelayout();
 
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
-
-
         if (getUserAssociatedEntity!=null) {
 
             ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
                 @Override
                 public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
-
+                    dialog.dismiss();
                     if (response.isSuccessful()) {
                         if (response.body().status) {
                             jobInfo_s = response.body().response.job_info;
@@ -117,6 +118,7 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 
                 @Override
                 public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+                    dialog.dismiss();
 
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 //                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
@@ -270,6 +272,8 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
                             ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
                                 @Override
                                 public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
+                                    dialog.dismiss();
+
                                     if (response.isSuccessful()) {
                                         if (response.body().status) {
                                             jobInfo_s = response.body().response.job_info;
@@ -288,6 +292,8 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 
                                 @Override
                                 public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
+                                    dialog.dismiss();
+
                                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                                 }

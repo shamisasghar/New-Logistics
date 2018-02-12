@@ -74,7 +74,6 @@ public class FailedJobFragment extends Fragment {
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
-
                     }
                 }
 

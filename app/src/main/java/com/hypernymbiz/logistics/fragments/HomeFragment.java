@@ -83,7 +83,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     NestedScrollView nestedScrollView;
     ExpandableLayout sectionLinearLayout;
     boolean status = true;
-    RelativeLayout relativeLayout;
     LoadingDialog dialog;
 
     @Override
@@ -308,6 +307,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             googleMap.setTrafficEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         }
+
         ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {

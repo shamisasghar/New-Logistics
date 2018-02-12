@@ -20,8 +20,11 @@ import android.widget.Toast;
 
 import com.hypernymbiz.logistics.ActiveJobActivity;
 import com.hypernymbiz.logistics.FrameActivity;
+import com.hypernymbiz.logistics.HomeActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
+import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.models.JobDetail;
 import com.hypernymbiz.logistics.models.PayloadNotification;
 import com.hypernymbiz.logistics.models.StartJob;
@@ -57,7 +60,8 @@ public class JobDetailsFragment extends Fragment {
     PayloadNotification payloadNotification;
     SharedPreferences.Editor editor;
     SharedPreferences pref;
-
+    LoadingDialog dialog;
+    private SimpleDialog mSimpleDialog;
 
     @Override
     public void onAttach(Context context) {
@@ -71,7 +75,6 @@ public class JobDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_job_details, container, false);
-
         btn_start = (Button) view.findViewById(R.id.btn_startjob);
         btn_cancel = (Button) view.findViewById(R.id.btn_canceljob);
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
@@ -82,6 +85,11 @@ public class JobDetailsFragment extends Fragment {
         decrptin = (TextView) view.findViewById(R.id.txt_description);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
 
         Calendar c = Calendar.getInstance();
         System.out.println("Current time =&gt; " + c.getTime());
@@ -108,6 +116,7 @@ public class JobDetailsFragment extends Fragment {
                 ApiInterface.retrofit.startjob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
+                       dialog.dismiss();
                         if (response.isSuccessful()) {
                             if (response.body().status) {
                                 String strlat, strlng, endlat, endlng;
@@ -165,7 +174,7 @@ public class JobDetailsFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
-
+                        dialog.dismiss();
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                     }
@@ -178,7 +187,27 @@ public class JobDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent getintent = getActivity().getIntent();
+                if (!AppUtils.isInternetAvailable(getActivity())) {
+                    mSimpleDialog = new SimpleDialog(getContext(), getString(R.string.title_internet), getString(R.string.msg_internet),
+                            getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            switch (view.getId()) {
+                                case R.id.button_positive:
+                                    mSimpleDialog.dismiss();
+                                    ActivityUtils.startWifiSettings(getContext());
+                                    break;
+                                case R.id.button_negative:
+                                    mSimpleDialog.dismiss();
+                                    break;
+                            }
+                        }
+                    });
+                    mSimpleDialog.show();
+
+                } else
+                {
+                    Intent getintent = getActivity().getIntent();
                 String id = getintent.getStringExtra("jobid");
                 HashMap<String, Object> body = new HashMap<>();
                 if (id != null) {
@@ -214,7 +243,9 @@ public class JobDetailsFragment extends Fragment {
                 frameActivity.onBackPressed();
 
             }
+        }
         });
+
         Bundle extras = getActivity().getIntent().getExtras();
         Bundle value = null;
         if (extras != null) {
@@ -271,6 +302,7 @@ public class JobDetailsFragment extends Fragment {
                 ApiInterface.retrofit.getalldata(Integer.parseInt(id)).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
+                        dialog.dismiss();
                         if (response.isSuccessful()) {
                             if (response.body().status) {
                                 jbname.setText(response.body().response.getName());
@@ -312,7 +344,7 @@ public class JobDetailsFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
-
+dialog.dismiss();
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                     }
@@ -320,5 +352,7 @@ public class JobDetailsFragment extends Fragment {
             }
         }
         return view;
+        }
     }
-}
+
+

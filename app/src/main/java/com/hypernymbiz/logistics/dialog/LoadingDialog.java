@@ -41,7 +41,7 @@ public class LoadingDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_loading);
         TextView messageText = (TextView) findViewById(R.id.text_message);
-        WaveDrawable mWaveDrawable = new WaveDrawable(ContextCompat.getDrawable(getContext(),R.drawable.oil));
+        WaveDrawable mWaveDrawable = new WaveDrawable(ContextCompat.getDrawable(getContext(),R.drawable.oil_tank));
         ImageView imageView = (ImageView) findViewById(R.id.image_oil);
         mWaveDrawable.setWaveSpeed(AppUtils.dpToPx(WAVE_SPEED));
         mWaveDrawable.setWaveLength(AppUtils.dpToPx(WAVE_LENGTH));

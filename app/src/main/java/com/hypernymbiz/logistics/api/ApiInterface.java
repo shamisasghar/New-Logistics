@@ -42,7 +42,7 @@ public interface ApiInterface {
 
 
   //  String HTTP = "http://192.168.2.120:8000/";
-   String HTTP = "http://192.168.2.120:8000/";
+   String HTTP = "http://16726bff.ngrok.io/";
 
     String HTTPP = "http://192.168.2.185:8000/";
 
@@ -73,7 +73,7 @@ public interface ApiInterface {
     Call<WebAPIResponse<List<JobCount>>> getcount();
 
     @PATCH("hypernet/notifications/update_alert_flag_status/")
-    Call<WebAPIResponse<JobCountPatch>> getcountpatch();
+    Call<WebAPIResponse<String>> getcountpatch();
 
     @GET("iof/get_app_jobs/")
     Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);

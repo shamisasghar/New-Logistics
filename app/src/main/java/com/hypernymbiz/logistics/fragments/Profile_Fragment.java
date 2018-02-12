@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.hypernymbiz.logistics.LoginActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -47,6 +48,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
     SharedPreferences pref;
     String getUserAssociatedEntity, Email, Driver_name, Driver_id, Driver_photo;
     CircleImageView img_profile;
+    LoadingDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,6 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
         img_profile = (CircleImageView) view.findViewById(R.id.img_driver_profile);
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
-
         Email = pref.getString("Email", "");
 //        Driver_photo = pref.getString("Url", "");
 //        Driver_name = pref.getString("Name", "");
@@ -81,12 +82,19 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 //        Glide.with(getContext()).load(Driver_photo).into(img_profile);
 //        drivername.setText(Driver_name);
 //        drivercnic.setText(Driver_id);
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
         swipelayout();
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
         if(getUserAssociatedEntity!=null) {
             ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
                 @Override
                 public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
+                   dialog.dismiss();
+
                     if (response.isSuccessful()) {
                         if (response.body().status) {
 
@@ -110,7 +118,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 
                 @Override
                 public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
-
+dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 //                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                View sbView = snackbar.getView();
@@ -195,6 +203,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                             ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
                                 @Override
                                 public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
+                                   dialog.dismiss();
                                     if (response.isSuccessful()) {
                                         if (response.body().status) {
 
@@ -217,6 +226,7 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 
                                 @Override
                                 public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
+                                    dialog.dismiss();
                                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
 //                                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);

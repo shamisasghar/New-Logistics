@@ -52,11 +52,11 @@ public class CompleteJobFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_complete);
 
         rootlayout = (ConstraintLayout) view.findViewById(R.id.layout_contraint);
-                layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
-        if (getUserAssociatedEntity!=null) {
+        if (getUserAssociatedEntity != null) {
 
             ApiInterface.retrofit.getalldata(Integer.parseInt(getUserAssociatedEntity), 55).enqueue(new Callback<WebAPIResponse<Respone_Completed_job>>() {
                 @Override
@@ -72,20 +72,16 @@ public class CompleteJobFragment extends Fragment {
                     } else {
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
-
                     }
-
                 }
-
                 @Override
                 public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
 
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
-
                 }
             });
-        }else {
+        } else {
             AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
         }

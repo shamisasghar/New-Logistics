@@ -55,6 +55,7 @@ import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActiveJobUtils;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
+import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
 import org.json.JSONObject;
@@ -100,6 +101,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     TextView dig_strt, dig_end, dig_actstrt, dig_actend, dig_dis, dig_vol;
     SharedPreferences.Editor editor;
     String Jobstart, Jobend, JobActualstart, JobActualend;
+    boolean check= true;
     View view;
 
     Context context;
@@ -173,7 +175,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             Double slong = Double.parseDouble(pref.getString("Startlng", ""));
             Double elat = Double.parseDouble(pref.getString("Endlat", ""));
             Double elong = Double.parseDouble(pref.getString("Endlng", ""));
-            Integer jobid = Integer.parseInt(pref.getString("jobid", ""));
+            String jobid = pref.getString("jobid", "");
             Integer driver_id = Integer.parseInt(getUserAssociatedEntity);
             ActiveJobUtils.jobResumed(getContext());
             ActiveJobUtils.saveJobResume(getContext(), new ActiveJobResume(slat, slong, elat, elong, driver_id, jobid, start_job, start_end, driver_start_time));
@@ -209,6 +211,9 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 //        });
 
         swipeButton.setOnSwipeListener(new ProSwipeButton.OnSwipeListener() {
+
+
+
             @Override
             public void onSwipeConfirm() {
                 new Handler().postDelayed(new Runnable() {
@@ -228,9 +233,10 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 String id ;
 
                 if (ActiveJobUtils.isJobResumed(getContext())) {
-                    id = Integer.toString(ActiveJobUtils.getJobResume(getContext()).getJob_id());
+                    id =ActiveJobUtils.getJobResume(getContext()).getJob_id();
                 }
-                else {
+                else
+                {
                     id = pref.getString("jobid", "");
                 }
                 Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
@@ -238,18 +244,20 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 body.put("job_id", id);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
-
                 editor = pref.edit();
                 editor.putString("actalend", actual_end_time);
                 editor.commit();
-
                 ActiveJobUtils.clearJobResumed(getContext());
-
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobEnd>> call, Response<WebAPIResponse<JobEnd>> response) {
-//                        if (response.body().status) {
-//                    }
+                      if (response.isSuccessful()) {
+                          if (response.body().status)
+                          {
+
+
+                          }
+                   }
                     }
 
                     @Override
@@ -299,7 +307,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         });
        String ID = pref.getString("jobid", "");
         editor = pref.edit();
-
         editor.putString("id",ID);
         editor.putString("driver", getUserAssociatedEntity);
         editor.putString("jobstart", Jobstart);
@@ -546,8 +553,13 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                     googleMap.addPolyline(lineOptions);
                 } else {
                 }
-            } else {
-                Toast.makeText(getContext(), "Enable Network ", Toast.LENGTH_SHORT).show();
+            }
+            else {
+
+                if(check==true) {
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+                }
+                check=false;
 
             }
         }

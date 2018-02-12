@@ -12,12 +12,12 @@ public class ActiveJobResume {
     private Double elat;
     private Double elong;
     private Integer driver_id;
-    private Integer job_id;
+    private String job_id;
     private String start_time;
     private String end_time;
     private String driver_start_time;
 
-    public ActiveJobResume(Double slat, Double slong, Double elat, Double elong, Integer driver_id, Integer job_id, String start_time, String end_time, String driver_start_time) {
+    public ActiveJobResume(Double slat, Double slong, Double elat, Double elong, Integer driver_id, String job_id, String start_time, String end_time, String driver_start_time) {
         this.slat = slat;
         this.slong = slong;
         this.elat = elat;
@@ -55,11 +55,11 @@ public class ActiveJobResume {
         this.driver_id = driver_id;
     }
 
-    public Integer getJob_id() {
+    public String getJob_id() {
         return job_id;
     }
 
-    public void setJob_id(Integer job_id) {
+    public void setJob_id(String job_id) {
         this.job_id = job_id;
     }
 

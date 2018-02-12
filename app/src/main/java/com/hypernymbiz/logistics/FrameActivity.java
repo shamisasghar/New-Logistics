@@ -115,54 +115,79 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
         if (isTaskRoot()) {
 
             if(fragment instanceof ActiveJobFragment&&ActiveJobUtils.isJobResumed(this))
+
             {
-                mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_failed_job), getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        switch (view.getId()) {
-                            case R.id.button_positive:
-                                mSimpleDialog.dismiss();
-                                String id = pref.getString("id", "");
-                                String driverid = pref.getString("driver", "");
 
-                                HashMap<String, Object> body = new HashMap<>();
-                                if (id != null) {
-                                    body.put("job_id", Integer.parseInt(id));
-                                    body.put("driver_id", Integer.parseInt(driverid));
-                                    body.put("flag", 54);
-                                }
-                                ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
-                                    @Override
-                                    public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
-                                        if (response.isSuccessful()) {
-                                            if (response.body().status) {
+                if(!AppUtils.isInternetAvailable(this))
+                {
 
-                                            } else {
+                    mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
+                            getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            switch (view.getId()) {
+                                case R.id.button_positive:
+                                    mSimpleDialog.dismiss();
+                                    ActivityUtils.startWifiSettings(FrameActivity.this);
+                                    break;
+                                case R.id.button_negative:
+                                    mSimpleDialog.dismiss();
+                                    break;
+                            }
+                        }
+                    });
+                    mSimpleDialog.show();
+
+                }
+else {
+
+                    mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_failed_job), getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            switch (view.getId()) {
+                                case R.id.button_positive:
+                                    mSimpleDialog.dismiss();
+                                    String id = pref.getString("id", "");
+                                    String driverid = pref.getString("driver", "");
+
+                                    HashMap<String, Object> body = new HashMap<>();
+                                    if (id != null) {
+                                        body.put("job_id", Integer.parseInt(id));
+                                        body.put("driver_id", Integer.parseInt(driverid));
+                                        body.put("flag", 54);
+                                    }
+                                    ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
+                                        @Override
+                                        public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
+                                            if (response.isSuccessful()) {
+                                                if (response.body().status) {
+
+                                                } else {
 //                                             AppUtils.showSnackBar(ge(),AppUtils.getErrorMessage(getContext(),2));
-                                                Toast.makeText(FrameActivity.this, "Error Occur", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(FrameActivity.this, "Error Occur", Toast.LENGTH_SHORT).show();
+                                                }
                                             }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
+                                        @Override
+                                        public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
 //                                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-                                        Toast.makeText(FrameActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(FrameActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
 
-                                    }
-                                });
-                                finish();
-                                ActivityUtils.startHomeActivity(getApplicationContext(), HomeActivity.class, HomeFragment.class.getName());
-                                ActiveJobUtils.clearJobResumed(getApplicationContext());
-                                break;
-                            case R.id.button_negative:
-                                mSimpleDialog.dismiss();
-                                break;
+                                        }
+                                    });
+                                    finish();
+                                    ActivityUtils.startHomeActivity(getApplicationContext(), HomeActivity.class, HomeFragment.class.getName());
+                                    ActiveJobUtils.clearJobResumed(getApplicationContext());
+                                    break;
+                                case R.id.button_negative:
+                                    mSimpleDialog.dismiss();
+                                    break;
+                            }
                         }
-                    }
-                });
-                mSimpleDialog.show();
-
+                    });
+                    mSimpleDialog.show();
+                }
             }
 
             else {
@@ -180,6 +205,29 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 FrameActivity.this.finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             } else if (fragment instanceof ActiveJobFragment) {
+
+                if(!AppUtils.isInternetAvailable(this))
+                {
+                        mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
+                                getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                switch (view.getId()) {
+                                    case R.id.button_positive:
+                                        mSimpleDialog.dismiss();
+                                        ActivityUtils.startWifiSettings(FrameActivity.this);
+                                        break;
+                                    case R.id.button_negative:
+                                        mSimpleDialog.dismiss();
+                                        break;
+                                }
+                            }
+                        });
+                        mSimpleDialog.show();
+
+                }
+
+                else {
 
                     mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_failed_job), getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                         @Override
@@ -225,6 +273,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                         }
                     });
                     mSimpleDialog.show();
+                }
 
                 }
             }

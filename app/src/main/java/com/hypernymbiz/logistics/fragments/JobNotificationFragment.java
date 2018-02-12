@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.hypernymbiz.logistics.adapter.JobNotifiyAdapter;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.models.JobCount;
 import com.hypernymbiz.logistics.models.JobCountPatch;
 import com.hypernymbiz.logistics.models.JobInfo;
@@ -58,6 +59,7 @@ public class JobNotificationFragment extends Fragment {
     Context fContext;
     ImageView imageView;
     View view;
+    LoadingDialog dialog;
 
 
     @Override
@@ -72,7 +74,6 @@ public class JobNotificationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_job_notification, container, false);
-
         sharedPreferences = getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
         recyclerView = (RecyclerView) view.findViewById(R.id.notification_recycler);
@@ -81,6 +82,12 @@ public class JobNotificationFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipelayout = (SwipeRefreshLayout) view.findViewById(R.id.layout_swipe);
         constraintLayout = (ConstraintLayout) view.findViewById(R.id.layout_constraint1);
+        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+
       //  swipe();
 
 
@@ -130,6 +137,8 @@ public class JobNotificationFragment extends Fragment {
             ApiInterface.retrofit.getallpendingdata(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<List<JobInfo>>>() {
                 @Override
                 public void onResponse(Call<WebAPIResponse<List<JobInfo>>> call, Response<WebAPIResponse<List<JobInfo>>> response) {
+
+                    dialog.dismiss();
                     if (response.isSuccessful()) {
                         if (response.body().status) {
                             List<JobInfo> jobInfo = response.body().response;
@@ -151,6 +160,7 @@ public class JobNotificationFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<WebAPIResponse<List<JobInfo>>> call, Throwable t) {
+                    dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                 }
@@ -162,30 +172,30 @@ public class JobNotificationFragment extends Fragment {
 
         }
 
-//        ApiInterface.retrofit.getcountpatch().enqueue(new Callback<WebAPIResponse<JobCountPatch>>() {
-//            @Override
-//            public void onResponse(Call<WebAPIResponse<JobCountPatch>> call, Response<WebAPIResponse<JobCountPatch>> response) {
-//                if (response.isSuccessful()) {
-//                    if (response.body().status) {
-//                        Log.d("TAAAG", "" + response);
-//
-//                    }
-//
-//                } else {
-//
-//                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
-//
-//                }
-//
-//            }
-//
-//
-//            @Override
-//            public void onFailure(Call<WebAPIResponse<JobCountPatch>> call, Throwable t) {
-//                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-//
-//            }
-//        });
+        ApiInterface.retrofit.getcountpatch().enqueue(new Callback<WebAPIResponse<String>>() {
+            @Override
+            public void onResponse(Call<WebAPIResponse<String>> call, Response<WebAPIResponse<String>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().status) {
+
+                        Log.d("TAAAG", "" + response.body().response);
+                        Log.d("TAAAG", "" + response.body().status);
+
+                    }
+
+                } else {
+
+                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+                }
+
+            }
+            @Override
+            public void onFailure(Call<WebAPIResponse<String>> call, Throwable t) {
+
+                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
+            }
+        });
 
 
         return view;
