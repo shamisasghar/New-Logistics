@@ -66,6 +66,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -102,7 +103,10 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     SharedPreferences.Editor editor;
     String Jobstart, Jobend, JobActualstart, JobActualend;
     boolean check= true;
+
     View view;
+    Calendar c;
+    String driverendtime;
 
     Context context;
 
@@ -226,10 +230,10 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                     }
                 }, 2000);
 
-                Calendar c = Calendar.getInstance();
-                System.out.println("Current time =&gt; " + c.getTime());
+                c = Calendar.getInstance();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 actual_end_time = df.format(c.getTime());
+                driverendtime=DateFormat.getDateTimeInstance().format(c.getTime());
                 String id ;
 
                 if (ActiveJobUtils.isJobResumed(getContext())) {
@@ -246,6 +250,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 body.put("actual_end_time", actual_end_time);
                 editor = pref.edit();
                 editor.putString("actalend", actual_end_time);
+                editor.putString("driverend",driverendtime);
                 editor.commit();
                 ActiveJobUtils.clearJobResumed(getContext());
                 ApiInterface.retrofit.endjob(body).enqueue(new Callback<WebAPIResponse<JobEnd>>() {
@@ -285,8 +290,8 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 summary.show();
                 summary.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                dig_actend.setText(actual_end_time);
-                dig_actstrt.setText(pref.getString("Actualstart", ""));
+                dig_actend.setText(driverendtime);
+                dig_actstrt.setText(pref.getString("drivertime", ""));
                 dig_strt.setText(pref.getString("Startjob", ""));
                 dig_end.setText(pref.getString("Startend", ""));
 
@@ -583,8 +588,8 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         });
         Jobstart = pref.getString("Startjob", "");
         Jobend = pref.getString("Startend", "");
-        JobActualstart = pref.getString("Actualstart", "");
-        JobActualend = actual_end_time;
+        JobActualstart = pref.getString("drivertime", "");
+        JobActualend = driverendtime;
 
         sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend, 2));
         sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend, 1));

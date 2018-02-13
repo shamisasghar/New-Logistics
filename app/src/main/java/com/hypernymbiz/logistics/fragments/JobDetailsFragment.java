@@ -36,8 +36,10 @@ import com.hypernymbiz.logistics.utils.Constants;
 import com.hypernymbiz.logistics.utils.GsonUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import retrofit2.Call;
@@ -61,6 +63,7 @@ public class JobDetailsFragment extends Fragment {
     SharedPreferences.Editor editor;
     SharedPreferences pref;
     LoadingDialog dialog;
+    Calendar c;
     private SimpleDialog mSimpleDialog;
 
     @Override
@@ -91,10 +94,14 @@ public class JobDetailsFragment extends Fragment {
         dialog.show();
 
 
-        Calendar c = Calendar.getInstance();
-        System.out.println("Current time =&gt; " + c.getTime());
+        c = Calendar.getInstance();
+//        System.out.println("Current time =&gt; " + c.getTime());
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         actual_start_time = df.format(c.getTime());
+
+
+//        Log.d("TAAg",actual_start_time);
+//        Toast.makeText(getContext(), ""+actual_start_time, Toast.LENGTH_SHORT).show();
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,17 +113,15 @@ public class JobDetailsFragment extends Fragment {
                     body.put("job_id", Integer.parseInt(id));
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                } else
-                    {
+                } else {
                     body.put("job_id", payloadNotification.job_id);
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 }
-
                 ApiInterface.retrofit.startjob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
-                       dialog.dismiss();
+                        dialog.dismiss();
                         if (response.isSuccessful()) {
                             if (response.body().status) {
                                 String strlat, strlng, endlat, endlng;
@@ -148,9 +153,11 @@ public class JobDetailsFragment extends Fragment {
                                 Intent intent = new Intent(getContext(), ActiveJobFragment.class);
                                 Intent getintent = getActivity().getIntent();
                                 String id = getintent.getStringExtra("jobid");
+                                String date = DateFormat.getDateTimeInstance().format(c.getTime());
                                 if (id != null) {
                                     editor = pref.edit();
                                     editor.putString("jobid", id);
+                                    editor.putString("drivertime", date);
                                     editor.commit();
 
 //                                        intent.putExtra("jobid",id);
@@ -205,45 +212,44 @@ public class JobDetailsFragment extends Fragment {
                     });
                     mSimpleDialog.show();
 
-                } else
-                {
+                } else {
                     Intent getintent = getActivity().getIntent();
-                String id = getintent.getStringExtra("jobid");
-                HashMap<String, Object> body = new HashMap<>();
-                if (id != null) {
-                    body.put("job_id", Integer.parseInt(id));
-                    body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                    body.put("flag", 54);
-                }
-                ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
-                    @Override
-                    public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
+                    String id = getintent.getStringExtra("jobid");
+                    HashMap<String, Object> body = new HashMap<>();
+                    if (id != null) {
+                        body.put("job_id", Integer.parseInt(id));
+                        body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+                        body.put("flag", 54);
+                    }
+                    ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
+                        @Override
+                        public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
 
-                        if (response.isSuccessful()) {
-                            if (response.body().status) {
+                            if (response.isSuccessful()) {
+                                if (response.body().status) {
+
+                                }
+
+                            } else {
+
+                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                             }
 
-                        } else {
-
-                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
-
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
-                    @Override
-                    public void onFailure(Call<WebAPIResponse<StartJob>> call, Throwable t) {
-                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                        }
+                    });
 
-                    }
-                });
+                    FrameActivity frameActivity = (FrameActivity) getActivity();
+                    frameActivity.onBackPressed();
 
-                FrameActivity frameActivity = (FrameActivity) getActivity();
-                frameActivity.onBackPressed();
-
+                }
             }
-        }
         });
 
         Bundle extras = getActivity().getIntent().getExtras();
@@ -344,7 +350,7 @@ public class JobDetailsFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<WebAPIResponse<JobDetail>> call, Throwable t) {
-dialog.dismiss();
+                        dialog.dismiss();
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                     }
@@ -352,7 +358,7 @@ dialog.dismiss();
             }
         }
         return view;
-        }
     }
+}
 
 

@@ -344,7 +344,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         Jobstart = pref.getString("jobstart", "");
         Jobend = pref.getString("jobend", "");
         JobActualstart = pref.getString("actalstart", "");
-        JobActualend = pref.getString("actalend", "");
+        JobActualend = pref.getString("driverend", "");
         if (Jobstart.equals("")) {
             nestedScrollView.setVisibility(View.GONE);
             linearLayout.setVisibility(View.VISIBLE);
