@@ -93,6 +93,8 @@ public class JobDetailsFragment extends Fragment {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
+        btn_start.setVisibility(View.GONE);
+        btn_cancel.setVisibility(View.GONE);
 
         c = Calendar.getInstance();
 //        System.out.println("Current time =&gt; " + c.getTime());
@@ -270,14 +272,15 @@ public class JobDetailsFragment extends Fragment {
                                 jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
                                 decrptin.setText(response.body().response.getDescription());
                                 String status = response.body().response.getJobStatus();
-                                if (status.equals("Accomplished")) {
-                                    btn_start.setVisibility(View.GONE);
-                                    btn_cancel.setVisibility(View.GONE);
-                                } else if (status.equals("Failed")) {
-                                    btn_start.setVisibility(View.GONE);
-                                    btn_cancel.setVisibility(View.GONE);
-
+                                if (status.equals("Pending")) {
+                                    btn_start.setVisibility(View.VISIBLE);
+                                    btn_cancel.setVisibility(View.VISIBLE);
                                 }
+//                                else if (status.equals("Failed")) {
+//                                    btn_start.setVisibility(View.GONE);
+//                                    btn_cancel.setVisibility(View.GONE);
+//
+//                                }
                                 String strttime, endtime;
 
                                 strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
@@ -318,14 +321,15 @@ public class JobDetailsFragment extends Fragment {
                                 decrptin.setText(response.body().response.getDescription());
                                 String status = response.body().response.getJobStatus();
                                 if (status != null) {
-                                    if (status.equals("Accomplished")) {
-                                        btn_start.setVisibility(View.GONE);
-                                        btn_cancel.setVisibility(View.GONE);
-                                    } else if (status.equals("Failed")) {
-                                        btn_start.setVisibility(View.GONE);
-                                        btn_cancel.setVisibility(View.GONE);
-
+                                    if (status.equals("Pending")) {
+                                        btn_start.setVisibility(View.VISIBLE);
+                                        btn_cancel.setVisibility(View.VISIBLE);
                                     }
+//                                    else if (status.equals("Failed")) {
+//                                        btn_start.setVisibility(View.GONE);
+//                                        btn_cancel.setVisibility(View.GONE);
+//
+//                                    }
                                 } else {
                                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 

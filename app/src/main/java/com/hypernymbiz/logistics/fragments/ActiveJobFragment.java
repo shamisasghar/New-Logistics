@@ -73,6 +73,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import iammert.com.expandablelib.ExpandCollapseListener;
 import iammert.com.expandablelib.ExpandableLayout;
 import iammert.com.expandablelib.Section;
 import in.shadowfax.proswipebutton.ProSwipeButton;
@@ -577,15 +578,38 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             @Override
             public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
                 ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
-                view.findViewById(R.id.arrow).setBackgroundResource(isExpanded ? R.drawable.up_arrow : R.drawable.up_arrow);
+                if (isExpanded) {
+
+                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+                } else
+                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
             }
 
-            @Override
+                @Override
             public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
                 ((TextView) view.findViewById(R.id.label)).setText(model.getName());
                 ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
             }
         });
+
+        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
+
+            @Override
+            public void onExpanded(int i, Object o, View view) {
+                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+            }
+        });
+        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
+
+            @Override
+            public void onCollapsed(int i, Object o, View view) {
+                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+
+            }
+        });
+
+
+
         Jobstart = pref.getString("Startjob", "");
         Jobend = pref.getString("Startend", "");
         JobActualstart = pref.getString("drivertime", "");

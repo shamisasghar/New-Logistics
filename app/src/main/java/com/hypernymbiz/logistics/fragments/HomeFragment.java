@@ -115,10 +115,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                 ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
             }
         });
-
     }
-
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
@@ -289,7 +286,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
         {
             list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-            list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
+            list.add(new ExpandableSubCategoryChild("End Time: ", EndTime));
             section.parent = phoneCategory;
             section.children.addAll(list);
 
@@ -350,7 +347,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             linearLayout.setVisibility(View.VISIBLE);
         } else {
             if (status == true) {
-
                 sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend));
                 sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend));
                 status = false;

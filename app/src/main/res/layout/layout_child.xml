@@ -15,7 +15,7 @@
             android:layout_centerVertical="true"
             android:text="Start:"
             android:textColor="@color/colorAccent2"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="60dp"/>
 
         <TextView
 
@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/label"
             android:layout_alignBottom="@+id/label"
-            android:layout_marginLeft="41dp"
             android:layout_marginStart="41dp"
             android:text="value"
             android:layout_toEndOf="@+id/label"
