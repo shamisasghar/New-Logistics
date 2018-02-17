@@ -1,6 +1,5 @@
 package com.hypernymbiz.logistics.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hypernymbiz.logistics.ActiveJobActivity;
 import com.hypernymbiz.logistics.FrameActivity;
-import com.hypernymbiz.logistics.HomeActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.LoadingDialog;
@@ -39,7 +35,6 @@ import com.hypernymbiz.logistics.utils.LoginUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 import retrofit2.Call;
@@ -229,13 +224,10 @@ public class JobDetailsFragment extends Fragment {
 
                             if (response.isSuccessful()) {
                                 if (response.body().status) {
-
                                 }
-
-                            } else {
-
+                            }
+                            else {
                                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
-
                             }
 
                         }

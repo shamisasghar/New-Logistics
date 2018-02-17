@@ -2,11 +2,10 @@ package com.hypernymbiz.logistics.fragments;
 
 
 import android.Manifest;
-import android.app.job.JobService;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -14,8 +13,10 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +25,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.github.aakira.expandablelayout.Utils;
 import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -37,10 +36,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
+import com.hypernymbiz.logistics.adapter.ExpandableAdapter;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.LoadingDialog;
-import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
-import com.hypernymbiz.logistics.models.ExpandableSubCategoryChild;
+import com.hypernymbiz.logistics.models.ItemModel;
 import com.hypernymbiz.logistics.models.JobCount;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -51,9 +50,7 @@ import com.hypernymbiz.logistics.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-import iammert.com.expandablelib.ExpandCollapseListener;
 import iammert.com.expandablelib.ExpandableLayout;
-import iammert.com.expandablelib.Section;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,6 +81,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     ExpandableLayout sectionLinearLayout;
     boolean status = true;
     LoadingDialog dialog;
+    RecyclerView recyclerView;
+
+    public static void startActivity(Context context) {
+        context.startActivity(new Intent(context, HomeFragment.class));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,7 +124,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         mMapView = (MapView) view.findViewById(R.id.mapView);
         linearLayout = (LinearLayout) view.findViewById(R.id.linear_error);
         nestedScrollView = (NestedScrollView) view.findViewById(R.id.layout_nestedview);
-        sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
+
+         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        final List<ItemModel> data = new ArrayList<>();
+//        data.add(new ItemModel("Assigned Time", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+//        data.add(new ItemModel("Driver Time", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+//        recyclerView.setAdapter(new ExpandableAdapter(data));
+
+
+//        sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
+
+
         dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -199,28 +213,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         }
         mMapView.getMapAsync(this);
 
-        sectionLinearLayout.animate();
-        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
-            @Override
-            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
-                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
-
-                if (isExpanded) {
-
-                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
-                } else
-                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
-
-
-            }
-
-            @Override
-            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
-                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
-                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
-
-            }
-        });
+//        sectionLinearLayout.animate();
+//        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
+//            @Override
+//            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
+//                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
+//
+//                if (isExpanded) {
+//
+//                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+//                } else
+//                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+//
+//
+//            }
+//
+//            @Override
+//            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
+//                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
+//                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
+//
+//            }
+//        });
 
         return view;
 
@@ -232,21 +246,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
+//        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
+//
+//            @Override
+//            public void onExpanded(int i, Object o, View view) {
+//                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+//            }
+//        });
+//        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
+//
+//            @Override
+//            public void onCollapsed(int i, Object o, View view) {
+//                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+//
+//            }
+//        });
 
-            @Override
-            public void onExpanded(int i, Object o, View view) {
-                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
-            }
-        });
-        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
-
-            @Override
-            public void onCollapsed(int i, Object o, View view) {
-                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
-
-            }
-        });
 
         //    mHolder.button.setOnClickListener(this);
 //        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
@@ -277,22 +292,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             //   button = (Button) view.findViewById(R.id.button);
 
         }
-
     }
 
-    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime) {
-        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
-        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
-        List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-        {
-            list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-            list.add(new ExpandableSubCategoryChild("End Time: ", EndTime));
-            section.parent = phoneCategory;
-            section.children.addAll(list);
-
-        }
-        return section;
-    }
+//    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime) {
+//        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
+//        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
+//        List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+//        {
+//            list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+//            list.add(new ExpandableSubCategoryChild("End Time: ", EndTime));
+//            section.parent = phoneCategory;
+//            section.children.addAll(list);
+//
+//        }
+//        return section;
+//    }
 
     @Override
     public void onResume() {
@@ -347,8 +361,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             linearLayout.setVisibility(View.VISIBLE);
         } else {
             if (status == true) {
-                sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend));
-                sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend));
+
+                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                final List<ItemModel> data = new ArrayList<>();
+                data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+                data.add(new ItemModel(false,"Driver Time", JobActualstart, "", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+                recyclerView.setAdapter(new ExpandableAdapter(data));
+
+//                sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend));
+//                sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend));
                 status = false;
             }
             nestedScrollView.setVisibility(View.VISIBLE);
