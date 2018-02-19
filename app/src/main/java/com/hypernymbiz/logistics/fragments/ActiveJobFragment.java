@@ -46,6 +46,7 @@ import com.hypernymbiz.logistics.models.JobEnd;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.ActiveJobUtils;
+import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.LoginUtils;
 
@@ -295,6 +296,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 //                        ActivityUtils.startActivity(getActivity(), FrameActivity.class, JobNotificationFragment.class.getName(), null);
                         getActivity().onBackPressed();
                         getActivity().finish();
+
 //
                     }
                 });

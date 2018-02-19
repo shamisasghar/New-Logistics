@@ -25,7 +25,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="msg_end_job">Do you want to end this job?</string>
-    <string name="msg_failed_job">Do you want to failed this job?</string>
+    <string name="msg_failed_job">Do you want to Cancel this job?\n Note: Mark as Failed Job</string>
     <!-- Messages -->
     <string name="msg_internet">Please enable your wifi or mobile data from settings</string>
     <string name="msg_location">Please enable your location from settings</string>

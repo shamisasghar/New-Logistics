@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.Utils;
@@ -77,7 +78,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     TextView mNumberOfCartItemsText;
     String Jobstart, Jobend, JobActualstart, JobActualend;
     LinearLayout linearLayout;
-    NestedScrollView nestedScrollView;
+    ScrollView nestedScrollView;
     ExpandableLayout sectionLinearLayout;
     boolean status = true;
     LoadingDialog dialog;
@@ -123,7 +124,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
         mMapView = (MapView) view.findViewById(R.id.mapView);
         linearLayout = (LinearLayout) view.findViewById(R.id.linear_error);
-        nestedScrollView = (NestedScrollView) view.findViewById(R.id.layout_nestedview);
+        nestedScrollView = (ScrollView) view.findViewById(R.id.layout_nestedview);
+        Runnable runnable=new Runnable() {
+            @Override
+            public void run() {
+                nestedScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+
+            }
+        };
+        nestedScrollView.post(runnable);
+
+//        nestedScrollView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
 
          recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 //        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
@@ -132,7 +148,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //        data.add(new ItemModel("Assigned Time", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
 //        data.add(new ItemModel("Driver Time", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
 //        recyclerView.setAdapter(new ExpandableAdapter(data));
-
 
 //        sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 

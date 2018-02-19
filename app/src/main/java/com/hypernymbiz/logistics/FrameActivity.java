@@ -114,12 +114,11 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (isTaskRoot()) {
 
-            if(fragment instanceof ActiveJobFragment&&ActiveJobUtils.isJobResumed(this))
+            if (fragment instanceof ActiveJobFragment && ActiveJobUtils.isJobResumed(this))
 
             {
 
-                if(!AppUtils.isInternetAvailable(this))
-                {
+                if (!AppUtils.isInternetAvailable(this)) {
 
                     mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
                             getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
@@ -138,8 +137,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                     });
                     mSimpleDialog.show();
 
-                }
-else {
+                } else {
 
                     mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_failed_job), getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                         @Override
@@ -178,6 +176,7 @@ else {
                                     });
                                     finish();
                                     ActivityUtils.startHomeActivity(getApplicationContext(), HomeActivity.class, HomeFragment.class.getName());
+
                                     ActiveJobUtils.clearJobResumed(getApplicationContext());
                                     break;
                                 case R.id.button_negative:
@@ -188,16 +187,11 @@ else {
                     });
                     mSimpleDialog.show();
                 }
-            }
-
-            else {
+            } else {
                 ActivityUtils.startHomeActivity(this, HomeActivity.class, HomeFragment.class.getName());
             }
 
-        }
-
-        else
-            {
+        } else {
             if (fragment instanceof JobNotificationFragment) {
                 FrameActivity.this.finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -206,28 +200,25 @@ else {
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             } else if (fragment instanceof ActiveJobFragment) {
 
-                if(!AppUtils.isInternetAvailable(this))
-                {
-                        mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
-                                getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                switch (view.getId()) {
-                                    case R.id.button_positive:
-                                        mSimpleDialog.dismiss();
-                                        ActivityUtils.startWifiSettings(FrameActivity.this);
-                                        break;
-                                    case R.id.button_negative:
-                                        mSimpleDialog.dismiss();
-                                        break;
-                                }
+                if (!AppUtils.isInternetAvailable(this)) {
+                    mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
+                            getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            switch (view.getId()) {
+                                case R.id.button_positive:
+                                    mSimpleDialog.dismiss();
+                                    ActivityUtils.startWifiSettings(FrameActivity.this);
+                                    break;
+                                case R.id.button_negative:
+                                    mSimpleDialog.dismiss();
+                                    break;
                             }
-                        });
-                        mSimpleDialog.show();
+                        }
+                    });
+                    mSimpleDialog.show();
 
-                }
-
-                else {
+                } else {
 
                     mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_failed_job), getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                         @Override
@@ -275,9 +266,8 @@ else {
                     mSimpleDialog.show();
                 }
 
-                }
             }
-
+        }
 
 
     }

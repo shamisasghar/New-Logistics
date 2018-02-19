@@ -61,7 +61,7 @@ public class ActivityUtils {
         if (animationType == AnimationEnum.HORIZONTAL) {
             context.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         } else if (animationType == AnimationEnum.VERTICAL) {
-            context.overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+            context.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 

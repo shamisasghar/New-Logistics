@@ -4,12 +4,15 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.aakira.expandablelayout.ExpandableLayout;
 import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
@@ -41,7 +44,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
     public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         this.context = parent.getContext();
         return new ViewHolder(LayoutInflater.from(context)
-                .inflate(R.layout.expandable_list_row, parent, false));
+                .inflate(R.layout.item_expandable, parent, false));
 
     }
 
@@ -57,20 +60,23 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         holder.expandableLayout.setExpanded(expandState.get(position));
 
         holder.starttime.setText(item.start_time);
-        if (item.rowCheck) {
-            holder.endtime.setText(item.end_time);
-        }
-        else{
-            holder.endtime.setVisibility(View.GONE);
-        }
-        holder.expandableLayout.setListener(new ExpandableLayoutListenerAdapter()
-        {
+        holder.endtime.setText(item.end_time);
+
+//        if (item.rowCheck) {
+//            holder.endtime.setText(item.end_time);
+//        }
+//        else
+//        {
+//            holder.endtime.setVisibility(View.GONE);
+//            holder.lbl_fail.setVisibility(View.GONE);
+//        }
+        holder.expandableLayout.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
                 createRotateAnimator(holder.buttonLayout, 0f, 180f).start();
                 expandState.put(position, true);
-            }
 
+            }
             @Override
             public void onPreClose() {
                 createRotateAnimator(holder.buttonLayout, 180f, 0f).start();
@@ -83,6 +89,15 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
             @Override
             public void onClick(final View v) {
                 onClickButton(holder.expandableLayout);
+                Toast.makeText(context, "hii", Toast.LENGTH_SHORT).show();
+
+//                holder.nestedScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+//                Runnable runnable=new Runnable() {
+//                    @Override
+//                    public void run() {
+//                    }
+//                };
+//                holder.nestedScrollView.post(runnable);
             }
         });
     }
@@ -96,9 +111,11 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         return data.size();
     }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView,starttime,endtime;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView textView, starttime, endtime, lbl_fail;
         public RelativeLayout buttonLayout;
+        ScrollView nestedScrollView;
+
 
         public ExpandableLinearLayout expandableLayout;
 
@@ -108,6 +125,10 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
             starttime = (TextView) v.findViewById(R.id.txt_start);
             endtime = (TextView) v.findViewById(R.id.txt_fail);
             buttonLayout = (RelativeLayout) v.findViewById(R.id.button);
+            lbl_fail = (TextView) v.findViewById(R.id.fail);
+            nestedScrollView = (ScrollView) v.findViewById(R.id.layout_nestedview);
+
+
             expandableLayout = (ExpandableLinearLayout) v.findViewById(R.id.expandableLayout);
 
         }
