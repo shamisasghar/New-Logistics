@@ -257,6 +257,8 @@ public class JobDetailsFragment extends Fragment {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
                         if (response.isSuccessful()) {
+                            dialog.dismiss();
+
                             if (response.body().status) {
                                 jbname.setText(response.body().response.getName());
                                 jbstatus.setText(response.body().response.getJobStatus());

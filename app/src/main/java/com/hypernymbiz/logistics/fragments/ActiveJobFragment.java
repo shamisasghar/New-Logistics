@@ -16,6 +16,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.aakira.expandablelayout.Utils;
 import com.github.capur16.digitspeedviewlib.DigitSpeedView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,12 +40,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.hypernymbiz.logistics.R;
+import com.hypernymbiz.logistics.adapter.ExpandableAdapter;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.models.ActiveJobResume;
 import com.hypernymbiz.logistics.models.DirectionsJSONParser;
 import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
 import com.hypernymbiz.logistics.models.ExpandableSubCategoryChild;
+import com.hypernymbiz.logistics.models.ItemModel;
 import com.hypernymbiz.logistics.models.JobEnd;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -96,6 +102,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     SharedPreferences.Editor editor;
     String Jobstart, Jobend, JobActualstart, JobActualend;
     boolean check= true;
+    RecyclerView recyclerView;
 
     View view;
     Calendar c;
@@ -163,6 +170,15 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         info_img = (ImageView) view.findViewById(R.id.info);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
         context = getContext();
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        final List<ItemModel> data = new ArrayList<>();
+        data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+        data.add(new ItemModel(false,"Driver Time", JobActualstart, "", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+        recyclerView.setAdapter(new ExpandableAdapter(data));
+
 
         if (!ActiveJobUtils.isJobResumed(getContext())) {
             String start_job = pref.getString("Startjob", "");
@@ -188,7 +204,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             e.printStackTrace();
         }
         mMapView.getMapAsync(this);
-        Expandable();
+//        Expandable();
         map();
 //        info_img.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -364,12 +380,10 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
 
                             digitSpeedView.updateSpeed(currentspeed);
                             //   digit.hideUnit();
-
                         }
 
                         Location l = (Location) location;
                         pos = new LatLng(l.getLatitude(), l.getLongitude());
-
                         //  googleMap.setTrafficEnabled(true);
                         LatLng start = new LatLng(slat, slng);
                         googleMap.addMarker(new MarkerOptions().position(start).title("Start Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))).showInfoWindow();
@@ -526,10 +540,8 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 for (int i = 0; i < result.size(); i++) {
                     points = new ArrayList<>();
                     lineOptions = new PolylineOptions();
-
                     // Fetching i-th route
                     List<HashMap<String, String>> path = result.get(i);
-
                     // Fetching all the points in i-th route
                     for (int j = 0; j < path.size(); j++) {
                         HashMap<String, String> point = path.get(j);
@@ -564,78 +576,78 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    public void Expandable() {
-        ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
+//    public void Expandable() {
+//        ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
+//
+//        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
+//            @Override
+//            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
+//                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
+//                if (isExpanded) {
+//
+//                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+//                } else
+//                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+//            }
+//
+//                @Override
+//            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
+//                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
+//                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
+//            }
+//        });
+//
+//        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
+//
+//            @Override
+//            public void onExpanded(int i, Object o, View view) {
+//                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+//            }
+//        });
+//        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
+//
+//            @Override
+//            public void onCollapsed(int i, Object o, View view) {
+//                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+//
+//            }
+//        });
+//
+//
+//
+//        Jobstart = pref.getString("Startjob", "");
+//        Jobend = pref.getString("Startend", "");
+//        JobActualstart = pref.getString("drivertime", "");
+//        JobActualend = driverendtime;
+//
+//        sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend, 2));
+//        sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend, 1));
+//
+//    }
 
-        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
-            @Override
-            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
-                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
-                if (isExpanded) {
-
-                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
-                } else
-                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
-            }
-
-                @Override
-            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
-                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
-                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
-            }
-        });
-
-        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
-
-            @Override
-            public void onExpanded(int i, Object o, View view) {
-                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
-            }
-        });
-        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
-
-            @Override
-            public void onCollapsed(int i, Object o, View view) {
-                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
-
-            }
-        });
-
-
-
-        Jobstart = pref.getString("Startjob", "");
-        Jobend = pref.getString("Startend", "");
-        JobActualstart = pref.getString("drivertime", "");
-        JobActualend = driverendtime;
-
-        sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend, 2));
-        sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend, 1));
-
-    }
-
-    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime, int value) {
-        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
-        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
-        if (value == 1) {
-            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-            {
-                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-                section.parent = phoneCategory;
-                section.children.addAll(list);
-
-            }
-        } else {
-            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-            {
-                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-                list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
-                section.parent = phoneCategory;
-                section.children.addAll(list);
-
-            }
-        }
-        return section;
-    }
+//    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime, int value) {
+//        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
+//        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
+//        if (value == 1) {
+//            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+//            {
+//                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+//                section.parent = phoneCategory;
+//                section.children.addAll(list);
+//
+//            }
+//        } else {
+//            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+//            {
+//                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+//                list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
+//                section.parent = phoneCategory;
+//                section.children.addAll(list);
+//
+//            }
+//        }
+//        return section;
+//    }
 
     @Override
     public void onResume() {

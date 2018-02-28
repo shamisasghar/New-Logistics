@@ -89,7 +89,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
             @Override
             public void onClick(final View v) {
                 onClickButton(holder.expandableLayout);
-                Toast.makeText(context, "hii", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "hii", Toast.LENGTH_SHORT).show();
 
 //                holder.nestedScrollView.fullScroll(ScrollView.FOCUS_DOWN);
 //                Runnable runnable=new Runnable() {
@@ -115,11 +115,9 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         public TextView textView, starttime, endtime, lbl_fail;
         public RelativeLayout buttonLayout;
         ScrollView nestedScrollView;
-
-
         public ExpandableLinearLayout expandableLayout;
-
-        public ViewHolder(View v) {
+        public ViewHolder(View v)
+        {
             super(v);
             textView = (TextView) v.findViewById(R.id.textView);
             starttime = (TextView) v.findViewById(R.id.txt_start);
@@ -127,10 +125,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
             buttonLayout = (RelativeLayout) v.findViewById(R.id.button);
             lbl_fail = (TextView) v.findViewById(R.id.fail);
             nestedScrollView = (ScrollView) v.findViewById(R.id.layout_nestedview);
-
-
             expandableLayout = (ExpandableLinearLayout) v.findViewById(R.id.expandableLayout);
-
         }
     }
 

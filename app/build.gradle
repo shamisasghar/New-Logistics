@@ -25,13 +25,14 @@ android {
         vectorDrawables.useSupportLibrary = true
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
-        manifestPlaceholders = [onesignal_app_id: "afa2ffbe-1208-4c2f-851c-592b1087e237",
+        manifestPlaceholders = [onesignal_app_id: "f4201e3f-8a83-4e49-9936-59a9cb302be2",
                                 // Project number pulled from dashboard, local value is ignored.
-                                onesignal_google_project_number: "REMOTE"]
+//                                onesignal_google_project_number: "REMOTE"]
+                                onesignal_google_project_number: "975855260105"]
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -23,12 +23,6 @@
             android:icon="@drawable/drawer_profile"
             android:title="Profile" />
     </group>
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/fra"
-            android:icon="@drawable/drawer_profile"
-            android:title="Profile" />
-    </group>
 
 
 </menu>

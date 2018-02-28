@@ -1,5 +1,7 @@
 package com.hypernymbiz.logistics.api;
 
+import android.util.Log;
+
 import com.hypernymbiz.logistics.models.JobCount;
 import com.hypernymbiz.logistics.models.JobCountPatch;
 import com.hypernymbiz.logistics.models.JobDetail;
@@ -10,8 +12,11 @@ import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.StartJob;
 import com.hypernymbiz.logistics.models.User;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.toolbox.MyApplication;
 import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
+import com.hypernymbiz.logistics.utils.LoginUtils;
+import com.hypernymbiz.logistics.utils.ScheduleUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,7 +46,8 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
 
-    String HTTP = "http://192.168.2.120:8000/";
+   // String HTTP = "http://192.168.2.120:8000/";
+    String HTTP = "http://159.65.7.152/";
   // String HTTP = "http://16726bff.ngrok.io/";
 
     String HTTPP = "http://192.168.2.185:8000/";
@@ -106,9 +112,10 @@ public interface ApiInterface {
                             .header("Cache-Control", "no-cache")
                             .header("Content-Type", "application/json")
                             .method(original.method(), original.body());
-                    String token = "Token a1f32065fe1f5bdaf7f3075d22fccbe469a6b498";
+//                    String token = "Token a1f32065fe1f5bdaf7f3075d22fccbe469a6b498";
+                    String token = LoginUtils.getUserToken(MyApplication.getAppContext());
                     if (token != null) {
-                        requestBuilder.header("Authorization", token);
+                        requestBuilder.header("Authorization", "Token "+token);
                     }
                     Request request = requestBuilder.build();
                     return chain.proceed(request);

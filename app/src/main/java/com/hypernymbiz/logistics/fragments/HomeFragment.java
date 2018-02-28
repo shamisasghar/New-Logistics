@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +30,7 @@ import android.widget.LinearLayout;
 
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.aakira.expandablelayout.Utils;
 import com.google.android.gms.maps.CameraUpdate;
@@ -35,6 +39,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.adapter.ExpandableAdapter;
@@ -48,6 +53,7 @@ import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +89,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     boolean status = true;
     LoadingDialog dialog;
     RecyclerView recyclerView;
+    CardView cardView;
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, HomeFragment.class));
@@ -125,6 +132,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         mMapView = (MapView) view.findViewById(R.id.mapView);
         linearLayout = (LinearLayout) view.findViewById(R.id.linear_error);
         nestedScrollView = (ScrollView) view.findViewById(R.id.layout_nestedview);
+        cardView=(CardView)view.findViewById(R.id.cardviewhome_map);
+
+
+
         Runnable runnable=new Runnable() {
             @Override
             public void run() {
@@ -134,6 +145,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         };
         nestedScrollView.post(runnable);
 
+
 //        nestedScrollView.post(new Runnable() {
 //            @Override
 //            public void run() {
@@ -142,12 +154,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //        });
 
          recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        final List<ItemModel> data = new ArrayList<>();
-//        data.add(new ItemModel("Assigned Time", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        final List<ItemModel> data = new ArrayList<>();
+        data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
 //        data.add(new ItemModel("Driver Time", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
-//        recyclerView.setAdapter(new ExpandableAdapter(data));
+        recyclerView.setAdapter(new ExpandableAdapter(data));
+
 
 //        sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
@@ -296,6 +309,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             return;
         }
         this.googleMap.setMyLocationEnabled(true);
+        MapStyleOptions mapStyleOptions=MapStyleOptions.loadRawResourceStyle(getActivity(),R.raw.map);
+        googleMap.setMapStyle(mapStyleOptions);
 
     }
 

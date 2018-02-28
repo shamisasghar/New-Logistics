@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.toolbox.MyApplication;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
@@ -89,17 +91,17 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 
         swipelayout();
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
-        if(getUserAssociatedEntity!=null) {
+        if (getUserAssociatedEntity != null) {
             ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
                 @Override
                 public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-                   dialog.dismiss();
+                    dialog.dismiss();
 
                     if (response.isSuccessful()) {
                         if (response.body().status) {
 
-                            String driverName, driverCnic, drivergender, driverdof;
-                            String url = response.body().response.getPhoto();
+                            String driverName, driverCnic, drivergender, driverdof,url;
+                            url = response.body().response.getPhoto();
                             driverName = response.body().response.getName();
                             driverCnic = String.valueOf(response.body().response.getCnic());
                             drivergender = response.body().response.getMaritalStatus();
@@ -111,14 +113,14 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                             Glide.with(getContext()).load(url).into(img_profile);
                         }
                     } else {
-                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(),2));
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                     }
 
                 }
 
                 @Override
                 public void onFailure(Call<WebAPIResponse<Profile>> call, Throwable t) {
-dialog.dismiss();
+                    dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 //                Snackbar snackbar = Snackbar.make(swipelayout, "Establish Network Connection!", Snackbar.LENGTH_SHORT);
 //                View sbView = snackbar.getView();
@@ -129,10 +131,9 @@ dialog.dismiss();
 //                snackbar.show();
                 }
             });
-        }
-        else {
+        } else {
 
-            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(),2));
+            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
         }
 
@@ -199,11 +200,11 @@ dialog.dismiss();
 
                         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
 
-                        if (getUserAssociatedEntity!=null) {
+                        if (getUserAssociatedEntity != null) {
                             ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
                                 @Override
                                 public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
-                                   dialog.dismiss();
+                                    dialog.dismiss();
                                     if (response.isSuccessful()) {
                                         if (response.body().status) {
 
@@ -238,8 +239,7 @@ dialog.dismiss();
 //                                snackbar.show();
                                 }
                             });
-                        }
-                        else {
+                        } else {
 
                             AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 

@@ -10,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.models.Profile;
@@ -98,15 +100,17 @@ public class LoginActivity extends AppCompatActivity {
         ApiInterface.retrofit.loginUser(body).enqueue(new Callback<WebAPIResponse<User>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<User>> call, Response<WebAPIResponse<User>> response) {
+                Log.d("TAAAG",""+response.body().status);
+                Log.d("TAAAG",""+response.body().response);
                 progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     if (response.body().status) {
 
                         OneSignal.sendTag("email", response.body().response.getEmail());
-                        // Toast.makeText(LoginActivity.this, response.body().response.getToken(), Toast.LENGTH_SHORT).show();
+//                         Toast.makeText(LoginActivity.this, response.body().response.getToken(), Toast.LENGTH_SHORT).show();
                         LoginUtils.saveUserToken(LoginActivity.this, response.body().response.getToken(), Integer.toString(response.body().response.getAssociatedEntity()));
                         LoginUtils.userLoggedIn(LoginActivity.this);
-
+                        Log.d("TAAAG",""+LoginUtils.getUserToken(getApplicationContext()));
                         getUserAssociatedEntity = response.body().response.getAssociatedEntity().toString();
 //                    ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
 //                        @Override
