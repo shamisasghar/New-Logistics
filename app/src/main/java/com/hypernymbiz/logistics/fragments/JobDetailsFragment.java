@@ -266,6 +266,7 @@ public class JobDetailsFragment extends Fragment {
                             dialog.dismiss();
                             try {
                                 if (response.body().status) {
+
                                     jbname.setText(response.body().response.getName());
                                     jbstatus.setText(response.body().response.getJobStatus());
                                     jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
@@ -289,11 +290,13 @@ public class JobDetailsFragment extends Fragment {
                                     editor.putString("Startjob", strttime);
                                     editor.putString("Startend", endtime);
                                     editor.commit();
+
                                 }
                             }
                             catch (Exception ex)
                             {
 
+                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                             }
                         }

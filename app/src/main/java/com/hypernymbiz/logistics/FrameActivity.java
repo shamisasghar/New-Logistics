@@ -18,6 +18,7 @@ import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.enumerations.AnimationEnum;
 import com.hypernymbiz.logistics.fragments.ActiveJobFragment;
 import com.hypernymbiz.logistics.fragments.HomeFragment;
+import com.hypernymbiz.logistics.fragments.JobAssignedFragment;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
 import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
 import com.hypernymbiz.logistics.models.JobDetail;
@@ -206,7 +207,13 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
             } else if (fragment instanceof JobDetailsFragment) {
                 FrameActivity.this.finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            } else if (fragment instanceof ActiveJobFragment) {
+
+            }
+            else if (fragment instanceof JobAssignedFragment) {
+                FrameActivity.this.finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+            else if (fragment instanceof ActiveJobFragment) {
 
                 if (!AppUtils.isInternetAvailable(this)) {
                     mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),

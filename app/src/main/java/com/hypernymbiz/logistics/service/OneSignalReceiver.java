@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.HomeActivity;
+import com.hypernymbiz.logistics.fragments.JobAssignedFragment;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
 import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
 import com.hypernymbiz.logistics.models.PayloadNotification;
@@ -47,11 +48,8 @@ public class OneSignalReceiver extends NotificationExtenderService {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
-            else
-            {
-                try
-                {
+            } else {
+                try {
                     payloadNotification = new PayloadNotification();
                     payloadNotification.title = additionalData.getString("title");
                     payloadNotification.job_id = Integer.parseInt(additionalData.getString("job_id"));
@@ -59,10 +57,13 @@ public class OneSignalReceiver extends NotificationExtenderService {
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
 
+                    if (payloadNotification.title.equals("You have been assigned a job")) {
 
+                        AppUtils.makeNotification(getApplication(), FrameActivity.class, JobAssignedFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
 
-                    AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
-
+                    } else {
+                        AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
+                    }
 //                    if (orderStatus.status == OrderPlacedEnum.READY_FOR_PAYMENT.getValue()) {
 //                        if (!AppUtils.isRunningInForeground(this)) {
 //                            Bundle bundle = new Bundle();
