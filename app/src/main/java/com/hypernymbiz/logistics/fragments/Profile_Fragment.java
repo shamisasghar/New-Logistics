@@ -98,21 +98,29 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
                     dialog.dismiss();
 
                     if (response.isSuccessful()) {
-                        if (response.body().status) {
+                        try {
+                            if (response.body().status) {
 
-                            String driverName, driverCnic, drivergender, driverdof,url;
-                            url = response.body().response.getPhoto();
-                            driverName = response.body().response.getName();
-                            driverCnic = String.valueOf(response.body().response.getCnic());
-                            drivergender = response.body().response.getMaritalStatus();
-                            driverdof = response.body().response.getDateOfJoining();
-                            drivername.setText(driverName);
-                            drivercnic.setText(driverCnic);
-                            martialstatus.setText(drivergender);
-                            dof.setText(driverdof);
-                            Glide.with(getContext()).load(url).into(img_profile);
+                                String driverName, driverCnic, drivergender, driverdof, url;
+                                url = response.body().response.getPhoto();
+                                driverName = response.body().response.getName();
+                                driverCnic = String.valueOf(response.body().response.getCnic());
+                                drivergender = response.body().response.getMaritalStatus();
+                                driverdof = response.body().response.getDateOfJoining();
+                                drivername.setText(driverName);
+                                drivercnic.setText(driverCnic);
+                                martialstatus.setText(drivergender);
+                                dof.setText(driverdof);
+                                Glide.with(getContext()).load(url).into(img_profile);
+                            }
                         }
-                    } else {
+                        catch (Exception ex)
+                        {
+
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
+                        }
+                    }else {
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                     }
 

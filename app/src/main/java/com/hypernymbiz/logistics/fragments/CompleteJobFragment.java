@@ -62,6 +62,8 @@ public class CompleteJobFragment extends Fragment {
                 @Override
                 public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
                     if (response.isSuccessful()) {
+                        try
+                        {
                         if (response.body().status) {
 
                             // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
@@ -69,7 +71,14 @@ public class CompleteJobFragment extends Fragment {
                             completeJobAdapter = new CompleteJobAdapter(jobInfo_s);
                             recyclerView.setAdapter(completeJobAdapter);
                         }
-                    } else {
+                    }
+                    catch (Exception ex)
+                    {
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
+                    }
+                    }
+                        else {
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                     }

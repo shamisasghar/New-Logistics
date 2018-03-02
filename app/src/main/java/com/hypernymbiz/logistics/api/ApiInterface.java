@@ -93,7 +93,6 @@ public interface ApiInterface {
     Call<WebAPIResponse<JobEnd>> endjob(@Body HashMap<String, Object> body);
     class MyOkHttpClient {
 
-
         public static OkHttpClient getHttpClient() {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);

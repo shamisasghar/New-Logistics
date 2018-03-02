@@ -140,18 +140,26 @@ public class JobNotificationFragment extends Fragment {
 
                     dialog.dismiss();
                     if (response.isSuccessful()) {
-                        if (response.body().status) {
-                            List<JobInfo> jobInfo = response.body().response;
-                            adapter = new JobNotifiyAdapter(jobInfo, getActivity());
-                            recyclerView.setAdapter(adapter);
-                            String size;
-                            size = String.valueOf(jobInfo.size());
-                            if (size.equals("0")) {
-                                imageView.setVisibility(View.VISIBLE);
-                            } else
-                                imageView.setVisibility(View.GONE);
+                        try {
+                            if (response.body().status) {
+                                List<JobInfo> jobInfo = response.body().response;
+                                adapter = new JobNotifiyAdapter(jobInfo, getActivity());
+                                recyclerView.setAdapter(adapter);
+                                String size;
+                                size = String.valueOf(jobInfo.size());
+                                if (size.equals("0")) {
+                                    imageView.setVisibility(View.VISIBLE);
+                                } else
+                                    imageView.setVisibility(View.GONE);
+                            }
                         }
-                    } else {
+                        catch (Exception ex)
+                        {
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
+
+                        }
+                    }else {
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
@@ -176,14 +184,24 @@ public class JobNotificationFragment extends Fragment {
             @Override
             public void onResponse(Call<WebAPIResponse<String>> call, Response<WebAPIResponse<String>> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().status) {
+                    try {
+                        if (response.body().status) {
 
-                        Log.d("TAAAG", "" + response.body().response);
-                        Log.d("TAAAG", "" + response.body().status);
+                            Log.d("TAAAG", "" + response.body().response);
+                            Log.d("TAAAG", "" + response.body().status);
+
+                        }
 
                     }
+                    catch (Exception ex)
+                    {
+                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
-                } else {
+
+                    }
+                }
+
+                else {
 
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                 }

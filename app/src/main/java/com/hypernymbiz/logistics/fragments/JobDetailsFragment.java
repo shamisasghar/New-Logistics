@@ -223,7 +223,13 @@ public class JobDetailsFragment extends Fragment {
                         public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
 
                             if (response.isSuccessful()) {
-                                if (response.body().status) {
+                                try {
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
                                 }
                             }
                             else {
@@ -258,33 +264,41 @@ public class JobDetailsFragment extends Fragment {
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
                         if (response.isSuccessful()) {
                             dialog.dismiss();
-
-                            if (response.body().status) {
-                                jbname.setText(response.body().response.getName());
-                                jbstatus.setText(response.body().response.getJobStatus());
-                                jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
-                                jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
-                                decrptin.setText(response.body().response.getDescription());
-                                String status = response.body().response.getJobStatus();
-                                if (status.equals("Pending")) {
-                                    btn_start.setVisibility(View.VISIBLE);
-                                    btn_cancel.setVisibility(View.VISIBLE);
-                                }
+                            try {
+                                if (response.body().status) {
+                                    jbname.setText(response.body().response.getName());
+                                    jbstatus.setText(response.body().response.getJobStatus());
+                                    jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
+                                    jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
+                                    decrptin.setText(response.body().response.getDescription());
+                                    String status = response.body().response.getJobStatus();
+                                    if (status.equals("Pending")) {
+                                        btn_start.setVisibility(View.VISIBLE);
+                                        btn_cancel.setVisibility(View.VISIBLE);
+                                    }
 //                                else if (status.equals("Failed")) {
 //                                    btn_start.setVisibility(View.GONE);
 //                                    btn_cancel.setVisibility(View.GONE);
 //
 //                                }
-                                String strttime, endtime;
+                                    String strttime, endtime;
 
-                                strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
-                                endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
-                                editor = pref.edit();
-                                editor.putString("Startjob", strttime);
-                                editor.putString("Startend", endtime);
-                                editor.commit();
+                                    strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
+                                    endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
+                                    editor = pref.edit();
+                                    editor.putString("Startjob", strttime);
+                                    editor.putString("Startend", endtime);
+                                    editor.commit();
+                                }
                             }
-                        } else {
+                            catch (Exception ex)
+                            {
+
+
+                            }
+                        }
+
+                        else {
 
                             AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                         }
@@ -307,40 +321,49 @@ public class JobDetailsFragment extends Fragment {
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
                         dialog.dismiss();
                         if (response.isSuccessful()) {
-                            if (response.body().status) {
-                                jbname.setText(response.body().response.getName());
-                                jbstatus.setText(response.body().response.getJobStatus());
-                                jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
-                                jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
-                                decrptin.setText(response.body().response.getDescription());
-                                String status = response.body().response.getJobStatus();
-                                if (status != null) {
-                                    if (status.equals("Pending")) {
-                                        btn_start.setVisibility(View.VISIBLE);
-                                        btn_cancel.setVisibility(View.VISIBLE);
-                                    }
+                            try {
+                                if (response.body().status) {
+                                    jbname.setText(response.body().response.getName());
+                                    jbstatus.setText(response.body().response.getJobStatus());
+                                    jbstart.setText(AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime()));
+                                    jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
+                                    decrptin.setText(response.body().response.getDescription());
+                                    String status = response.body().response.getJobStatus();
+                                    if (status != null) {
+                                        if (status.equals("Pending")) {
+                                            btn_start.setVisibility(View.VISIBLE);
+                                            btn_cancel.setVisibility(View.VISIBLE);
+                                        }
 //                                    else if (status.equals("Failed")) {
 //                                        btn_start.setVisibility(View.GONE);
 //                                        btn_cancel.setVisibility(View.GONE);
 //
 //                                    }
+                                    } else {
+                                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+                                    }
+                                    String strttime, endtime;
+
+                                    strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
+                                    endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
+                                    editor = pref.edit();
+                                    editor.putString("Startjob", strttime);
+                                    editor.putString("Startend", endtime);
+                                    editor.commit();
                                 } else {
                                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                                 }
-                                String strttime, endtime;
+                            }
+                            catch (Exception ex)
+                            {
+                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
-                                strttime = AppUtils.getFormattedDate(response.body().response.getJobStartDatetime()) + " " + AppUtils.getTime(response.body().response.getJobStartDatetime());
-                                endtime = AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime());
-                                editor = pref.edit();
-                                editor.putString("Startjob", strttime);
-                                editor.putString("Startend", endtime);
-                                editor.commit();
-                            } else {
-                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                             }
-                        } else {
+                        }
+                        else {
 
                             AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                         }

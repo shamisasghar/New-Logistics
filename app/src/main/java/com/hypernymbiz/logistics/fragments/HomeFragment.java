@@ -53,6 +53,7 @@ import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,8 +135,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         nestedScrollView = (ScrollView) view.findViewById(R.id.layout_nestedview);
         cardView=(CardView)view.findViewById(R.id.cardviewhome_map);
 
-
-
         Runnable runnable=new Runnable() {
             @Override
             public void run() {
@@ -153,7 +152,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //            }
 //        });
 
-         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         final List<ItemModel> data = new ArrayList<>();

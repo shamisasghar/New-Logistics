@@ -63,14 +63,24 @@ public class FailedJobFragment extends Fragment {
                 public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
 
                     if (response.isSuccessful()) {
-                        if (response.body().status) {
+                        try {
 
-                            // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
-                            jobInfo_s = response.body().response.job_info;
-                            failedJobAdapter = new FailedJobAdapter(jobInfo_s);
-                            recyclerView.setAdapter(failedJobAdapter);
+
+                            if (response.body().status) {
+
+                                // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
+                                jobInfo_s = response.body().response.job_info;
+                                failedJobAdapter = new FailedJobAdapter(jobInfo_s);
+                                recyclerView.setAdapter(failedJobAdapter);
+                            }
                         }
-                    } else {
+                        catch (Exception ex)
+                        {
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
+
+                        }
+                    }else {
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 

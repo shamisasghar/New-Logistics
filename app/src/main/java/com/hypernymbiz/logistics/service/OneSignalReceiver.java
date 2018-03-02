@@ -58,6 +58,9 @@ public class OneSignalReceiver extends NotificationExtenderService {
                     payloadNotification.message = additionalData.getString("message");
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
+
+
+
                     AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
 
 //                    if (orderStatus.status == OrderPlacedEnum.READY_FOR_PAYMENT.getValue()) {

@@ -158,13 +158,21 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                                         @Override
                                         public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
                                             if (response.isSuccessful()) {
-                                                if (response.body().status) {
 
-                                                } else {
+                                                try {
+                                                    if (response.body().status) {
+
+                                                    } else {
 //                                             AppUtils.showSnackBar(ge(),AppUtils.getErrorMessage(getContext(),2));
-                                                    Toast.makeText(FrameActivity.this, "Error Occur", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(FrameActivity.this, "Error Occur", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (Exception ex) {
+
+                                                    Toast.makeText(FrameActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+
                                                 }
                                             }
+
                                         }
 
                                         @Override

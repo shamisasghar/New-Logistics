@@ -104,14 +104,15 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("TAAAG",""+response.body().response);
                 progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
-                    if (response.body().status) {
+                    try {
+                        if (response.body().status) {
 
-                        OneSignal.sendTag("email", response.body().response.getEmail());
+                            OneSignal.sendTag("email", response.body().response.getEmail());
 //                         Toast.makeText(LoginActivity.this, response.body().response.getToken(), Toast.LENGTH_SHORT).show();
-                        LoginUtils.saveUserToken(LoginActivity.this, response.body().response.getToken(), Integer.toString(response.body().response.getAssociatedEntity()));
-                        LoginUtils.userLoggedIn(LoginActivity.this);
-                        Log.d("TAAAG",""+LoginUtils.getUserToken(getApplicationContext()));
-                        getUserAssociatedEntity = response.body().response.getAssociatedEntity().toString();
+                            LoginUtils.saveUserToken(LoginActivity.this, response.body().response.getToken(), Integer.toString(response.body().response.getAssociatedEntity()));
+                            LoginUtils.userLoggedIn(LoginActivity.this);
+                            Log.d("TAAAG", "" + LoginUtils.getUserToken(getApplicationContext()));
+                            getUserAssociatedEntity = response.body().response.getAssociatedEntity().toString();
 //                    ApiInterface.retrofit.getprofile(Integer.parseInt(getUserAssociatedEntity)).enqueue(new Callback<WebAPIResponse<Profile>>() {
 //                        @Override
 //                        public void onResponse(Call<WebAPIResponse<Profile>> call, Response<WebAPIResponse<Profile>> response) {
@@ -121,15 +122,15 @@ public class LoginActivity extends AppCompatActivity {
 //                                url = response.body().response.getPhoto();
 //                                driver_name = response.body().response.getName();
 //                                driver_id = Integer.toString(response.body().response.getId());
-                        email = response.body().response.getEmail();
-                        editor = pref.edit();
-                        editor.putString("Email", email);
+                            email = response.body().response.getEmail();
+                            editor = pref.edit();
+                            editor.putString("Email", email);
 //                                editor.putString("Url", url);
 //                                editor.putString("Name", driver_name);
 //                                editor.putString("Id", driver_id);
-                        editor.commit();
+                            editor.commit();
 
-                        //      Glide.with(getApplicationContext()).load(url).into(img_profile);
+                            //      Glide.with(getApplicationContext()).load(url).into(img_profile);
 //                            }
 //                        }
 
@@ -139,10 +140,25 @@ public class LoginActivity extends AppCompatActivity {
 //                    });
 
 
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        finish();
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        progressBar.setVisibility(View.GONE);
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Establish Network Connection!", Snackbar.LENGTH_LONG);
+                        View view = snackbar.getView();
+                        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                        view.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.colorPrimary));
+                        tv.setTextColor(ContextCompat.getColor(getApplication(), R.color.colorDialogToolbarText));
+                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                        snackbar.show();
+                    }
+                    }
+
+
                     else {
                         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Wrong Email & Password", Snackbar.LENGTH_LONG);
                         View view = snackbar.getView();
@@ -152,9 +168,10 @@ public class LoginActivity extends AppCompatActivity {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         snackbar.show();
 
+
                     }
 
-                }
+
 
             }
 

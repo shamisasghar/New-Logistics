@@ -104,12 +104,21 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
                 public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
                     dialog.dismiss();
                     if (response.isSuccessful()) {
-                        if (response.body().status) {
-                            jobInfo_s = response.body().response.job_info;
-                            compltd_job.setText(Integer.toString(jobInfo_s.size()));
-                            //  faild_job.setText(Integer.toString(jobInfo_s.size()));
+                        try {
+                            if (response.body().status) {
+                                jobInfo_s = response.body().response.job_info;
+                                compltd_job.setText(Integer.toString(jobInfo_s.size()));
+                                //  faild_job.setText(Integer.toString(jobInfo_s.size()));
+                            }
                         }
-                    } else {
+                        catch (Exception ex)
+                        {
+
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+
+                        }
+                    }
+                    else {
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                     }
@@ -137,12 +146,21 @@ public class JobFragment extends Fragment implements View.OnClickListener, Toolb
 
                     if (response.isSuccessful()) {
 
-                        if (response.body().status) {
-                            jobInfo_s = response.body().response.job_info;
-                            faild_job.setText(Integer.toString(jobInfo_s.size()));
-                        }
+                        try {
 
-                    } else {
+                            if (response.body().status) {
+                                jobInfo_s = response.body().response.job_info;
+                                faild_job.setText(Integer.toString(jobInfo_s.size()));
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
+                        }
+                    }
+
+                    else {
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                     }
