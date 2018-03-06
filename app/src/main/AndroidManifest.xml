@@ -44,6 +44,9 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDc7u3RNdiwxZqxCWLrd9cDkbNgt5ee9-I" />
+ <!--<meta-data-->
+            <!--android:name="com.google.android.maps.v2.API_KEY"-->
+            <!--android:value="AIzaSyBCDDtg9Jlli0Pb8ahzAURf2RMLwvO9Rts" />-->
 
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"

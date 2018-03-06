@@ -99,7 +99,8 @@ public class JobAssignedFragment  extends Fragment {
                     });
                     mSimpleDialog.show();
 
-                } else {
+                } else
+                    {
                     Intent getintent = getActivity().getIntent();
                     String id = getintent.getStringExtra("jobid");
                     HashMap<String, Object> body = new HashMap<>();

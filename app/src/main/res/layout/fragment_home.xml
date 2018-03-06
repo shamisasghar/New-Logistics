@@ -34,7 +34,7 @@
         <LinearLayout
             android:id="@+id/layout_linear"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
@@ -59,20 +59,20 @@
                     android:id="@+id/layout_nestedview"
                     android:layout_height="match_parent">
 
-                    <android.support.v7.widget.RecyclerView
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="vertical"/>
-
-                    <!--<iammert.com.expandablelib.ExpandableLayout-->
-                        <!--android:id="@+id/layout_expandable"-->
-
+                    <!--<android.support.v7.widget.RecyclerView-->
+                        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                        <!--android:id="@+id/recyclerView"-->
                         <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--app:childLayout="@layout/layout_child"-->
-                        <!--app:parentLayout="@layout/layout_parent"/>-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:scrollbars="vertical"/>-->
+
+                    <iammert.com.expandablelib.ExpandableLayout
+                        android:id="@+id/layout_expandable"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:childLayout="@layout/layout_child"
+                        app:parentLayout="@layout/layout_parent"/>
                 </ScrollView>
 
                 <LinearLayout

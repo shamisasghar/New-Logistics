@@ -170,14 +170,14 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         info_img = (ImageView) view.findViewById(R.id.info);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
         context = getContext();
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        final List<ItemModel> data = new ArrayList<>();
-        data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
-        data.add(new ItemModel(false,"Driver Time", JobActualstart, "", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
-        recyclerView.setAdapter(new ExpandableAdapter(data));
+//        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+//
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        final List<ItemModel> data = new ArrayList<>();
+//        data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+//        data.add(new ItemModel(false,"Driver Time", JobActualstart, "", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+//        recyclerView.setAdapter(new ExpandableAdapter(data));
 
 
         if (!ActiveJobUtils.isJobResumed(getContext())) {
@@ -204,7 +204,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             e.printStackTrace();
         }
         mMapView.getMapAsync(this);
-//        Expandable();
+       Expandable();
         map();
 //        info_img.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -268,7 +268,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                       if (response.isSuccessful()) {
                           if (response.body().status)
                           {
-
 
                           }
                    }
@@ -576,78 +575,78 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-//    public void Expandable() {
-//        ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
-//
-//        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
-//            @Override
-//            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
-//                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
-//                if (isExpanded) {
-//
-//                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
-//                } else
-//                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
-//            }
-//
-//                @Override
-//            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
-//                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
-//                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
-//            }
-//        });
-//
-//        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
-//
-//            @Override
-//            public void onExpanded(int i, Object o, View view) {
-//                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
-//            }
-//        });
-//        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
-//
-//            @Override
-//            public void onCollapsed(int i, Object o, View view) {
-//                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
-//
-//            }
-//        });
-//
-//
-//
-//        Jobstart = pref.getString("Startjob", "");
-//        Jobend = pref.getString("Startend", "");
-//        JobActualstart = pref.getString("drivertime", "");
-//        JobActualend = driverendtime;
-//
-//        sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend, 2));
-//        sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend, 1));
-//
-//    }
+    public void Expandable() {
+        ExpandableLayout sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
-//    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime, int value) {
-//        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
-//        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
-//        if (value == 1) {
-//            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-//            {
-//                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-//                section.parent = phoneCategory;
-//                section.children.addAll(list);
-//
-//            }
-//        } else {
-//            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-//            {
-//                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-//                list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
-//                section.parent = phoneCategory;
-//                section.children.addAll(list);
-//
-//            }
-//        }
-//        return section;
-//    }
+        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
+            @Override
+            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
+                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
+                if (isExpanded) {
+
+                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+                } else
+                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+            }
+
+                @Override
+            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
+                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
+                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
+            }
+        });
+
+        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
+
+            @Override
+            public void onExpanded(int i, Object o, View view) {
+                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+            }
+        });
+        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
+
+            @Override
+            public void onCollapsed(int i, Object o, View view) {
+                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+
+            }
+        });
+
+
+
+        Jobstart = pref.getString("Startjob", "");
+        Jobend = pref.getString("Startend", "");
+        JobActualstart = pref.getString("drivertime", "");
+        JobActualend = driverendtime;
+
+        sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend, 2));
+        sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend, 1));
+
+    }
+
+    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime, int value) {
+        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
+        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
+        if (value == 1) {
+            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+            {
+                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+                section.parent = phoneCategory;
+                section.children.addAll(list);
+
+            }
+        } else {
+            List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+            {
+                list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+                list.add(new ExpandableSubCategoryChild("End Time:", EndTime));
+                section.parent = phoneCategory;
+                section.children.addAll(list);
+
+            }
+        }
+        return section;
+    }
 
     @Override
     public void onResume() {

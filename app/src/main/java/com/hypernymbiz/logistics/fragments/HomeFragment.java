@@ -45,6 +45,8 @@ import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.adapter.ExpandableAdapter;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.LoadingDialog;
+import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
+import com.hypernymbiz.logistics.models.ExpandableSubCategoryChild;
 import com.hypernymbiz.logistics.models.ItemModel;
 import com.hypernymbiz.logistics.models.JobCount;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
@@ -58,7 +60,9 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import iammert.com.expandablelib.ExpandCollapseListener;
 import iammert.com.expandablelib.ExpandableLayout;
+import iammert.com.expandablelib.Section;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -152,16 +156,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //            }
 //        });
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        final List<ItemModel> data = new ArrayList<>();
-        data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
-//        data.add(new ItemModel("Driver Time", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
-        recyclerView.setAdapter(new ExpandableAdapter(data));
+//        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        final List<ItemModel> data = new ArrayList<>();
+//        data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+////        data.add(new ItemModel("Driver Time", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+//        recyclerView.setAdapter(new ExpandableAdapter(data));
 
 
-//        sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
+        sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
 
         dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
@@ -240,28 +244,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         }
         mMapView.getMapAsync(this);
 
-//        sectionLinearLayout.animate();
-//        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
-//            @Override
-//            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
-//                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
-//
-//                if (isExpanded) {
-//
-//                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
-//                } else
-//                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
-//
-//
-//            }
-//
-//            @Override
-//            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
-//                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
-//                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
-//
-//            }
-//        });
+        sectionLinearLayout.animate();
+        sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
+            @Override
+            public void renderParent(View view, ExpandableCategoryParent model, boolean isExpanded, int parentPosition) {
+                ((TextView) view.findViewById(R.id.tvParent)).setText(model.name);
+
+                if (isExpanded) {
+
+                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+                } else
+                    view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+
+
+            }
+
+            @Override
+            public void renderChild(View view, ExpandableSubCategoryChild model, int parentPosition, int childPosition) {
+                ((TextView) view.findViewById(R.id.label)).setText(model.getName());
+                ((TextView) view.findViewById(R.id.tvChild)).setText(model.getTime());
+
+            }
+        });
 
         return view;
 
@@ -273,21 +277,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-//        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
-//
-//            @Override
-//            public void onExpanded(int i, Object o, View view) {
-//                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
-//            }
-//        });
-//        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
-//
-//            @Override
-//            public void onCollapsed(int i, Object o, View view) {
-//                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
-//
-//            }
-//        });
+        sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
+
+            @Override
+            public void onExpanded(int i, Object o, View view) {
+                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.down_arrow);
+            }
+        });
+        sectionLinearLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<Object>() {
+
+            @Override
+            public void onCollapsed(int i, Object o, View view) {
+                view.findViewById(R.id.arrow).setBackgroundResource(R.drawable.ic_up);
+
+            }
+        });
 
 
         //    mHolder.button.setOnClickListener(this);
@@ -323,19 +327,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         }
     }
 
-//    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime) {
-//        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
-//        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
-//        List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
-//        {
-//            list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
-//            list.add(new ExpandableSubCategoryChild("End Time: ", EndTime));
-//            section.parent = phoneCategory;
-//            section.children.addAll(list);
-//
-//        }
-//        return section;
-//    }
+    public Section<ExpandableCategoryParent, ExpandableSubCategoryChild> getsection(String ParentTitle, String StartTime, String EndTime) {
+        Section<ExpandableCategoryParent, ExpandableSubCategoryChild> section = new Section<>();
+        ExpandableCategoryParent phoneCategory = new ExpandableCategoryParent(ParentTitle);
+        List<ExpandableSubCategoryChild> list = new ArrayList<ExpandableSubCategoryChild>();
+        {
+            list.add(new ExpandableSubCategoryChild("Start Time:", StartTime));
+            list.add(new ExpandableSubCategoryChild("End Time: ", EndTime));
+            section.parent = phoneCategory;
+            section.children.addAll(list);
+
+        }
+        return section;
+    }
 
     @Override
     public void onResume() {
@@ -391,15 +395,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         } else {
             if (status == true) {
 
-                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                final List<ItemModel> data = new ArrayList<>();
-                data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
-                data.add(new ItemModel(false,"Driver Time", JobActualstart, "", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
-                recyclerView.setAdapter(new ExpandableAdapter(data));
+//                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
+//                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//                final List<ItemModel> data = new ArrayList<>();
+//                data.add(new ItemModel(true,"Assigned Time", Jobstart, Jobend, R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+//                data.add(new ItemModel(false,"Driver Time", JobActualstart, "", R.color.colorwhite, R.color.material_grey_300, Utils.createInterpolator(Utils.BOUNCE_INTERPOLATOR)));
+//                recyclerView.setAdapter(new ExpandableAdapter(data));
 
-//                sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend));
-//                sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend));
+                sectionLinearLayout.addSection(getsection("Assigned Time ", Jobstart, Jobend));
+                sectionLinearLayout.addSection(getsection("Driver Time ", JobActualstart, JobActualend));
                 status = false;
             }
             nestedScrollView.setVisibility(View.VISIBLE);

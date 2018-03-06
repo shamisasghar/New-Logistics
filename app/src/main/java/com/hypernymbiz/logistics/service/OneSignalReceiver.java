@@ -2,21 +2,35 @@ package com.hypernymbiz.logistics.service;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.HomeActivity;
+import com.hypernymbiz.logistics.R;
+import com.hypernymbiz.logistics.api.ApiInterface;
+import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.fragments.JobAssignedFragment;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
 import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
 import com.hypernymbiz.logistics.models.PayloadNotification;
+import com.hypernymbiz.logistics.models.StartJob;
+import com.hypernymbiz.logistics.models.WebAPIResponse;
+import com.hypernymbiz.logistics.utils.ActivityUtils;
 import com.hypernymbiz.logistics.utils.AppUtils;
 import com.hypernymbiz.logistics.utils.Constants;
 import com.hypernymbiz.logistics.utils.GsonUtils;
+import com.hypernymbiz.logistics.utils.LoginUtils;
 import com.onesignal.NotificationExtenderService;
 import com.onesignal.OSNotificationReceivedResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Metis on 25-Jan-18.
@@ -24,9 +38,13 @@ import org.json.JSONObject;
 
 public class OneSignalReceiver extends NotificationExtenderService {
     PayloadNotification payloadNotification;
+    private SimpleDialog mSimpleDialog;
+    String getUserAssociatedEntity;
+
 
     @Override
     protected boolean onNotificationProcessing(OSNotificationReceivedResult receivedResult) {
+        getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(this);
 
 
         // Read properties from result.
@@ -41,10 +59,11 @@ public class OneSignalReceiver extends NotificationExtenderService {
                     payloadNotification.message = additionalData.getString("message");
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
-                    // AppUtils.makeNotification(this, JobDetailActivity.class, null, bundle, payloadNotification.title, false, payloadNotification.job_id);
-                    //ActivityUtils.startActivity(this, FrameActivity.class,JobDetailFragment.class.getName(), bundle);
-                    AppUtils.makeNotification(this, null, null, bundle, payloadNotification.title, false, payloadNotification.job_id);
-
+                    if (payloadNotification.title.equals("You have been assigned a job")) {
+                        AppUtils.makeNotification(getApplication(), FrameActivity.class, JobAssignedFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
+                    } else {
+                        AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

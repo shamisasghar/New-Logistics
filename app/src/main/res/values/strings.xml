@@ -20,6 +20,7 @@
     <string name="title_reset_password">Reset Password</string>
     <string name="title_sign_up">Sign Up</string>
     <string name="title_internet">Internet Not Available</string>
+    <string name="title_job_dialog">Job Assigned</string>
     <string name="title_location">Location Not Available</string>
     <string name="title_order_tracking">Order Tracking</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -28,6 +29,8 @@
     <string name="msg_failed_job">Do you want to Cancel this job?\n Note: Mark as Failed Job</string>
     <!-- Messages -->
     <string name="msg_internet">Please enable your wifi or mobile data from settings</string>
+    <string name="msg_job_assigned">You have been assigned a job</string>
+
     <string name="msg_location">Please enable your location from settings</string>
     <string name="msg_user_not_log_in">Please Login</string>
     <string name="msg_logout">Are you sure you want to logout?</string>

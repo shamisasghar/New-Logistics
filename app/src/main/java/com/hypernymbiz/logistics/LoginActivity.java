@@ -100,8 +100,8 @@ public class LoginActivity extends AppCompatActivity {
         ApiInterface.retrofit.loginUser(body).enqueue(new Callback<WebAPIResponse<User>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<User>> call, Response<WebAPIResponse<User>> response) {
-                Log.d("TAAAG",""+response.body().status);
-                Log.d("TAAAG",""+response.body().response);
+//                Log.d("TAAAG",""+response.body().status);
+//                Log.d("TAAAG",""+response.body().response);
                 progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     try {

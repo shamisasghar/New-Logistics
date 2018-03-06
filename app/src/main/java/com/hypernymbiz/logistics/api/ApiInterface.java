@@ -46,11 +46,11 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
 
-   // String HTTP = "http://192.168.2.120:8000/";
+//    String HTTP = "http://192.168.2.120:8000/";
     String HTTP = "http://159.65.7.152/";
   // String HTTP = "http://16726bff.ngrok.io/";
 
-    String HTTPP = "http://192.168.2.185:8000/";
+   String HTTPP = "http://192.168.2.185:8000/";
 
     Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(ApiInterface.HTTP)

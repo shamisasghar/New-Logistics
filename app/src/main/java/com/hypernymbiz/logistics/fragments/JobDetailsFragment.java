@@ -164,7 +164,10 @@ public class JobDetailsFragment extends Fragment {
                                     ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
                                     getActivity().finish();
                                 } else {
-                                    intent.putExtra("jobid", "" + payloadNotification.job_id);
+//                                    intent.putExtra("jobid", "" + payloadNotification.job_id);
+                                    editor = pref.edit();
+                                    editor.putString("jobid", ""+payloadNotification.job_id);
+                                    editor.commit();
                                     Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
                                     ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
                                     getActivity().finish();
@@ -191,33 +194,24 @@ public class JobDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (!AppUtils.isInternetAvailable(getActivity())) {
-                    mSimpleDialog = new SimpleDialog(getContext(), getString(R.string.title_internet), getString(R.string.msg_internet),
-                            getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            switch (view.getId()) {
-                                case R.id.button_positive:
-                                    mSimpleDialog.dismiss();
-                                    ActivityUtils.startWifiSettings(getContext());
-                                    break;
-                                case R.id.button_negative:
-                                    mSimpleDialog.dismiss();
-                                    break;
-                            }
-                        }
-                    });
-                    mSimpleDialog.show();
 
-                } else {
                     Intent getintent = getActivity().getIntent();
                     String id = getintent.getStringExtra("jobid");
                     HashMap<String, Object> body = new HashMap<>();
                     if (id != null) {
                         body.put("job_id", Integer.parseInt(id));
                         body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                        body.put("flag", 54);
+                        body.put("flag",54);
                     }
+                    else
+                    {
+                        body.put("job_id", payloadNotification.job_id);
+                        body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
+                        body.put("flag",54);
+                    }
+
+
+
                     ApiInterface.retrofit.canceljob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                         @Override
                         public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
@@ -249,7 +243,6 @@ public class JobDetailsFragment extends Fragment {
                     frameActivity.onBackPressed();
 
                 }
-            }
         });
 
         Bundle extras = getActivity().getIntent().getExtras();
@@ -273,7 +266,7 @@ public class JobDetailsFragment extends Fragment {
                                     jbend.setText(AppUtils.getFormattedDate(response.body().response.getJobEndDatetime()) + " " + AppUtils.getTime(response.body().response.getJobEndDatetime()));
                                     decrptin.setText(response.body().response.getDescription());
                                     String status = response.body().response.getJobStatus();
-                                    if (status.equals("Pending")) {
+                                    if (status.equals("Pending")||status.equals("Accepted")) {
                                         btn_start.setVisibility(View.VISIBLE);
                                         btn_cancel.setVisibility(View.VISIBLE);
                                     }
@@ -333,7 +326,7 @@ public class JobDetailsFragment extends Fragment {
                                     decrptin.setText(response.body().response.getDescription());
                                     String status = response.body().response.getJobStatus();
                                     if (status != null) {
-                                        if (status.equals("Pending")) {
+                                        if (status.equals("Pending")||status.equals("Accepted")) {
                                             btn_start.setVisibility(View.VISIBLE);
                                             btn_cancel.setVisibility(View.VISIBLE);
                                         }
