@@ -62,27 +62,22 @@ public class CompleteJobFragment extends Fragment {
                 @Override
                 public void onResponse(Call<WebAPIResponse<Respone_Completed_job>> call, Response<WebAPIResponse<Respone_Completed_job>> response) {
                     if (response.isSuccessful()) {
-                        try
-                        {
-                        if (response.body().status) {
-
-                            // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
-                            jobInfo_s = response.body().response.job_info;
-                            completeJobAdapter = new CompleteJobAdapter(jobInfo_s);
-                            recyclerView.setAdapter(completeJobAdapter);
+                        try {
+                            if (response.body().status) {
+                                // Toast.makeText(getContext(), "List Detail"+Integer.toString(response.body().response.job_info.size()), Toast.LENGTH_SHORT).show();
+                                jobInfo_s = response.body().response.job_info;
+                                completeJobAdapter = new CompleteJobAdapter(jobInfo_s);
+                                recyclerView.setAdapter(completeJobAdapter);
+                            }
+                        } catch (Exception ex) {
+                            AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
-
-                    }
-                    }
-                        else {
+                    } else {
 
                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                     }
                 }
+
                 @Override
                 public void onFailure(Call<WebAPIResponse<Respone_Completed_job>> call, Throwable t) {
 

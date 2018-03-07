@@ -171,7 +171,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/btn_reject"
-                android:background="@drawable/ripple_effect"
+                android:background="@drawable/border_orange"
                 android:text="Accept"
                 android:textColor="@color/colorAccent"/>
             <Button
@@ -183,7 +183,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/btn_accept"
-                android:background="@drawable/ripple_effect"
+                android:background="@drawable/border_orange"
                 android:text="Reject"
                 android:textColor="@color/colorAccent"/>
         </android.support.constraint.ConstraintLayout>

@@ -247,14 +247,15 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 //                                snackbar.show();
                                 }
                             });
-                        } else {
+                        }
+                        else {
 
                             AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                         }
 
                     }
-                }, 3000);
+                }, 100);
             }
         });
 

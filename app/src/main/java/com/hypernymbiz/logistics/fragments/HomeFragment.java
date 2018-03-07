@@ -12,6 +12,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
@@ -33,13 +35,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.aakira.expandablelayout.Utils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.adapter.ExpandableAdapter;
@@ -73,13 +84,15 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by shamis on 10/12/2017.
  */
 
-public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
+public class HomeFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback , GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private ViewHolder mHolder;
     private Toolbar mToolbar;
     private Context mContext;
     SharedPreferences pref;
     CameraUpdate update;
+    Marker marker;
     Location l;
+    GoogleApiClient googleApiClient;
 
     private GoogleMap googleMap;
     LocationManager locationManager;
@@ -91,10 +104,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     LinearLayout linearLayout;
     ScrollView nestedScrollView;
     ExpandableLayout sectionLinearLayout;
+    SupportMapFragment supportMapFragment;
     boolean status = true;
     LoadingDialog dialog;
     RecyclerView recyclerView;
     CardView cardView;
+    LocationRequest locationRequest;
 
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, HomeFragment.class));
@@ -134,10 +149,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
-        mMapView = (MapView) view.findViewById(R.id.mapView);
         linearLayout = (LinearLayout) view.findViewById(R.id.linear_error);
         nestedScrollView = (ScrollView) view.findViewById(R.id.layout_nestedview);
         cardView=(CardView)view.findViewById(R.id.cardviewhome_map);
+
 
         Runnable runnable=new Runnable() {
             @Override
@@ -192,57 +207,57 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 //      }
 
 
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+//        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+//        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(getActivity(), new String[]{
+//                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+//                    android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+//
+//        } else {
+//            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+//
+//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
+//                    @Override
+//                    public void onLocationChanged(Location location) {
+//
+////                        Log.d("TAAAG", "on location change");
+//                        l = (Location) location;
+//                        pos = new LatLng(l.getLatitude(), l.getLongitude());
+////                        update = CameraUpdateFactory.newLatLngZoom(pos, 15.4f);
+////                        googleMap.animateCamera(update);
+//                        // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+//                        // googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
+////                        googleMap.setTrafficEnabled(true);
+//
+//                    }
+//
+//                    @Override
+//                    public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onProviderEnabled(String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onProviderDisabled(String s) {
+//
+//                    }
+//                });
+//
+//            }
+//        }
 
-        } else {
-            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-
-//                        Log.d("TAAAG", "on location change");
-                        l = (Location) location;
-                        pos = new LatLng(l.getLatitude(), l.getLongitude());
-//                        update = CameraUpdateFactory.newLatLngZoom(pos, 15.4f);
-//                        googleMap.animateCamera(update);
-                        // googleMap.addMarker(new MarkerOptions().position(pos).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-                        // googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 15.4f));
-//                        googleMap.setTrafficEnabled(true);
-
-                    }
-
-                    @Override
-                    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String s) {
-
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String s) {
-
-                    }
-                });
-
-            }
-        }
-
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mMapView.getMapAsync(this);
+//        mMapView.onCreate(savedInstanceState);
+//        mMapView.onResume();
+//        try {
+//            MapsInitializer.initialize(getActivity().getApplicationContext());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        mMapView.getMapAsync(this);
 
         sectionLinearLayout.animate();
         sectionLinearLayout.setRenderer(new ExpandableLayout.Renderer<ExpandableCategoryParent, ExpandableSubCategoryChild>() {
@@ -277,6 +292,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
+        initMap();
+
         sectionLinearLayout.setExpandListener(new ExpandCollapseListener.ExpandListener<Object>() {
 
             @Override
@@ -307,13 +325,61 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        MapsInitializer.initialize(getContext());
         this.googleMap = googleMap;
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).build();
+        googleApiClient.connect();
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
+//        this.googleMap.setMyLocationEnabled(true);
+//        MapStyleOptions mapStyleOptions=MapStyleOptions.loadRawResourceStyle(getActivity(),R.raw.map);
+//        googleMap.setMapStyle(mapStyleOptions);
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(1000);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
             return;
         }
-        this.googleMap.setMyLocationEnabled(true);
-        MapStyleOptions mapStyleOptions=MapStyleOptions.loadRawResourceStyle(getActivity(),R.raw.map);
-        googleMap.setMapStyle(mapStyleOptions);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,locationRequest,this);
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        final MarkerOptions option;
+        if(marker!=null)
+        {
+
+            marker.remove();
+        }
+        LatLng ll=new LatLng(location.getLatitude(),location.getLongitude());
+        CameraUpdate update= CameraUpdateFactory.newLatLngZoom(ll,15.8f);
+        googleMap.animateCamera(update);
+        option =new MarkerOptions().title("Driver Location").position(new LatLng(location.getLatitude(),location.getLongitude())).icon((BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+//        option=new MarkerOptions().position(new LatLng(location.getLatitude(),location.getLongitude())).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
+
+        marker= googleMap.addMarker(option);
 
     }
 
@@ -343,14 +409,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
     @Override
     public void onResume() {
-        mMapView.onResume();
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && googleMap != null) {
-
-            googleMap.setMyLocationEnabled(true);
-            googleMap.setTrafficEnabled(true);
-            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        }
+        supportMapFragment.onResume();
+//        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+//                && googleMap != null) {
+//
+//            googleMap.setMyLocationEnabled(true);
+//            googleMap.setTrafficEnabled(true);
+//            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+//        }
 
         ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
             @Override
@@ -413,16 +479,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         super.onResume();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        mMapView.onSaveInstanceState(outState);
-        super.onSaveInstanceState(outState);
-    }
+    private void initMap()
+    {
+        supportMapFragment.getMapAsync(this);
 
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
     }
 
 

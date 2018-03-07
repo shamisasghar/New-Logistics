@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences pref;
 
     SharedPreferences.Editor editor;
-    String email, driver_name, driver_id, url,getUserAssociatedEntity;
+    String email, driver_name, driver_id, url, getUserAssociatedEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         HashMap<String, Object> body = new HashMap<>();
         body.put("email", username);
         body.put("password", password);
-       // body.put("push_key", ScheduleUtils.getUserOneSignalId(this));
+        // body.put("push_key", ScheduleUtils.getUserOneSignalId(this));
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(this);
         ApiInterface.retrofit.loginUser(body).enqueue(new Callback<WebAPIResponse<User>>() {
             @Override
@@ -106,7 +106,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     try {
                         if (response.body().status) {
-
                             OneSignal.sendTag("email", response.body().response.getEmail());
 //                         Toast.makeText(LoginActivity.this, response.body().response.getToken(), Toast.LENGTH_SHORT).show();
                             LoginUtils.saveUserToken(LoginActivity.this, response.body().response.getToken(), Integer.toString(response.body().response.getAssociatedEntity()));
@@ -143,10 +142,19 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
+                        } else {
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Wrong email & password", Snackbar.LENGTH_LONG);
+                            View view = snackbar.getView();
+                            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                            view.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.colorPrimary));
+                            tv.setTextColor(ContextCompat.getColor(getApplication(), R.color.colorDialogToolbarText));
+                            tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            snackbar.show();
                         }
+
+
                     }
-                    catch (Exception ex)
-                    {
+                    catch (Exception ex) {
                         progressBar.setVisibility(View.GONE);
                         Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Establish Network Connection!", Snackbar.LENGTH_LONG);
                         View view = snackbar.getView();
@@ -156,21 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         snackbar.show();
                     }
-                    }
-
-
-                    else {
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Wrong Email & Password", Snackbar.LENGTH_LONG);
-                        View view = snackbar.getView();
-                        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                        view.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.colorPrimary));
-                        tv.setTextColor(ContextCompat.getColor(getApplication(), R.color.colorDialogToolbarText));
-                        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        snackbar.show();
-
-
-                    }
-
+                }
 
 
             }
@@ -189,6 +183,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
     private boolean validateName() {
         if (edit_username.getText().toString().trim().isEmpty()) {
             inputLayout_username.setError(getString(R.string.err_msg_name));
