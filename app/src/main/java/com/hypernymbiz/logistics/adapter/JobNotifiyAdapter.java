@@ -14,7 +14,10 @@ import android.widget.Toast;
 
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
+import com.hypernymbiz.logistics.fragments.JobAssignedFragment;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
+import com.hypernymbiz.logistics.fragments.MaintenanceAssignedFragment;
+import com.hypernymbiz.logistics.fragments.MaintenanceDetailFragment;
 import com.hypernymbiz.logistics.models.JobInfo;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.utils.Constants;
@@ -47,25 +50,43 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
 
         holder.job.setText(jobInfo_s.get(position).getJobName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            int pos=holder.getAdapterPosition();
-            Integer id= jobInfo_s.get(position).getJobId();
 
 
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(context, FrameActivity.class);
-                Toast.makeText(context, ""+id.toString(), Toast.LENGTH_SHORT).show();
-                intent.putExtra("jobid",Integer.toString(id));
-                intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                int pos = holder.getAdapterPosition();
+                Integer id = jobInfo_s.get(position).getJobId();
+
+
+                @Override
+                public void onClick(View v) {
+
+
+               Toast.makeText(context, ""+id.toString(), Toast.LENGTH_SHORT).show();
+                    if(jobInfo_s.get(position).getJobType()==9)
+                    {
+                        Intent intent = new Intent(context, FrameActivity.class);
+                        intent.putExtra("jobid", Integer.toString(id));
+                        intent.putExtra(Constants.FRAGMENT_NAME, MaintenanceDetailFragment.class.getName());
+                        context.startActivity(intent);
+
+                    }
+                    else {
+                        Intent intent = new Intent(context, FrameActivity.class);
+                        intent.putExtra("jobid", Integer.toString(id));
+                        intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
 //                    intent.putExtra(Constants.DATA, bundle);
-                context.startActivity(intent);
+                        context.startActivity(intent);
+                    }
+                }
 
-            }
+            });
 
-        });
-    }
+
+
+        }
+
 
 
     @Override

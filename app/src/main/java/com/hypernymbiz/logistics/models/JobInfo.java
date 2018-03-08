@@ -10,6 +10,9 @@ public class JobInfo {
     @SerializedName("assigned_device")
     @Expose
     private String assignedDevice;
+    @SerializedName("job_type")
+    @Expose
+    private Integer jobtype;
     @SerializedName("assigned_device_id")
     @Expose
     private Integer assignedDeviceId;
@@ -50,6 +53,14 @@ public class JobInfo {
 
     public void setAssignedDevice(String assignedDevice) {
         this.assignedDevice = assignedDevice;
+    }
+
+    public Integer getJobType() {
+        return jobtype;
+    }
+
+    public void setJobtype(Integer jobType) {
+        this.jobtype = jobType;
     }
 
     public Integer getAssignedDeviceId() {

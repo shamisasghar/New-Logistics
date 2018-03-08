@@ -28,6 +28,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import android.widget.ScrollView;
@@ -106,9 +108,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     ExpandableLayout sectionLinearLayout;
     SupportMapFragment supportMapFragment;
     boolean status = true;
+    boolean check = true;
+    ImageButton mylocation;
     LoadingDialog dialog;
     RecyclerView recyclerView;
     CardView cardView;
+    LatLng ll;
     LocationRequest locationRequest;
 
     public static void startActivity(Context context) {
@@ -151,6 +156,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         pref = getActivity().getSharedPreferences("TAG", MODE_PRIVATE);
         linearLayout = (LinearLayout) view.findViewById(R.id.linear_error);
         nestedScrollView = (ScrollView) view.findViewById(R.id.layout_nestedview);
+        mylocation = (ImageButton) view.findViewById(R.id.img_location);
+
         cardView=(CardView)view.findViewById(R.id.cardviewhome_map);
 
 
@@ -368,14 +375,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     @Override
     public void onLocationChanged(Location location) {
         final MarkerOptions option;
+
         if(marker!=null)
         {
 
             marker.remove();
         }
-        LatLng ll=new LatLng(location.getLatitude(),location.getLongitude());
-        CameraUpdate update= CameraUpdateFactory.newLatLngZoom(ll,15.8f);
-        googleMap.animateCamera(update);
+         ll=new LatLng(location.getLatitude(),location.getLongitude());
+
+        if(check==true) {
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15.8f);
+            googleMap.animateCamera(update);
+            check=false;
+        }
+        mylocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 15.8f);
+                googleMap.animateCamera(update);
+            }
+        });
+
+
+
         option =new MarkerOptions().title("Driver Location").position(new LatLng(location.getLatitude(),location.getLongitude())).icon((BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 //        option=new MarkerOptions().position(new LatLng(location.getLatitude(),location.getLongitude())).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
 
@@ -410,6 +432,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     @Override
     public void onResume() {
         supportMapFragment.onResume();
+        check=true;
+        dialog.dismiss();
 //        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 //                && googleMap != null) {
 //

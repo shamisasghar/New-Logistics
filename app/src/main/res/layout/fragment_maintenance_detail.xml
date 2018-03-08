@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_swipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/linear_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/label_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Description"
+                android:textColorHint="#000000"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear_maintenance_name"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/linear_description"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/label_maintenance_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Maintenance Name :"
+                android:textColorHint="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:id="@+id/txt_maintenance_name"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="-"
+                android:textColorHint="#000000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_maintenance_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_maintenance_name"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/label_maintenance_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Maintenance Type  :"
+                android:textColorHint="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:id="@+id/txt_maintenance_type"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="-"
+                android:textColorHint="#000000"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear_assigned_truck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/linear_maintenance_type"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/label_jobsstarttime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Assigned Truck :"
+                android:textColorHint="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/txt_assigned_truck"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:hint="-"
+                android:textColorHint="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_due_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/linear_assigned_truck"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/label_due_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Due Date/Time :"
+                android:textColorHint="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/txt_due_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="-"
+                android:gravity="center"
+                android:textColorHint="#000000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_maintenance_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_due_date"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/label_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Maintenance Status :"
+                android:textColorHint="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/txt_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="-"
+                android:gravity="center_horizontal"
+                android:textColorHint="#000000"/>
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp">
+
+            <Button xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/btn_complete"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:background="@drawable/border_orange"
+                android:text="Complete"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <!--<Button-->
+        <!--android:id="@+id/btn_canceljob"-->
+        <!--android:layout_width="130dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:background="@drawable/border_orange"-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/btn_startjob"-->
+
+        <!--android:text="Cancel Job"-->
+        <!--android:textColor="@color/colorAccent"/>-->
+        </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

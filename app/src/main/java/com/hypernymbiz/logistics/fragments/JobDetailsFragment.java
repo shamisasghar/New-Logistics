@@ -3,6 +3,7 @@ package com.hypernymbiz.logistics.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
 import com.hypernymbiz.logistics.api.ApiInterface;
@@ -47,7 +49,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by Metis on 21-Jan-18.
  */
 
-public class JobDetailsFragment extends Fragment {
+public class JobDetailsFragment extends Fragment implements  com.google.android.gms.location.LocationListener {
     View view;
     Context fContext;
     Button btn_start, btn_cancel;
@@ -60,6 +62,8 @@ public class JobDetailsFragment extends Fragment {
     LoadingDialog dialog;
     Calendar c;
     private SimpleDialog mSimpleDialog;
+
+    Double lat,longi;
 
     @Override
     public void onAttach(Context context) {
@@ -97,8 +101,9 @@ public class JobDetailsFragment extends Fragment {
         actual_start_time = df.format(c.getTime());
 
 
+
+
 //        Log.d("TAAg",actual_start_time);
-//        Toast.makeText(getContext(), ""+actual_start_time, Toast.LENGTH_SHORT).show();
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -375,6 +380,16 @@ public class JobDetailsFragment extends Fragment {
             }
         }
         return view;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+
+        lat=location.getLatitude();
+        longi=location.getLongitude();
+        Toast.makeText(getContext(), ""+Double.toString(lat+longi), Toast.LENGTH_SHORT).show();
+
     }
 }
 

@@ -7,6 +7,7 @@ import com.hypernymbiz.logistics.models.JobCountPatch;
 import com.hypernymbiz.logistics.models.JobDetail;
 import com.hypernymbiz.logistics.models.JobEnd;
 import com.hypernymbiz.logistics.models.JobInfo;
+import com.hypernymbiz.logistics.models.Maintenance;
 import com.hypernymbiz.logistics.models.Profile;
 import com.hypernymbiz.logistics.models.Respone_Completed_job;
 import com.hypernymbiz.logistics.models.StartJob;
@@ -83,6 +84,8 @@ public interface ApiInterface {
 
     @GET("iof/get_app_jobs/")
     Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);
+    @GET("iof/get_app_maintenances/")
+    Call<WebAPIResponse<Maintenance>> getmaintenancedata(@Query("driver_id") int driver_id, @Query("m_id") int maintenance_id);
 
     @PUT("iof/driver_job_update")
     Call<WebAPIResponse<StartJob>> startjob(@Body HashMap<String, Object> body);

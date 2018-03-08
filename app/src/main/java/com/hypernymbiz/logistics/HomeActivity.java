@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.fragments.HomeFragment;
 import com.hypernymbiz.logistics.fragments.JobFragment;
+import com.hypernymbiz.logistics.fragments.MaintenanceFragment;
 import com.hypernymbiz.logistics.fragments.Profile_Fragment;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.toolbox.ToolbarListener;
@@ -275,6 +276,29 @@ public class HomeActivity extends AppCompatActivity implements ToolbarListener, 
             }
             addFragment(new Profile_Fragment());
         }
+        else if (id == R.id.maintenance) {
+            if (!AppUtils.isInternetAvailable(this)) {
+                mSimpleDialog = new SimpleDialog(this, getString(R.string.title_internet), getString(R.string.msg_internet),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mSimpleDialog.dismiss();
+                                ActivityUtils.startWifiSettings(HomeActivity.this);
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
+                return true;
+            }
+            addFragment(new MaintenanceFragment());
+        }
+
 
 
 

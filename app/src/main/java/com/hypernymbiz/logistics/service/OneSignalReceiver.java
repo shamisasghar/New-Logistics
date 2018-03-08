@@ -12,6 +12,7 @@ import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.fragments.JobAssignedFragment;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
 import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
+import com.hypernymbiz.logistics.fragments.MaintenanceAssignedFragment;
 import com.hypernymbiz.logistics.models.PayloadNotification;
 import com.hypernymbiz.logistics.models.StartJob;
 import com.hypernymbiz.logistics.models.WebAPIResponse;
@@ -61,7 +62,14 @@ public class OneSignalReceiver extends NotificationExtenderService {
                     bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
                     if (payloadNotification.title.equals("You have been assigned a job")) {
                         AppUtils.makeNotification(getApplication(), FrameActivity.class, JobAssignedFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
-                    } else {
+                    }
+                    else if(payloadNotification.title.equals("Upcoming maintenance"))
+                    {
+
+                        AppUtils.makeNotification(getApplication(), FrameActivity.class, MaintenanceAssignedFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
+
+                    }
+                    else {
                         AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
                     }
                 } catch (JSONException e) {
@@ -79,8 +87,14 @@ public class OneSignalReceiver extends NotificationExtenderService {
                     if (payloadNotification.title.equals("You have been assigned a job")) {
 
                         AppUtils.makeNotification(getApplication(), FrameActivity.class, JobAssignedFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
+                    }
+                    else if(payloadNotification.title.equals("Upcoming maintenance"))
+                    {
 
-                    } else {
+                        AppUtils.makeNotification(getApplication(), FrameActivity.class, MaintenanceAssignedFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
+
+                    }
+                    else {
                         AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
                     }
 //                    if (orderStatus.status == OrderPlacedEnum.READY_FOR_PAYMENT.getValue()) {

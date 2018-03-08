@@ -21,6 +21,8 @@ import com.hypernymbiz.logistics.fragments.HomeFragment;
 import com.hypernymbiz.logistics.fragments.JobAssignedFragment;
 import com.hypernymbiz.logistics.fragments.JobDetailsFragment;
 import com.hypernymbiz.logistics.fragments.JobNotificationFragment;
+import com.hypernymbiz.logistics.fragments.MaintenanceAssignedFragment;
+import com.hypernymbiz.logistics.fragments.MaintenanceDetailFragment;
 import com.hypernymbiz.logistics.models.JobDetail;
 import com.hypernymbiz.logistics.models.JobInfo_;
 import com.hypernymbiz.logistics.models.StartJob;
@@ -210,6 +212,16 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
 
             }
             else if (fragment instanceof JobAssignedFragment) {
+                FrameActivity.this.finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+            else if (fragment instanceof MaintenanceDetailFragment) {
+                FrameActivity.this.finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+            }
+
+            else if (fragment instanceof MaintenanceAssignedFragment) {
                 FrameActivity.this.finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
