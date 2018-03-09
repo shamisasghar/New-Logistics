@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,12 @@ import android.widget.Toast;
 
 import com.github.aakira.expandablelayout.Utils;
 import com.github.capur16.digitspeedviewlib.DigitSpeedView;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -85,7 +92,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by Metis on 01-Feb-18.
  */
 
-public class ActiveJobFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
+public class ActiveJobFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback, com.google.android.gms.location.LocationListener {
     ImageView info_img;
     Dialog summary, info;
     ProSwipeButton swipeButton;
@@ -103,6 +110,15 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     String Jobstart, Jobend, JobActualstart, JobActualend;
     boolean check= true;
     RecyclerView recyclerView;
+    private LocationRequest mLocationRequest;
+
+    private long UPDATE_INTERVAL = 1000;  /* 1 sec */
+    private long FASTEST_INTERVAL = 500; /* 1/2 sec */
+    public static int counter = 0;
+
+    Double lat, longi;
+    LatLng ll;
+
 
     View view;
     Calendar c;
@@ -170,6 +186,8 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         info_img = (ImageView) view.findViewById(R.id.info);
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getContext());
         context = getContext();
+        startLocationUpdates();
+
 //        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 //
 //        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),0));
@@ -192,7 +210,6 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
             Integer driver_id = Integer.parseInt(getUserAssociatedEntity);
             ActiveJobUtils.jobResumed(getContext());
             ActiveJobUtils.saveJobResume(getContext(), new ActiveJobResume(slat, slong, elat, elong, driver_id, jobid, start_job, start_end, driver_start_time));
-
 
         }
 
@@ -257,6 +274,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 body.put("job_id", id);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
+                body.put("end_lat_long",ll);
                 editor = pref.edit();
                 editor.putString("actalend", actual_end_time);
                 editor.putString("driverend",driverendtime);
@@ -478,6 +496,14 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
         return data;
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        ll = new LatLng(location.getLatitude(),location.getLongitude());
+//        longi = location.getLongitude();
+
+        Toast.makeText(getContext(), "" +ll, Toast.LENGTH_SHORT).show();
+    }
+
     private class FetchUrl extends AsyncTask<String, Void, String> {
 
         @Override
@@ -669,6 +695,43 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    protected void startLocationUpdates() {
+
+        // Create the location request to start receiving updates
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        final LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        SettingsClient settingsClient = LocationServices.getSettingsClient(getActivity());
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        LocationServices.getFusedLocationProviderClient(getActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        // do work here
+                        counter++;
+                        if(counter > 1) {
+                            onLocationChanged(locationResult.getLastLocation());
+                            LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
+                        }
+                    }
+                },
+                Looper.myLooper());
     }
 
 

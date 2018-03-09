@@ -39,7 +39,8 @@ public class MaintenanceAssignedFragment extends Fragment {
     SharedPreferences pref;
     LoadingDialog dialog;
     PayloadNotification payloadNotification;
-    TextView main_name,main_type,main_truck,main_time,main_status;
+    TextView main_name, main_type, main_truck, main_time, main_status;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -72,7 +73,7 @@ public class MaintenanceAssignedFragment extends Fragment {
             value = extras.getBundle(Constants.DATA);
             if (value != null) {
                 payloadNotification = GsonUtils.fromJson(value.getString(Constants.PAYLOAD), PayloadNotification.class);
-                ApiInterface.retrofit.getmaintenancedata(Integer.parseInt(getUserAssociatedEntity),payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<Maintenance>>() {
+                ApiInterface.retrofit.getmaintenancedata(Integer.parseInt(getUserAssociatedEntity), payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<Maintenance>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<Maintenance>> call, Response<WebAPIResponse<Maintenance>> response) {
                         dialog.dismiss();
@@ -123,12 +124,7 @@ public class MaintenanceAssignedFragment extends Fragment {
                 });
 
 
-
-
-            }
-
-
-            else {
+            } else {
                 Intent getintent = getActivity().getIntent();
                 String id = getintent.getStringExtra("jobid");
 
@@ -166,7 +162,6 @@ public class MaintenanceAssignedFragment extends Fragment {
                             } catch (Exception ex) {
                                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
-
                             }
                         } else {
 
@@ -182,12 +177,10 @@ public class MaintenanceAssignedFragment extends Fragment {
                     }
                 });
 
-
-
             }
         }
         return view;
     }
-        }
+}
 
 

@@ -173,7 +173,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/btn_canceljob"
 
-            android:text="Start Job"
+            android:text=""
             android:textColor="@color/colorAccent"/>
         <Button
             android:id="@+id/btn_canceljob"
@@ -186,7 +186,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/btn_startjob"
 
-            android:text="Cancel Job"
+            android:text=""
             android:textColor="@color/colorAccent"/>
         </android.support.constraint.ConstraintLayout>
     </RelativeLayout>

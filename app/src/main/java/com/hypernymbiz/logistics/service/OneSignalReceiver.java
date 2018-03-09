@@ -61,7 +61,7 @@ public class OneSignalReceiver extends NotificationExtenderService {
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
                     if (payloadNotification.title.equals("You have been assigned a job")) {
-                        AppUtils.makeNotification(getApplication(), FrameActivity.class, JobAssignedFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
+                        AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
                     }
                     else if(payloadNotification.title.equals("Upcoming maintenance"))
                     {
@@ -86,7 +86,7 @@ public class OneSignalReceiver extends NotificationExtenderService {
 
                     if (payloadNotification.title.equals("You have been assigned a job")) {
 
-                        AppUtils.makeNotification(getApplication(), FrameActivity.class, JobAssignedFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
+                        AppUtils.makeNotification(getApplication(), FrameActivity.class, JobDetailsFragment.class.getName(), bundle, payloadNotification.title, false, payloadNotification.job_id);
                     }
                     else if(payloadNotification.title.equals("Upcoming maintenance"))
                     {
