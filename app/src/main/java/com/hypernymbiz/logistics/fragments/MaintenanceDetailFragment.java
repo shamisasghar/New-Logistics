@@ -66,6 +66,7 @@ public class MaintenanceDetailFragment extends Fragment {
         main_time = (TextView) view.findViewById(R.id.txt_due_date);
         main_status = (TextView) view.findViewById(R.id.txt_status);
         btn_complte = (Button) view.findViewById(R.id.btn_complete);
+        btn_complte.setVisibility(View.INVISIBLE);
 
 
         getUserAssociatedEntity = LoginUtils.getUserAssociatedEntity(getActivity());
@@ -95,8 +96,8 @@ public class MaintenanceDetailFragment extends Fragment {
 
                             String status = response.body().response.getStatus();
                             if (status != null) {
-                                if (status.equals("completed")||status.equals("overdue")) {
-                                    btn_complte.setVisibility(View.INVISIBLE);
+                                if (status.equals("due")) {
+                                    btn_complte.setVisibility(View.VISIBLE);
                                 }
 //                                    else if (status.equals("Failed")) {
 //                                        btn_start.setVisibility(View.GONE);

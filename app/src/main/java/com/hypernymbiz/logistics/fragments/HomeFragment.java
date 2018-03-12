@@ -110,7 +110,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     boolean status = true;
     boolean check = true;
     ImageButton mylocation;
-    LoadingDialog dialog;
+//    LoadingDialog dialog;
     RecyclerView recyclerView;
     CardView cardView;
     LatLng ll;
@@ -190,10 +190,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         sectionLinearLayout = (ExpandableLayout) view.findViewById(R.id.layout_expandable);
 
 
-        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+//        dialog = new LoadingDialog(getActivity(), getString(R.string.msg_loading));
+//        dialog.setCancelable(false);
+//        dialog.setCanceledOnTouchOutside(false);
+//        dialog.show();
 
 //        Jobstart=  pref.getString("jobstart","");
 //        Jobend= pref.getString("jobend","");
@@ -433,7 +433,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
     public void onResume() {
         supportMapFragment.onResume();
         check=true;
-        dialog.dismiss();
+      //  dialog.dismiss();
 //        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 //                && googleMap != null) {
 //
@@ -445,7 +445,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
         ApiInterface.retrofit.getcount().enqueue(new Callback<WebAPIResponse<List<JobCount>>>() {
             @Override
             public void onResponse(Call<WebAPIResponse<List<JobCount>>> call, Response<WebAPIResponse<List<JobCount>>> response) {
-                dialog.dismiss();
+               // dialog.dismiss();
                 if (response.isSuccessful()) {
                     if (response.body().status) {
                         size = String.valueOf(response.body().response.get(0).getCount());
@@ -460,7 +460,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
                     }
 
                 } else {
-                    dialog.dismiss();
+                  //  dialog.dismiss();
                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
 
                 }
@@ -470,7 +470,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
 
             @Override
             public void onFailure(Call<WebAPIResponse<List<JobCount>>> call, Throwable t) {
-                dialog.dismiss();
+             //   dialog.dismiss();
                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
             }

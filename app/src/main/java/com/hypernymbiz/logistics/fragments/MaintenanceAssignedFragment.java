@@ -46,7 +46,7 @@ public class MaintenanceAssignedFragment extends Fragment {
         super.onAttach(context);
         fContext = context;
         if (context instanceof ToolbarListener) {
-            ((ToolbarListener) context).setTitle("Maintenance Detials");
+            ((ToolbarListener) context).setTitle("Maintenance Assigned");
         }
     }
 

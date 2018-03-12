@@ -115,8 +115,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
     public static int counter = 0;
-
-    Double lat, longi;
+String driverlocation;
     LatLng ll;
 
 
@@ -274,7 +273,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
                 body.put("job_id", id);
                 body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                 body.put("actual_end_time", actual_end_time);
-                body.put("end_lat_long",ll);
+                body.put("end_lat_long",driverlocation);
                 editor = pref.edit();
                 editor.putString("actalend", actual_end_time);
                 editor.putString("driverend",driverendtime);
@@ -499,7 +498,11 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onLocationChanged(Location location) {
         ll = new LatLng(location.getLatitude(),location.getLongitude());
-//        longi = location.getLongitude();
+        Double lat,lng;
+
+        lat=location.getLatitude();
+        lng=location.getLongitude();
+        driverlocation=lat.toString()+","+lng.toString();
 
         Toast.makeText(getContext(), "" +ll, Toast.LENGTH_SHORT).show();
     }

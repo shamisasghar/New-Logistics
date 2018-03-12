@@ -78,7 +78,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
     public static int counter = 0;
 
-    Double lat, longi;
+    String driverlocation;
     LatLng ll;
 
     @Override
@@ -130,12 +130,12 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                     body.put("job_id", Integer.parseInt(id));
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                    body.put("start_lat_long",ll);
+                    body.put("start_lat_long", driverlocation);
                 } else {
                     body.put("job_id", payloadNotification.job_id);
                     body.put("actual_start_time", actual_start_time);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
-                    body.put("start_lat_long",ll);
+                    body.put("start_lat_long",driverlocation);
                 }
                 ApiInterface.retrofit.startjob(body).enqueue(new Callback<WebAPIResponse<StartJob>>() {
                     @Override
@@ -150,7 +150,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                 endlat = String.valueOf(response.body().response.getJobEndLat());
                                 endlng = String.valueOf(response.body().response.getJobEndLng());
 
-                                if (!strlat.equals("") && !strlng.equals("") && !endlat.equals("") && !endlng.equals("")) {
+                                if (!strlat.equals("null") && !strlng.equals("null") && !endlat.equals("null") && !endlng.equals("null")) {
                                     editor.putString("Startlat", strlat);
                                     editor.putString("Startlng", strlng);
                                     editor.putString("Endlat", endlat);
@@ -224,13 +224,13 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                     body.put("job_id", Integer.parseInt(id));
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                     body.put("flag", 54);
-                    body.put("start_lat_long",ll);
+                    body.put("start_lat_long", ll);
 
                 } else {
                     body.put("job_id", payloadNotification.job_id);
                     body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                     body.put("flag", 54);
-                    body.put("start_lat_long",ll);
+                    body.put("start_lat_long", ll);
                 }
 
 
@@ -357,8 +357,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                                     });
                                                     mSimpleDialog.show();
 
-                                                } else
-                                                {
+                                                } else {
                                                     Intent getintent = getActivity().getIntent();
                                                     String id = getintent.getStringExtra("jobid");
                                                     HashMap<String, Object> body = new HashMap<>();
@@ -367,9 +366,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                                         body.put("job_id", Integer.parseInt(id));
                                                         body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                                                         body.put("flag", 75);
-                                                    }
-                                                    else
-                                                    {
+                                                    } else {
                                                         body.put("job_id", payloadNotification.job_id);
                                                         body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                                                         body.put("flag", 75);
@@ -382,14 +379,11 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                                             if (response.isSuccessful()) {
                                                                 try {
 
-                                                                }
-                                                                catch (Exception ex)
-                                                                {
+                                                                } catch (Exception ex) {
                                                                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                                                                 }
-                                                            }
-                                                            else {
+                                                            } else {
                                                                 AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                                                             }
 
@@ -409,8 +403,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                             }
                                         });
 
-                                    }
-                                    else if(status.equals("Accepted")){
+                                    } else if (status.equals("Accepted")) {
                                         btn_start.setVisibility(View.VISIBLE);
                                         btn_cancel.setVisibility(View.VISIBLE);
                                         btn_start.setText("Start Job");
@@ -546,8 +539,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                                         });
                                                         mSimpleDialog.show();
 
-                                                    } else
-                                                    {
+                                                    } else {
                                                         Intent getintent = getActivity().getIntent();
                                                         String id = getintent.getStringExtra("jobid");
                                                         HashMap<String, Object> body = new HashMap<>();
@@ -556,9 +548,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                                             body.put("job_id", Integer.parseInt(id));
                                                             body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                                                             body.put("flag", 75);
-                                                        }
-                                                        else
-                                                        {
+                                                        } else {
                                                             body.put("job_id", payloadNotification.job_id);
                                                             body.put("driver_id", Integer.parseInt(getUserAssociatedEntity));
                                                             body.put("flag", 75);
@@ -571,14 +561,11 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                                                 if (response.isSuccessful()) {
                                                                     try {
 
-                                                                    }
-                                                                    catch (Exception ex)
-                                                                    {
+                                                                    } catch (Exception ex) {
                                                                         AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), Constants.NETWORK_ERROR));
 
                                                                     }
-                                                                }
-                                                                else {
+                                                                } else {
                                                                     AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                                                                 }
 
@@ -598,15 +585,12 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                                 }
                                             });
 
-                                        }
-
-                                        else if(status.equals("Accepted")){
+                                        } else if (status.equals("Accepted")) {
                                             btn_start.setVisibility(View.VISIBLE);
                                             btn_cancel.setVisibility(View.VISIBLE);
                                             btn_start.setText("Start Job");
                                             btn_cancel.setText("Cancel Job");
                                         }
-
 
 
 //                                    else if (status.equals("Failed")) {
@@ -655,12 +639,20 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
 
     @Override
     public void onLocationChanged(Location location) {
-        ll = new LatLng(location.getLatitude(),location.getLongitude());
+        ll = new LatLng(location.getLatitude(), location.getLongitude());
+        Double lat,lng;
+
+        lat=location.getLatitude();
+        lng=location.getLongitude();
+        driverlocation=lat.toString()+","+lng.toString();
+
+
 //        longi = location.getLongitude();
 
-//        Toast.makeText(getContext(), "" +ll, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), ""+driverlocation, Toast.LENGTH_SHORT).show();
 
     }
+
     protected void startLocationUpdates() {
 
         // Create the location request to start receiving updates
@@ -689,9 +681,14 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
                         counter++;
-                        if(counter > 1) {
-                            onLocationChanged(locationResult.getLastLocation());
-                            LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
+                        try {
+                            if (counter > 1) {
+                                onLocationChanged(locationResult.getLastLocation());
+                                LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
+                            }
+                        } catch (Exception ex)
+                        {
+
                         }
                     }
                 },
