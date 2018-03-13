@@ -142,60 +142,72 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                     public void onResponse(Call<WebAPIResponse<StartJob>> call, Response<WebAPIResponse<StartJob>> response) {
                         dialog.dismiss();
                         if (response.isSuccessful()) {
-                            if (response.body().status) {
-                                String strlat, strlng, endlat, endlng;
+                            try {
 
-                                strlat = String.valueOf(response.body().response.getJobStartLat());
-                                strlng = String.valueOf(response.body().response.getJobStartLng());
-                                endlat = String.valueOf(response.body().response.getJobEndLat());
-                                endlng = String.valueOf(response.body().response.getJobEndLng());
+                                if (response.body().status) {
+                                    String strlat, strlng, endlat, endlng;
 
-                                if (!strlat.equals("null") && !strlng.equals("null") && !endlat.equals("null") && !endlng.equals("null")) {
-                                    editor.putString("Startlat", strlat);
-                                    editor.putString("Startlng", strlng);
-                                    editor.putString("Endlat", endlat);
-                                    editor.putString("Endlng", endlng);
-                                    editor.putString("Actualstart", actual_start_time);
-                                    editor.commit();
-                                } else {
+                                    strlat = String.valueOf(response.body().response.getJobStartLat());
+                                    strlng = String.valueOf(response.body().response.getJobStartLng());
+                                    endlat = String.valueOf(response.body().response.getJobEndLat());
+                                    endlng = String.valueOf(response.body().response.getJobEndLng());
 
-                                    Snackbar snackbar = Snackbar.make(swipelayout, "Missing Route Parameters", Snackbar.LENGTH_SHORT);
-                                    View sbView = snackbar.getView();
-                                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                                    sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                                    textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
-                                    textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    snackbar.show();
+                                    if (!strlat.equals("null") && !strlng.equals("null") && !endlat.equals("null") && !endlng.equals("null")) {
+                                        editor.putString("Startlat", strlat);
+                                        editor.putString("Startlng", strlng);
+                                        editor.putString("Endlat", endlat);
+                                        editor.putString("Endlng", endlng);
+                                        editor.putString("Actualstart", actual_start_time);
+                                        editor.commit();
+                                    } else {
 
-                                }
-                                // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getContext(), ActiveJobFragment.class);
-                                Intent getintent = getActivity().getIntent();
-                                String id = getintent.getStringExtra("jobid");
-                                String date = DateFormat.getDateTimeInstance().format(c.getTime());
-                                if (id != null) {
-                                    editor = pref.edit();
-                                    editor.putString("jobid", id);
-                                    editor.putString("drivertime", date);
-                                    editor.commit();
+                                        Snackbar snackbar = Snackbar.make(swipelayout, "Missing Route Parameters", Snackbar.LENGTH_SHORT);
+                                        View sbView = snackbar.getView();
+                                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                                        sbView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                                        textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDialogToolbarText));
+                                        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                        snackbar.show();
+
+                                    }
+                                    // Toast.makeText(fContext, "hhh", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getContext(), ActiveJobFragment.class);
+                                    Intent getintent = getActivity().getIntent();
+                                    String id = getintent.getStringExtra("jobid");
+                                    String date = DateFormat.getDateTimeInstance().format(c.getTime());
+                                    if (id != null) {
+                                        editor = pref.edit();
+                                        editor.putString("jobid", id);
+                                        editor.putString("drivertime", date);
+                                        editor.commit();
 
 //                                        intent.putExtra("jobid",id);
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("jobid",id);
 //                                        ActivityUtils.startActivity(getActivity(),ActiveJobFragment.class,true);
-                                    ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
-                                    getActivity().finish();
-                                } else {
+                                        ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
+                                        getActivity().finish();
+                                    } else {
 //                                    intent.putExtra("jobid", "" + payloadNotification.job_id);
-                                    editor = pref.edit();
-                                    editor.putString("jobid", "" + payloadNotification.job_id);
-                                    editor.commit();
-                                    Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
-                                    ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
-                                    getActivity().finish();
+                                        editor = pref.edit();
+                                        editor.putString("jobid", "" + payloadNotification.job_id);
+                                        editor.commit();
+                                        Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
+                                        ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
+                                        getActivity().finish();
+                                    }
                                 }
                             }
-                        } else {
+                            catch (Exception ex)
+                            {
+                                AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
+
+
+                            }
+                        }
+
+
+                        else {
 
                             AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 2));
                         }
@@ -274,8 +286,9 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                 ApiInterface.retrofit.getalldata(payloadNotification.job_id).enqueue(new Callback<WebAPIResponse<JobDetail>>() {
                     @Override
                     public void onResponse(Call<WebAPIResponse<JobDetail>> call, Response<WebAPIResponse<JobDetail>> response) {
+                        dialog.dismiss();
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+
                             try {
                                 if (response.body().status) {
 

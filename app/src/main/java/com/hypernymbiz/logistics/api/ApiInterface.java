@@ -87,6 +87,8 @@ public interface ApiInterface {
     Call<WebAPIResponse<JobDetail>> getalldata(@Query("job_id") int job_id);
     @GET("iof/get_app_maintenances/")
     Call<WebAPIResponse<Maintenance>> getmaintenancedata(@Query("driver_id") int driver_id, @Query("m_id") int maintenance_id);
+    @GET("iof/get_app_maintenances/")
+    Call<WebAPIResponse<List<Maintenance>>> getallmaintenancedata(@Query("driver_id") int driver_id);
 
     @PUT("iof/driver_job_update")
     Call<WebAPIResponse<StartJob>> startjob(@Body HashMap<String, Object> body);
