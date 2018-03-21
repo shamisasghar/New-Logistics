@@ -29,8 +29,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.github.aakira.expandablelayout.Utils;
 import com.github.capur16.digitspeedviewlib.DigitSpeedView;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -47,7 +45,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.hypernymbiz.logistics.R;
-import com.hypernymbiz.logistics.adapter.ExpandableAdapter;
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.SimpleDialog;
 import com.hypernymbiz.logistics.models.ActiveJobResume;
@@ -75,8 +72,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import iammert.com.expandablelib.ExpandCollapseListener;
 import iammert.com.expandablelib.ExpandableLayout;
@@ -115,7 +114,7 @@ public class ActiveJobFragment extends Fragment implements View.OnClickListener,
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
     public static int counter = 0;
-String driverlocation;
+    String driverlocation;
     LatLng ll;
 
 
@@ -259,6 +258,15 @@ String driverlocation;
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 actual_end_time = df.format(c.getTime());
                 driverendtime=DateFormat.getDateTimeInstance().format(c.getTime());
+
+                Date time = Calendar.getInstance().getTime();
+                SimpleDateFormat outputFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                outputFmt.setTimeZone(TimeZone.getTimeZone("gmt"));
+
+
+                actual_end_time = outputFmt.format(new Date());
+
+
                 String id ;
 
                 if (ActiveJobUtils.isJobResumed(getContext())) {

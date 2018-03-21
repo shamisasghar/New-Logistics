@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,9 @@ import com.hypernymbiz.logistics.utils.LoginUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -118,7 +121,16 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
         actual_start_time = df.format(c.getTime());
 
 
-//        Log.d("TAAg",actual_start_time);
+        Date time = Calendar.getInstance().getTime();
+        SimpleDateFormat outputFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        outputFmt.setTimeZone(TimeZone.getTimeZone("gmt"));
+//        String ss=
+
+
+        actual_start_time = outputFmt.format(new Date());
+
+
+        Log.d("TAAg",actual_start_time);
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,7 +190,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                                     if (id != null) {
                                         editor = pref.edit();
                                         editor.putString("jobid", id);
-                                        editor.putString("drivertime", date);
+                                        editor.putString("drivertime", actual_start_time);
                                         editor.commit();
 
 //                                        intent.putExtra("jobid",id);
@@ -187,10 +199,12 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
 //                                        ActivityUtils.startActivity(getActivity(),ActiveJobFragment.class,true);
                                         ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);
                                         getActivity().finish();
-                                    } else {
+                                    }
+                                    else {
 //                                    intent.putExtra("jobid", "" + payloadNotification.job_id);
                                         editor = pref.edit();
                                         editor.putString("jobid", "" + payloadNotification.job_id);
+                                        editor.putString("drivertime", actual_start_time);
                                         editor.commit();
                                         Toast.makeText(getContext(), String.valueOf(payloadNotification.job_id), Toast.LENGTH_SHORT).show();
                                         ActivityUtils.startActivity(getActivity(), FrameActivity.class, ActiveJobFragment.class.getName(), null);

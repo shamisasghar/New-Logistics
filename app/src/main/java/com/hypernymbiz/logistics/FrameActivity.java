@@ -202,7 +202,10 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 ActivityUtils.startHomeActivity(this, HomeActivity.class, HomeFragment.class.getName());
             }
 
-        } else {
+        }
+
+
+        else {
             if (fragment instanceof JobNotificationFragment) {
                 FrameActivity.this.finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

@@ -83,7 +83,7 @@ public class MaintenanceAssignedFragment extends Fragment {
 
                                     main_name.setText(response.body().response.getMaintenanceName());
                                     main_type.setText(response.body().response.getMaintenanceType());
-//                            main_truck.setText(response.body().response.get());
+                                    main_truck.setText(response.body().response.getAssignedTruck());
                                     main_time.setText(AppUtils.getFormattedDate(response.body().response.getDueDate()) + " " + AppUtils.getTime(response.body().response.getDueDate()));
                                     main_status.setText(response.body().response.getStatus());
 //                            String status = response.body().response.getJobStatus();

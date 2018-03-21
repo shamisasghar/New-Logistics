@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:id="@+id/txt_maintenance_status"
-                android:text="-jjjjjjjjjjjjjjjjjjjjj"
+                android:text=""
                 android:gravity="center"/>
         </LinearLayout>
         <LinearLayout

@@ -21,6 +21,18 @@ public class Maintenance {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("assigned_truck")
+    @Expose
+    private String assignedTruck;
+
+    public String getAssignedTruck() {
+        return assignedTruck;
+    }
+
+    public void setAssignedTruck(String assignedTruck) {
+        this.assignedTruck = assignedTruck;
+    }
+
 
     public String getMaintenanceName() {
         return maintenanceName;

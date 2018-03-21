@@ -36,7 +36,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.aakira.expandablelayout.Utils;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -55,7 +55,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hypernymbiz.logistics.FrameActivity;
 import com.hypernymbiz.logistics.R;
-import com.hypernymbiz.logistics.adapter.ExpandableAdapter;
+
 import com.hypernymbiz.logistics.api.ApiInterface;
 import com.hypernymbiz.logistics.dialog.LoadingDialog;
 import com.hypernymbiz.logistics.models.ExpandableCategoryParent;
