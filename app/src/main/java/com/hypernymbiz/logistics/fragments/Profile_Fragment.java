@@ -262,6 +262,5 @@ public class Profile_Fragment extends Fragment implements View.OnClickListener, 
 
     }
 
-
 }
 

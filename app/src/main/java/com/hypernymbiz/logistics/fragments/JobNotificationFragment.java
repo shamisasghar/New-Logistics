@@ -50,7 +50,6 @@ import retrofit2.Response;
 public class JobNotificationFragment extends Fragment {
 
     private JobNotifiyAdapter adapter;
-    List<JobInfo_> jobInfo_s;
     SharedPreferences sharedPreferences;
     String getUserAssociatedEntity;
     RecyclerView recyclerView;

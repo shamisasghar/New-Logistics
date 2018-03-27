@@ -396,8 +396,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnMa
             }
         });
 
-
-
         option =new MarkerOptions().title("Driver Location").position(new LatLng(location.getLatitude(),location.getLongitude())).icon((BitmapDescriptorFactory.fromResource(R.drawable.marker)));
 //        option=new MarkerOptions().position(new LatLng(location.getLatitude(),location.getLongitude())).title("Driver Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
 

@@ -110,35 +110,8 @@ public class JobNotifiyAdapter extends RecyclerView.Adapter<JobNotifiyAdapter.Vi
 
             job = (TextView) itemView.findViewById(R.id.jobname);
             imageView = (ImageView) itemView.findViewById(R.id.image);
-            cardView=(CardView)itemView.findViewById(R.id.layout_cardview);
+            cardView = (CardView) itemView.findViewById(R.id.layout_cardview);
             String j = job.getText().toString();
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-//                    Toast.makeText(context, "notify", Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(context, job.getText(),Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(context, JobDetailFragment.class);
-//                        context.startActivity(intent);
-//                    ActivityUtils.startActivity(context, FrameActivity.class,JobDetailFragment.class.getName(),null);
-                    // ((Activity)context).finish();
-//                    Toast.makeText(context,String.valueOf(pos), Toast.LENGTH_SHORT).show();
-//
-//                    Intent intent = new Intent(context, FrameActivity.class);
-//                    intent.putExtra(Constants.FRAGMENT_NAME, JobDetailsFragment.class.getName());
-////                    intent.putExtra(Constants.DATA, bundle);
-//                    context.startActivity(intent);
-
-//                    }
-//
-//                    else
-//                    {
-//                        Toast.makeText(context, "not selected", Toast.LENGTH_SHORT).show();
-//                    }
-
-                }
-            });
 
         }
 

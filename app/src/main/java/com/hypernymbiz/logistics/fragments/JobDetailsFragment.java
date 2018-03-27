@@ -1,6 +1,7 @@
 package com.hypernymbiz.logistics.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -76,6 +77,7 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
     Calendar c;
     private SimpleDialog mSimpleDialog;
     private LocationRequest mLocationRequest;
+    String strlat, strlng, endlat, endlng;
 
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
@@ -126,7 +128,6 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
         outputFmt.setTimeZone(TimeZone.getTimeZone("gmt"));
 //        String ss=
 
-
         actual_start_time = outputFmt.format(new Date());
 
 
@@ -157,12 +158,17 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
                             try {
 
                                 if (response.body().status) {
-                                    String strlat, strlng, endlat, endlng;
 
                                     strlat = String.valueOf(response.body().response.getJobStartLat());
                                     strlng = String.valueOf(response.body().response.getJobStartLng());
                                     endlat = String.valueOf(response.body().response.getJobEndLat());
                                     endlng = String.valueOf(response.body().response.getJobEndLng());
+//                                    String cityname;
+//                                   cityname= AppUtils.getAddress(Double.parseDouble(strlat),Double.parseDouble(strlat),fContext);
+//                                    Toast.makeText(fContext, ""+cityname, Toast.LENGTH_SHORT).show();
+
+
+
 
                                     if (!strlat.equals("null") && !strlng.equals("null") && !endlat.equals("null") && !endlng.equals("null")) {
                                         editor.putString("Startlat", strlat);
@@ -676,10 +682,11 @@ public class JobDetailsFragment extends Fragment implements com.google.android.g
 
 //        longi = location.getLongitude();
 
-//        Toast.makeText(getContext(), ""+driverlocation, Toast.LENGTH_SHORT).show();
+       Toast.makeText(getContext(), ""+driverlocation, Toast.LENGTH_SHORT).show();
 
     }
 
+    @SuppressLint("RestrictedApi")
     protected void startLocationUpdates() {
 
         // Create the location request to start receiving updates

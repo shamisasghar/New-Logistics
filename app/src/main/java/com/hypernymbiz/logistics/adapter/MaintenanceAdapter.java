@@ -42,8 +42,7 @@ public List<Maintenance> maintenance;
         holder.maintenancestatus.setText(maintenance.get(position).getStatus());
         holder.starttime.setText(AppUtils.getFormattedDate(maintenance.get(position).getDueDate()) + " " + AppUtils.getTime(maintenance.get(position).getDueDate()));
 //        holder.endtime.setTex
-//        holder.maintenancetype.setText("ghghjggggghgjgh");
-
+        holder.maintenancetype.setText(maintenance.get(position).getMaintenanceType());
 
     }
 
@@ -59,7 +58,7 @@ public List<Maintenance> maintenance;
 
             maintenancename = (TextView) itemView.findViewById(R.id.txt_maintenance_name);
             maintenancestatus = (TextView) itemView.findViewById(R.id.txt_maintenance_status);
-            starttime = (TextView) itemView.findViewById(R.id.txt_starttime);
+            starttime = (TextView) itemView.findViewById(R.id.txt_due_date);
             maintenancetype = (TextView) itemView.findViewById(R.id.txt_maintenance_type);
 
 
